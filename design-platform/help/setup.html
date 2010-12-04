@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<link rel = "STYLESHEET" href="touchstone.css" Type = "text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Timing step</title>
+</head>
+
+<body>
+
+<a name="top"> </a>
+<h1>Setup</h1>
+
+<h2>Key names</h2>
+<p>Specify the key names for your experiment: its name, the authors and a brief description of the experiment. They will be used to identify the experiment. They are especially important to be able to export the experiment as a plugin.</p>
+
+<h2>Plugins</h2>
+
+<p>One of the goals of TouchStone is to reduce the time and difficulty to conduct an experiment. On the one hand it assists the experimenter in building a new experiment step by step and on the other hand it makes experimenters able to reuse existing <a href="glossary.html#experiment-component">experiment components</a>. Actually once an experiment is implemented with the run platform, it can be exported as a <b>plugin</b> that can be loaded in the design platform. The plugin externalizes all the experiment components used in an experiment so that they can be referenced in another experiment.</p>
+
+<p>To <b>export a plugin</b>, execute the following command line in your TouchStone run directory: <code>./build.sh xml</code> (or <code>./build.bat xml</code>). This generates a file named <i>plugin.xml</i> which can be loaded in the design platform. This command requires that the sources of your experiment contains a description of the plugin, i.e. a class that implements <code>fr.inria.insitu.touchstone.Plugin</code>. If you generate your code experiment with the design platform (in the Summary tab), this description is automatically generated using the key names of this tab: it is the class <code>PluginDescription</code>.</p>
+
+<p>To <b>load a plugin</b>, simply select the XML file of interest and click on the '+' button. The whole plugin or only parts of it (e.g., only factors) can be loaded by selecting or unselecting the corresponding checkboxes.</p>
+
+<h1>Kind of experiment</h1>
+
+<p>This is the reference to the Java class that will implement what to do when a block begins/ends and when a trial begins/ends. For example, to conduct an experiment to measure users' reaction time to a colored stimulus according to a variable number of distractors, we use the reference <code>RTBlock</code> that refers the Java class <code>ReactionBlock</code> below:</p>
+
+<p>
+<pre>
+/**
+ * @touchstone.block RTBlock
+ */
+public class ReactionBlock extends Block {
+
+  public ReactionBlock() { ... }
+
+  public void beginBlock() {
+    // display a gauge to indicate how many blocks remain to be completed
+  }
+
+  public void beginTrial() {
+    // display the colored stimulus and distractors
+  }
+
+  public void endTrial(EndCondition ec) {
+    // remove the colored stimulus and distractors
+  }
+
+  public void endBlock() {
+    // cleans the whole graphical scene
+  }
+}  
+</pre>
+</p>
+
+</body>
+</html>

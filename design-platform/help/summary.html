@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<link rel = "STYLESHEET" href="touchstone.css" Type = "text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Timing step</title>
+</head>
+
+<body>
+
+<a name="top"> </a>
+<h1>Summary</h1>
+
+<p><b>XML script</b>: This tab shows the XML script which describes the experiment. This script can be executed by the TouchStone run platform if all the referenced Java classes it contains actually exist (they are either defined in a loaded plugin or implemented in the run directory for this experiment). This script can be saved in a file that can be e.g. loaded in the run platform.</p>
+
+<p><b>Code generation</b>: The design platform allows to generate the skeleton for referenced Java classes that are not in the loaded plugins. Clicking on the <b>Generate Java Code</b> button makes a dialog box appear that allows to choose the folder where this code must be generated when the button <b>Go</b> is clicked.
+[TODO] values</p>
+
+<p><b>CSV description</b>: The <b>Get CSV description</b> button generates a description of the experiment as a CSV file. Each line in this file corresponds to a trial defined by the participant id, the block number, the trial number and the values of the factors for this trial. This CSV description can be used in any piece of software that is able to read CSV for e.g. checking the distribution of the values of a factor.</p>
+
+<p><b>Open another XML script</b>: Any other XML file can be opened in this tab. However, note that the other tabs in the design platform will not be updated with this XML file (the design itself must be saved using the design platform menu <i>Design</i> --> <i>Save this design</i>). However you can use the code generation function for any XML file event if it has not been produced using the design platform.
+</p>
+
+<!--
+<url>	/design/summary/
+<tab>	summary
+<title>	Step 7: Generate scripts and summaries 
+<description>
+Please check your experiment and, if necessary, update the experiment description in step 1: Set up your files. Click on one of the following links to generate these files:
+ 	- `XML script (for the Run platform)	<codename>.Touchstone.xml	`_	
+	- `Experiment design summary	<codename>.Touchstone.summary.txt	`_	
+	- `Sample data log	<codename>. Touchstone.sample_log.txt`_ 
+<more>	Step 7: Generate scripts and summaries
+<details>
+Touchstone generates an XML script designed to be interpreted by the Run platform. This file contains the specific details of your experiment, including factor names and values, experiment components, blocking and counterbalancing strategies and experimental measures and is necessary if you plan to re-edit your experiment with the Design platform. Note that this document specifies only the design of an experiment: In order to actually run the experiment, you will need to ensure that all of the experiment components have been implemented and can be called by the Run platform. For example, if you create a new interaction technique, you must implement code that can be called by the Run platform’s Experiment Launcher and implement the associated measures specified in your design.
+
+The XML script is also the source for creating a human-readable summary of your experiment design. This file captures the design rationale for each experiment, both to keep the design process as transparent as possible and to help experimenters remember why they made certain design decisions. The summary file is useful both for you as an experimenter, to help remember why you made particular design decisions, and as a pedagogical tool, to help senior researchers discuss design trade-offs with students and avoid common errors. The summary file contains a header with the long experiment name, the filename code, the authors, creation and modification dates, and the experiment description that you supply, usually identifying the goal of the experiment, hypotheses and any early predictions. The file then contains the design decisions specified in each step, including the comments that you provide to explain why you made each decision.
+Step 2 specifies a set of factors and values, including which are primary or secondary, and the resulting description of the overall experiment design. Step 3 specifies the blocking strategy and generates the set of unique conditions in each block, with no specified order. Step 4 specifies the elements of the experiment and the estimated timing. Step 5 specifies the counterbalancing strategy and generates the exact order in which each trial will be presented to each subject. Step 6 specifies the measures that will be used to collect data, as well as the associated log type. 
+
+Touchstone also creates a sample log file, with examples of both table and cinematic logs, using ‘fake’ data. The goal is to give you an idea of the kind of data your experiment design will generate and allow you te ensure that the results of your experiment can be analyzed by the statistics package or information visualization software that you choose.
+
+Touchstone also generates a list of associated files, including the runnable script, pointers to any experiment components (this is done from the Run platform), the sample table and cinematic logs and the filenames of the actual log files generated when the experiment is run from the Experiment Launcher. Certain additional files may also be necessary. For example, the Run platform keeps the list of real names of subjects in a separate file, with only subject id codes in the data files. Also, if the experiment collects image or video files that cannot be included directly in the table or cinematic logs, the summary file should include pointers to these files as well.
+
+-->
+
+</body>
+</html>

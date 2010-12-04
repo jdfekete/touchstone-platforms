@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<link rel = "STYLESHEET" href="touchstone.css" Type = "text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Timing step</title>
+</head>
+
+<body>
+
+<a name="top"> </a>
+<h1>Timing</h1>
+
+<p>This tab allows to estimate the length of the experiment. You can provide an estimation of the length of a trial in seconds and additional information about the different intertitles which will appear in the experiment. Given this information, this tabs computes the length of the whole experiment for a participant. In general, you should try to limit experiments to no more than an hour, and for intensive or boring tasks, 30 minutes is better.</p>
+
+<p>There are four types of intertitles in an experiment. You can add:
+<br> - an intertitle at the very beginning of the experiment for e.g. installing the graphical scene for the experiment or initializing some experiment variables (<b>set up</b>), 
+<br> - an intertitle between each trial for e.g. displaying instructions or inserting a pause (<b>intertrial</b>),
+<br> - an intertitle between the blocks at a given level (<b>interblock<i>i</i></b>),
+<br> - an intertitle between the practice blocks at a given level (<b>interpractice0</b> for preceding the practice blocks at the experiment level or (<b>interpractice<i>i</i></b>) for separating the blocks at level <b><i>i</i></b>).</p>
+
+<p>An intertitle is specified by the code to run for this intertitle and a criterion (also called end condition).</p>
+
+<h3>Intertitle runs</h3>
+
+<p>In the <b>Java class</b> column, you can specify the reference to the Java class that will implement what to do when an intertitle begins/ends. For example, to introduce a blue background between two trials, we use a reference to <code>BlueBG</code> that refers the Java class <code>BlueBackground</code> below:</p>
+
+<p>
+<pre>
+/**
+ * @touchstone.block BlueBG
+ */
+public class BlueBackground extends Intertitle {
+
+  public BlueBackground() { ... }
+
+  public void beginIntertitle() {
+    // Colors the background of the graphical scene in blue
+  }
+
+  public void endIntertitle() {
+    // Restores the default color of the background
+  }
+
+}  
+</pre>
+</p>
+
+<p>Before each new trial, a <code>BlueBackground</code> object is built and the method <code>beginIntertitle</code> is called. Then, once the <i>end condition</i> of this intertrial is reached (see below), the method <code>endIntertitle</code> is called.</p>
+
+
+<h3>End Conditions (or Criteria)</h3>
+
+<p>In the <b>criterion</b> column, you can specify the condition that ends an intertitle or a trial. A criterion refers a Java object that contains method(s) <code>isReached</code> that are evaluated by the run platform:
+<br> - each time a registered timer expires,
+<br> - each time an Java AWT input event occurs or,
+<br> - each time a TouchStone axis changed.
+</p>
+
+<p>
+For example, to define a criterion that ends a trial when the target has been hit, we can use a reference to <code>HitTarget</code> in the criterion for trials. <code>HitTarget</code> must refer a Java class, let's say <code>PressOnTarget</code>, that implements the <code>EndCondition</code> interface as shown below:
+<pre>
+  /**
+   * @touchstone.criterion HitTarget
+   */
+  public class PressOnTarget implements EndCondition {
+    
+    public PressOnTarget() { }
+
+    public String getEndCondition() {
+      return "OnTarget";
+    }
+
+    public boolean isReached(Timer timer, long when) {
+      return false;
+    }
+
+    public boolean isReached(AxesEvent e) {
+      // true if e is a press event that has occurred on the target
+    }
+
+    public boolean isReached(InputEvent e) {
+      // true if e is a press event that has occurred on the target
+    }
+    
+    public void start() { }
+    
+    public void stop() { }
+
+}
+</pre>
+If this criterion is associated to trials in the experiment, each time a trial starts (method <code>beginTrial</code> of a <code>Block</code>), a <code>PressOnTarget</code> object is built, installed and started (the method <code>start</code> above is called which does nothing by default). Then, as said above, the right method <code>isReached</code> is called each time an event occurs. Once one of these methods returns true, the condition is reached. In this case, the criterion is stopped (the method <code>stop</code> above is called) and the trial ends (method <code>endTrial</code> of a <code>Block</code>).
+<br><i>NB: We use a criterion for trials in the example but the same holds for intertitles</i>.
+</p>
+
+<p>Several criteria can be combined with operators to define a more complex criterion. The following set of boolean operators is available:
+<ul>
+<li>and (<code>&</code>)</li>
+<li>or (<code>|</code>)</li>
+<li>xor (<code>^</code>)</li>
+<li>not (<code>!</code>)</li>
+</ul>
+For example, the criterion <code>HitTarget | TimeOut(180000)</code> could be used to specify the end of a pointing task. It means that the task ends either when a mouse press occurs on the target or when it takes too much time.
+</p>
+
+<p>When a criterion is reached and ends a trial, a message is recorded in the column named "HIT" in the log files. By default, the recorded message is the String specified by the method <code>getEndCondition</code>. The operator <code>=></code> allows to specify another message to record. For example, the experiment script can specify the failure reason to log for a trial: <code>HitTarget | (TimeOut(180000)=>{Too Long})</code> means that when a task (or intertitle) takes too much time (more than 180000 ms), it ends as a miss and the message "Too Long" is logged in the "HIT" column. Note that strings must be delimited with curly braces.</p>
+
+<!--
+<a href="#top">Go To Top Of Page</a> 
+
+<a href="glossary.html" target="_blank">Glossary</a> 
+
+<a href="glossary.html#between-participant">Glossary anchor</a> 
+-->
+
+</body>
+</html>

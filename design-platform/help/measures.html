@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<link rel = "STYLESHEET" href="touchstone.css" Type = "text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Timing step</title>
+</head>
+
+<body>
+
+<a name="top"> </a>
+<h1>Measures</h1>
+
+<p>In this tab, choose which pre-defined measures to include and those you will define yourself. For each measure, choose whether you want to log each time a trial ends (trial level) or each time there is measure receives a new value (event level).</p>
+
+<p><b>Choose a pre-defined measure:</b> The left part below shows the list of available measures by default and those from loaded plugins. Double click on a measure to include it in the experiment.
+</p>
+
+<p><b>Define a new measure:</b> The line at the bottom of this tab allows to define a new measure.
+</p>
+
+<p>Selecting a measure in the list of selected measures allows to edit it using the bottom part of this tab. For example, it is easy to turn a measure initially logged only at the trial level into a measure logged both at the trial and event level. For legibility reasons, all measures that share a common parent are grouped into a directory having the name of the parent.</p>
+
+<p><b>Log at trial level:</b> 
+The table log at the trial level always contains the columns indicating the general experiment information, the experiment factors followed by the measures explicitly entered in this tab.
+<ul>
+	<li> <i>experiment</i>: the experiment short code entered in the Setup tab. </li>
+	<li> <i>participant</i>: the participant id. </li>
+	<li> <i>block</i>: the block number. </li>
+	<li> <i>trial</i>: the trial number. </li>
+</ul>
+For example, if the experiment has the short code OZvsSDAZ and has the technique factor T which has OZ and SDAZ for possible values and you choose to log the movement time MT (which is, by default the time elapsed during the trial). The trial table will look like:<br>
+
+<br># OZvsSDAZ:Compare multiscale navigation techniques
+<br># T:technique
+<br># MT:movement time
+<br># Date: 2009-10-29-18-50-31
+<table>
+	<tr>
+		<td>experiment</td><td>participant</td><td>block</td><td>trial</td><td>T</td><td>MT</td>
+	</tr>
+	<tr>
+		<td>nominal</td><td>nominal</td><td>integer</td><td>integer</td><td>nominal</td><td>integer</td>
+	</tr>
+	<tr>
+		<td>OZvsSDAZ</td><td>S1</td><td>1</td><td>1</td><td>OZ</td><td>13291</td>
+	</tr>
+	<tr>
+		<td>OZvsSDAZ</td><td>S1</td><td>1</td><td>2</td><td>OZ</td><td>14494</td>
+	</tr>
+	<tr>
+		<td>...</td>
+	</tr>
+	<tr>
+		<td>OZvsSDAZ</td><td>S1</td><td>2</td><td>1</td><td>SDAZ</td><td>13542</td>
+	</tr>
+	<tr>
+		<td>OZvsSDAZ</td><td>S1</td><td>2</td><td>1</td><td>SDAZ</td><td>14221</td>
+	</tr>
+	<tr>
+		<td>...</td>
+	</tr>
+</table>
+</p>
+
+<p><b>Log at event level:</b> 
+The table log at the event level always contains the columns indicating the block and trial numbers and the columns for the measures selected in this tab. 
+
+For example, if the Mouse.x and Mouse.y measures are selected, the event table will look like:<br>
+
+<br># OZvsSDAZ:Compare multiscale navigation techniques
+<br># Mouse.x:x-coordinate
+<br># Mouse.y:y-coordinate
+<br># Date: 2009-10-29-18-50-31
+<br># Participant: S1
+<table>
+	<tr>
+		<td>block</td><td>trial</td><td>Mouse.x</td><td>Mouse.y</td>
+	</tr>
+	<tr>
+		<td>integer</td><td>integer</td><td>integer</td><td>integer</td>
+	</tr>
+	<tr>
+		<td>1</td><td>1</td><td>585</td><td>394</td>
+	</tr>
+	<tr>
+		<td>1</td><td>1</td><td>585</td><td>396</td>
+	</tr>
+	<tr>
+		<td>...</td>
+	</tr>
+	<tr>
+		<td>1</td><td>2</td><td>302</td><td>108</td>
+	</tr>
+	<tr>
+		<td>1</td><td>2</td><td>305</td><td>112</td>
+	</tr>
+	<tr>
+		<td>...</td>
+	</tr>
+</table>
+	
+By default, the factor values are not logged at the event level for performance reasons but the factors are also proposed as measures in this tab if you want to still log them at the event level.
+</p>
+
+</body>
+</html>

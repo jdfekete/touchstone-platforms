@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<touchstone version="1.0">
+  <platform date="Dec 3, 2010 9:12:23 AM">
+    <plugin id="Core">
+      <factors />
+      <measures>
+        <measure id="MT" name="Movement time" help="The end time of the current trial" type="integer" />
+        <measure id="HIT" name="Success" help="Hit or Miss of the current trial" type="string" />
+        <measure id="time" name="Time from start" help="The time elapsed since the evaluation started, in milliseconds" type="integer" />
+        <measure id="trialStarted" name="Time when trial started" help="The time when the trial started" type="integer" />
+        <measure id="trialEnded" name="Time when trial ended" help="The time when the trial ended" type="integer" />
+        <measure id="currentTime" name="Instantaneous time" help="The current time when a line is logged" type="integer" />
+        <measure id="experiment" name="Experiment name" help="The name name_experiment of the experiment found in &lt;experiment id=name_experiment .../&gt;" type="string" />
+        <measure id="participant" name="Experiment participant" help="The id of the current participant found in the &lt;run id=id_participant.../&gt;" type="string" />
+        <measure id="block" name="Experiment block" help="The number of the current block" type="integer" />
+        <measure id="trial" name="Experiment trial" help="The number of the current trial" type="integer" />
+        <measure id="nbBlocks" name="Number of blocks for current participant" help="The number of blocks for current participant" type="integer" />
+        <measure id="nbTrials" name="Number of trials for current block" help="The number of trials for current block" type="integer" />
+        <measure id="inPractice" name="practice block" help="True if in practice, false otherwise" type="string" />
+        <measure id="Mouse.x" />
+        <measure id="Mouse.y" />
+        <measure id="Mouse.Left" />
+        <measure id="Mouse.Middle" />
+        <measure id="Mouse.Right" />
+        <measure id="Mouse.Wheel" />
+        <measure id="Keyboard.Back" />
+        <measure id="Keyboard.Tab" />
+        <measure id="Keyboard.Return" />
+        <measure id="Keyboard.Control" />
+        <measure id="Keyboard.Shift" />
+        <measure id="Keyboard.Pause" />
+        <measure id="Keyboard.Alt" />
+        <measure id="Keyboard.Capital" />
+        <measure id="Keyboard.Escape" />
+        <measure id="Keyboard.Noconvert" />
+        <measure id="Keyboard.Convert" />
+        <measure id="Keyboard.PageDown" />
+        <measure id="Keyboard.End" />
+        <measure id="Keyboard.Space" />
+        <measure id="Keyboard.PageUp" />
+        <measure id="Keyboard.Up" />
+        <measure id="Keyboard.At" />
+        <measure id="Keyboard.Colon" />
+        <measure id="Keyboard.Right" />
+        <measure id="Keyboard.Circumflex" />
+        <measure id="Keyboard.Home" />
+        <measure id="Keyboard.Left" />
+        <measure id="Keyboard.Down" />
+        <measure id="Keyboard.Period" />
+        <measure id="Keyboard.Slash" />
+        <measure id="Keyboard.NumpadComma" />
+        <measure id="Keyboard.Underscore" />
+        <measure id="Keyboard.Minus" />
+        <measure id="Keyboard.3" />
+        <measure id="Keyboard.2" />
+        <measure id="Keyboard.1" />
+        <measure id="Keyboard.0" />
+        <measure id="Keyboard.7" />
+        <measure id="Keyboard.6" />
+        <measure id="Keyboard.5" />
+        <measure id="Keyboard.4" />
+        <measure id="Keyboard.Semicolon" />
+        <measure id="Keyboard.9" />
+        <measure id="Keyboard.8" />
+        <measure id="Keyboard.NumpadEqual" />
+        <measure id="Keyboard.D" />
+        <measure id="Keyboard.E" />
+        <measure id="Keyboard.F" />
+        <measure id="Keyboard.G" />
+        <measure id="Keyboard.A" />
+        <measure id="Keyboard.B" />
+        <measure id="Keyboard.C" />
+        <measure id="Keyboard.L" />
+        <measure id="Keyboard.M" />
+        <measure id="Keyboard.N" />
+        <measure id="Keyboard.O" />
+        <measure id="Keyboard.H" />
+        <measure id="Keyboard.I" />
+        <measure id="Keyboard.J" />
+        <measure id="Keyboard.K" />
+        <measure id="Keyboard.U" />
+        <measure id="Keyboard.T" />
+        <measure id="Keyboard.W" />
+        <measure id="Keyboard.V" />
+        <measure id="Keyboard.Q" />
+        <measure id="Keyboard.P" />
+        <measure id="Keyboard.S" />
+        <measure id="Keyboard.R" />
+        <measure id="Keyboard.Rbracket" />
+        <measure id="Keyboard.Backslash" />
+        <measure id="Keyboard.Y" />
+        <measure id="Keyboard.X" />
+        <measure id="Keyboard.Lbracket" />
+        <measure id="Keyboard.Z" />
+        <measure id="Keyboard.Numpad6" />
+        <measure id="Keyboard.Numpad7" />
+        <measure id="Keyboard.Numpad4" />
+        <measure id="Keyboard.Numpad5" />
+        <measure id="Keyboard.Numpad2" />
+        <measure id="Keyboard.Numpad3" />
+        <measure id="Keyboard.Numpad0" />
+        <measure id="Keyboard.Numpad1" />
+        <measure id="Keyboard.Decimal" />
+        <measure id="Keyboard.Divide" />
+        <measure id="Keyboard.Subtract" />
+        <measure id="Keyboard.Mutliply" />
+        <measure id="Keyboard.Add" />
+        <measure id="Keyboard.Numpad8" />
+        <measure id="Keyboard.Numpad9" />
+        <measure id="Keyboard.F8" />
+        <measure id="Keyboard.F7" />
+        <measure id="Keyboard.F6" />
+        <measure id="Keyboard.F5" />
+        <measure id="Keyboard.F4" />
+        <measure id="Keyboard.F3" />
+        <measure id="Keyboard.F2" />
+        <measure id="Keyboard.F1" />
+        <measure id="Keyboard.Delete" />
+        <measure id="Keyboard.F12" />
+        <measure id="Keyboard.F11" />
+        <measure id="Keyboard.F10" />
+        <measure id="Keyboard.F9" />
+        <measure id="Keyboard.Grave" />
+        <measure id="Keyboard.Insert" />
+        <measure id="Keyboard.Numlock" />
+        <measure id="Keyboard.Scroll" />
+        <measure id="Keyboard.Stop" />
+      </measures>
+      <intertitles>
+        <intertitle id="Message" class="fr.inria.insitu.touchstone.run.exp.defaults.Message">
+          <constructor>
+            <arg type="java.lang.String" />
+          </constructor>
+        </intertitle>
+      </intertitles>
+      <blocks />
+      <criteria>
+        <criterion id="TimeOut" class="fr.inria.insitu.touchstone.run.endConditions.TimeOutCondition">
+          <constructor>
+            <arg type="int" />
+          </constructor>
+        </criterion>
+        <criterion id="Press" class="fr.inria.insitu.touchstone.run.endConditions.PressCondition">
+          <constructor>
+            <arg type="java.lang.String" />
+          </constructor>
+        </criterion>
+        <criterion id="Key" class="fr.inria.insitu.touchstone.run.endConditions.KeyCondition">
+          <constructor>
+            <arg type="int" />
+          </constructor>
+          <constructor>
+            <arg type="java.lang.String" />
+          </constructor>
+        </criterion>
+        <criterion id="Click" class="fr.inria.insitu.touchstone.run.endConditions.ClickCondition">
+          <constructor>
+            <arg type="java.lang.String" />
+          </constructor>
+        </criterion>
+      </criteria>
+    </plugin>
+  </platform>
+</touchstone>
+

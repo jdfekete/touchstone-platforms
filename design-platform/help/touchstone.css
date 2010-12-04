@@ -1,0 +1,90 @@
+BODY {
+	FONT-SIZE: 10px;
+	FONT-FAMILY: "Trebuchet MS";
+	TEXT-ALIGN: justify;
+	COLOR: #333333; 
+	MARGIN-TOP: 0px;
+	MARGIN-RIGHT: 0px;
+	MARGIN-BOTTOM: 0px;
+	MARGIN-LEFT: 0px; 	
+}
+
+P {
+	FONT-FAMILY: "Trebuchet MS";
+    FONT-SIZE: 9px; 	
+	PADDING-TOP: 0px;
+}
+
+PRE {
+	FONT-SIZE: 8px; 
+    COLOR: #666666;
+}
+
+CODE {
+	FONT-SIZE: 8px; 
+    COLOR: #666666;
+}
+
+IMG {
+	alt: "The picture can not be displayed"; align: center; border: 2px; hspace: 20px;
+}
+
+UL {
+	PADDING-TOP: 0px;
+	PADDING-LEFT: 0px;
+	FONT-SIZE: 10px;
+	FONT-FAMILY: "Trebuchet MS";
+	COLOR: #101010; 
+    LIST-STYLE-TYPE: none;
+    LIST-STYLE-POSITION:outside
+}
+
+LI {
+	PADDING-TOP: 5px;
+	PADDING-LEFT: 0px;
+	FONT-SIZE: 9px;
+	FONT-FAMILY: "Trebuchet MS";
+	COLOR: #101010; 
+}
+
+H1 {
+	FONT-FAMILY: arial, sans-serif;
+	FONT-SIZE: 11px;
+	FONT-VARIANT: small-caps;
+	COLOR: #330066; 
+	PADDING-TOP: 2px;
+    PADDING-BOTTOM: 0px;
+}
+
+H2 {
+	FONT-FAMILY: arial, sans-serif;
+	FONT-SIZE: 10px;
+	FONT-VARIANT: small-caps;
+	COLOR: #220055; 
+	PADDING-TOP: 2px;
+    PADDING-BOTTOM: 0px;
+}
+
+H3 {
+	COLOR: #330066;
+    FONT-SIZE: 9px; 
+	PADDING-TOP: 2px;
+    PADDING-BOTTOM: 0px;
+}
+
+TABLE {
+	frame: void;
+}
+
+A:link {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #CC9900; TEXT-DECORATION: none
+}
+A:visited {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #8b7355; TEXT-DECORATION: none
+}
+A:active {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #9F5F9F; TEXT-DECORATION: none
+}
+A:hover {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #CC9900; TEXT-DECORATION: none
+}
