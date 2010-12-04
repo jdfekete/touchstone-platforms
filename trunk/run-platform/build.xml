@@ -1,0 +1,391 @@
+<!-- ===========================================================================
+
+Installing the build tools
+==========================
+
+The TouchStone build system is based on Apache Ant, which is a Java building tool
+originally developed for the Jakarta Tomcat project but now used in many other
+Apache projects and extended by many developers.
+
+Ant is a little but very handy tool that uses a build file written in XML
+(this file) as building instructions. For more information refer to
+"http://ant.apache.org/".
+
+The only thing that you have to make sure of is that the "JAVA_HOME" environment
+property is set to match the top level directory containing the JVM you want
+to use. For example:
+
+C:\> set JAVA_HOME=C:\jdk1.4
+
+or on Unix:
+
+% setenv JAVA_HOME /usr/local/java
+  (csh)
+> JAVA_HOME=/usr/java; export JAVA_HOME
+  (ksh, bash)
+
+That's it!
+
+Building instructions
+=====================
+
+Ok, let's build the samples. First, make sure your current working directory is
+where this very file is located. Then type:
+
+  ./build.sh all (unix)
+  .\build.bat all (win32)
+
+To build the framework, examples, and tests or:
+
+  ./build.sh (unix)
+  .\build.bat (win32)
+  
+To list all the possible build targets.
+
+If everything is right (see *) and all the required packages are visible, this action
+will generate some jar files:
+
+  touchstone.jar  - This jar contains the main jar file.
+
+
+in the "./build" directory. These jar files (excluding infovis.jar wich is a library) can all
+be run by double clicking with the mouse on the jar file or by running the command
+
+  java -jar <jar file name>
+
+from within the ./build directory. Some of the jars depend on others and on files
+in ./lib so the distributions file structure should not be changed without repackaging
+the jars to remove these dependencies.
+
+* On Win/98 you may get an "Out of Environment Space" error message. This happens if
+Windows provides too small a space for environment variables. To work around this
+limitation: 
+  Close the DOS window (the error can corrupt its CLASSPATH variable). 
+  Open a new DOS window. Click on the MS-DOS icon at the top left of the window. 
+  Select the Properties option. 
+  Click on the Memory tab. 
+  Adjust the "Initial Environment" drop-down box from "Auto" to "2816". 
+  Click OK. 
+Then try building.
+
+-->
+
+<project name="touchstone" default="usage" basedir=".">
+
+ <!-- =================================================================== -->
+ <!-- Initialization target                                               -->
+ <!-- =================================================================== -->
+ <target name="init">
+  <tstamp/>
+  <property name="Name" value="TouchStone"/>
+  <property name="name" value="touchstone"/>
+  <property name="version" value="0.1alpha"/>
+  <property name="year" value="2006"/>
+
+  <echo message="----------- ${Name} ${version} [${year}] ------------"/>
+
+  <property name="build.compiler" value="modern"/>
+  <property name="debug" value="off"/>
+  <property name="optimize" value="on"/>
+  <property name="deprecation" value="on"/>
+  <property name="packages" value="fr.inria.insitu.touchstone.run.*"/>
+
+  <!-- Define the source directories -->
+  <property name="root.dir" value="."/>
+  <property name="doc.dir" value="${root.dir}/doc"/>
+  <property name="lib.dir" value="${root.dir}/lib"/>
+  <property name="src.dir" value="${root.dir}/src"/>
+  <property name="examples.dir" value="${root.dir}/examples"/>
+  <property name="tests.dir" value="${root.dir}/tests"/>
+
+  <!-- Define the source build directories -->
+  <property name="doc.apidocs" value="${doc.dir}/api"/>
+  <property name="build.dir" value="${root.dir}/build"/>
+  <property name="build.lib" value="${root.dir}/build/lib"/>
+  <property name="build.touchstone.src" value="${root.dir}/build/run-platform/src"/>
+  <property name="build.touchstone.dest" value="${root.dir}/build/run-platform/classes"/>
+
+  <!-- Define the distribution directories -->
+  <property name="dist.root" value="${root.dir}/dist"/>
+  <property name="sourcedist.dir" value="${dist.root}/${name}-${version}/${name}"/>
+
+  <path id="build-classpath">
+  	<fileset dir="${build.lib}">
+  		<include name="*.jar"/>
+  	</fileset>
+<!--	<pathelement location="${build.dir}/${name}.jar"/> -->
+  </path>
+
+   <path id="run-classpath">
+     <fileset dir="${lib.dir}">
+       <include name="*.jar"/>
+     </fileset>      	
+  </path>
+
+ </target>
+
+ <!-- =================================================================== -->
+ <!-- Help on usage                                                       -->
+ <!-- =================================================================== -->
+ <target name="usage">
+  <echo message=""/>
+  <echo message=""/>
+  <echo message="TouchStone Build file"/>
+  <echo message="-------------------------------------------------------------"/>
+  <echo message=""/>
+  <echo message=" available targets are:"/>
+  <echo message=""/>
+  <echo message="   all        --> builds all the jars in ./build"/>
+  <echo message="   factories  --> create the properties file in src/touchstone"/>
+  <echo message="   touchstone    --> builds the touchstone.jar file in ./build"/>
+  <echo message="   zip --> creates the compiled distribution in ./dist"/>
+  <echo message="   sourcedist --> creates the source distribution in ./dist"/>    
+  <echo message="   api        --> generates the TouchStone Toolkit  documentation in ./doc/api"/>
+  <echo message="   clean      --> restores distribution to original state"/>
+  <echo message="   usage      --> (default) displays build menu"/>
+  <echo message=""/>
+  <echo message=" See the comments inside the build.xml file for more details."/>
+  <echo message="-------------------------------------------------------------"/>
+  <echo message=""/>
+  <echo message=""/>
+ </target>
+
+ <!-- =================================================================== -->
+ <!-- Prepares the build directory                                        -->
+ <!-- =================================================================== -->
+ <target name="prepare" depends="init">
+  <mkdir dir="${build.dir}"/>
+  <mkdir dir="${build.lib}"/>
+  
+  <copy todir="${build.lib}">
+   <fileset dir="${lib.dir}"/>
+  </copy>
+  
+ </target>
+ 
+ <!-- =================================================================== -->
+ <!-- Prepares the touchstone source code                                    -->
+ <!-- =================================================================== -->
+ <target name="prepare-touchstone" depends="prepare">
+  <mkdir dir="${build.touchstone.src}"/>
+  <mkdir dir="${build.touchstone.dest}"/>
+  
+  <copy todir="${build.touchstone.src}">
+   <fileset dir="${src.dir}"/>
+  </copy>
+ 	
+ 	<pathconvert pathsep=" " property="build.manifest.classpath" dirsep="/">
+ 		<path refid="build-classpath"/>
+ 		<chainedmapper>
+ 		  <flattenmapper />
+ 		  <globmapper from="*" to="lib/*"/>
+   		</chainedmapper>
+ 	</pathconvert>
+ 	<manifest file="${build.touchstone.src}/touchstone.mf">
+		<attribute name="Built-By" value="${user.name}"/>
+		<attribute name="Main-Class" value="fr.inria.insitu.touchstone.run.LaunchExperiment"/>
+		<attribute name="Class-Path" value="${build.manifest.classpath}"/>
+		<attribute name="Created-By" value="Caroline Appert and Jean-Daniel Fekete"/>
+		<section name="common">
+			<attribute name="Implementation-Title" value="TOUCHSTONE"/>
+			<attribute name="Implementation-Version" value="${version} ${TODAY}"/> 
+			<attribute name="Implementation-Vendor" value="INRIA Futurs, France"/>
+			<attribute name="Implementation-URL" value="http://insitu.lri.fr"/>
+		</section>
+	</manifest>
+ </target>
+
+ <!-- =================================================================== -->
+ <!-- Compiles the TouchStone source code                                 -->
+ <!-- =================================================================== -->
+ <target name="compile-touchstone" depends="prepare-touchstone">
+  <!-- copy resource files -->
+  <copy todir="${build.touchstone.dest}">
+   <fileset dir="${build.touchstone.src}" excludes="**/*.java"/>
+  </copy>
+  <!-- <echo>${build.manifest.classpath}</echo> -->
+  <javac srcdir="${build.touchstone.src}"
+   source="1.5"
+   destdir="${build.touchstone.dest}"
+   debug="${debug}"
+   deprecation="${deprecation}"
+   optimize="${optimize}"
+   classpathref="run-classpath">
+	<!--  	<compilerarg value="-Xlint:unchecked"/> -->
+ </javac>
+ </target>
+
+ <!-- =================================================================== -->
+ <!-- Creates the touchstone.jar in ./build                                  -->
+ <!-- =================================================================== -->
+ <target name="touchstone" depends="compile-touchstone">
+   <jar jarfile="${build.dir}/${name}.jar"
+   basedir="${build.touchstone.dest}"
+   includes="**"
+   manifest="${build.touchstone.src}/touchstone.mf"/>
+ </target>
+	
+	<target name="run" depends="touchstone">
+		<java 
+			jar="${build.dir}/${name}.jar"
+			fork="true"/>
+	</target>
+
+ <!-- =================================================================== -->
+ <!-- Build all jars in ./build                                           -->
+ <!-- =================================================================== -->
+ <target name="all" depends="touchstone"/>
+
+ <!-- =================================================================== -->
+ <!-- Creates the API documentation in ./doc/api/                     -->
+ <!-- =================================================================== -->
+ <target name="api" depends="init">
+  <mkdir dir="${doc.apidocs}"/>
+  <javadoc packagenames="${packages}"
+   overview="src/overview.html"
+   sourcepath="${src.dir}"
+   destdir="${doc.apidocs}"
+   author="true"
+   public="true"
+   additionalparam="-source 1.5"
+   version="true"
+   use="true"
+   splitindex="true"
+   noindex="false"
+   windowtitle="TOUCHSTONE"
+   doctitle="TOUCHSTONE"
+   bottom="Copyright &#169; ${year} by INRIA, France All rights reserved."
+  	classpathref="run-classpath">
+  	<link href="http://java.sun.com/j2se/1.4/docs/api"/>
+  	<link href="http://insitu.lri.fr/~fekete/glite/api"/>
+  	<tag name="touchstone.factory" scope="all" description="Touchstone factory arguments:" />
+  	<tag name="touchstone.axes" scope="all" description="Touchstone input axes arguments:" />
+  	<tag name="touchstone.factorRequired" scope="all" description="Touchstone experimental factor required by the objects of this class:" />
+  	<tag name="touchstone.factor" scope="all" description="Touchstone experimental factor definition:" />
+  	<tag name="touchstone.measure" scope="all" description="Touchstone experimental measure definition:" />
+  	<tag name="touchstone.criterion" scope="all" description="Touchstone criterion:" />
+  	<tag name="touchstone.value" scope="all" description="Touchstone factor value:" />
+  	<tag name="touchstone.block" scope="all" description="Touchstone experimental block:" />
+  	<tag name="touchstone.intertitle" scope="all" description="Touchstone experimental intertitle:" />
+  </javadoc>
+  </target>
+
+ <!-- =================================================================== -->
+ <!-- Creates the Factories from documentation                            -->
+ <!-- =================================================================== -->
+ <target name="factories" depends="init">
+ <mkdir dir="${build.dir}/tools/classes"/>
+  <javac srcdir="tools/src"
+   source="1.5"
+   destdir="${build.dir}/tools/classes"
+   debug="${debug}"
+   deprecation="${deprecation}"
+   optimize="${optimize}">
+   <classpath>
+    <fileset dir="${java.home}/lib">
+     <include name="tools.jar"/>
+    </fileset>  
+   	<fileset dir="${lib.dir}">
+   	 <include name="jdom.jar"/>
+   	</fileset>
+   </classpath>
+  </javac>
+
+  <javadoc packagenames="${packages}"
+   sourcepath="${src.dir}"
+   author="true"
+   public="true"
+   additionalparam="-source 1.5"
+   version="true"
+   noindex="false"
+   classpathref="run-classpath"
+   >
+   <doclet name="FactoryPropertiesGenerator" path="${build.dir}/tools/classes"/>
+  </javadoc> 	
+  </target>
+
+ <!-- =================================================================== -->
+ <!-- Build source distribution in ./dist                                 -->
+ <!-- =================================================================== -->
+ <target name="sourcedist" depends="clean">
+  <mkdir dir="${dist.root}"/>
+  <mkdir dir="${sourcedist.dir}"/>
+
+  <copy todir="${sourcedist.dir}">
+   <fileset dir="${root.dir}">
+    <include name="data/**"/>
+    <include name="src/**"/>
+    <include name="lib/**"/>
+    <include name="tools/**"/>
+    <include name="scripts/**"/>
+    <include name="build.xml"/>
+    <include name="touchstone.jnlp"/>
+    <include name="touchstone.html"/>
+    <include name="touchstone-plugin.xml"/>
+    <include name="build.bat"/>
+    <include name="build.sh"/>
+    <include name="jinput*"/>
+    <include name="*jinput*"/>
+   </fileset>
+  </copy>
+
+  <fixcrlf srcdir="${sourcedist.dir}"
+   eol="lf" eof="remove"
+   includes="**/*.sh"
+   />
+  <zip zipfile="${dist.root}/${name}-${version}.zip"
+   basedir="${dist.root}/${name}-${version}"
+   whenempty="create"/>
+ </target>
+
+ <!-- =================================================================== -->
+ <!-- Build compiled distribution in ./dist                               -->
+ <!-- =================================================================== -->
+ <target name="zip" depends="clean, all, api">
+  <mkdir dir="${dist.root}"/>
+  <mkdir dir="${sourcedist.dir}"/>
+
+  <copy todir="${sourcedist.dir}">
+   <fileset dir="${root.dir}">
+    <exclude name="dist/**"/>
+    <!--
+    <exclude name="src/**"/>
+    -->
+   	<exclude name="class/**"/>
+   	
+   	<exclude name="build/**"/>
+   	
+   	<!--
+    <exclude name="data/**"/>
+    <exclude name="lib/**"/>
+    -->
+    <exclude name="examples/**"/>
+    <exclude name="tests/**"/>
+   </fileset>
+  </copy>
+  <copy todir="${sourcedist.dir}">
+    <fileset dir="${root.dir}/build">
+	  	<include name="*.jar"/>
+  	</fileset>
+  </copy>
+
+  <fixcrlf srcdir="${sourcedist.dir}"
+   eol="lf" eof="remove"
+   includes="**/*.sh"
+   />
+
+  <zip zipfile="${dist.root}/${name}-${version}.zip"
+   basedir="${dist.root}/${name}-${version}"
+   whenempty="create"
+   />
+ </target>
+
+ <!-- =================================================================== -->
+ <!-- Clean restors distribution to original state                        -->
+ <!-- =================================================================== -->
+ <target name="clean" depends="init">
+  <delete dir="${build.dir}"/>
+  <delete dir="${dist.root}"/>
+  <delete dir="${doc.apidocs}"/>
+ </target>
+</project>
