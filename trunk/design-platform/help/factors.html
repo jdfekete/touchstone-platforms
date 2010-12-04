@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<link rel = "STYLESHEET" href="touchstone.css" Type = "text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Timing step</title>
+</head>
+
+<body>
+
+<a name="top"> </a>
+<h1>Factors</h1>
+
+<p>This tab is used to gather information about <a href="glossary.html#factor">factors</a> of the experiment.</p>
+
+<p><b>Factor tag</b>: Touchstone can create three basic experiment designs: between-subjects, within-subjects and mixed. Touchstone does this by specifying which factors are between-subjects and which are within-subjects.</p>
+
+<p>The values of a <i>between-subjects</i> factor are randomly assigned to subjects (or groups of subjects). This means that each subject (or group) experienced a different value of this factor. On the opposite, the values of a <i>within-subjects</i> factor are all assigned to each subject. A pure between-subjects (resp. within-subjects) involves only between-subjects (resp. within-subjects) factors. A mixed design involves both between-subjects and within-subjects factors.</p>
+
+<p><b>Factor role</b>: [TODO]</p>
+
+<p><b>Factor name</b>: The name of a factor is made of two elements: a unique id of a few letters that will basically be used when reporting experiment design and results (text and graphs) and a long name that is more explicit.</p>
+
+<p><b>Factor type</b>: The type is either <i>character</i> or <i>number</i>. It is independent from the "statistical type" (nominal, ordinal, etc.), the type here is used to generate the Java code for factors. Factors of type <i>character</i> typically inherit from class <code>CharacterFactor</code> while factors of type <i>number</i> inherit from class <code>NumericalFactor</code>. Factors of type <i>character</i> have basically string values but note that you will be able to use more complex Java object values with the run platform. [TODO explain this somewhere]</p>
+
+<p><b>Factor values</b>: As factors, values have an id and an (optional) long name. Be sure to be consistent between the factor type and the factor values (e.g., you can not add a string value to a factor of type <i>character</i>). A value can be deleted by selecting it in the list and pressing the backspace key.</p>
+
+
+</body>
+</html>

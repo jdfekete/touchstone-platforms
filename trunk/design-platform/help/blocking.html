@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<link rel = "STYLESHEET" href="touchstone.css" Type = "text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Timing step</title>
+</head>
+
+<body>
+
+<a name="top"> </a>
+<h1>Blocking</h1>
+
+<p>To describe experiment designs, TouchStone uses two operators:
+	<ul>
+	<li> x  separates crossed factors:	A x B <i>A is crossed with B</i> </li>
+	<li> [] identifies nested factors:	A[B] <i>B is nested within A</i>. </li> 
+	</ul>
+For example, T x ID x subject[MN] is a mixed design where all subjects get all values of factors T and ID, but only 1 value of factor MN.
+</p>
+
+<p>In this blocking tab, you can specify the different blocks of your experiment, i.e. how the different values of the within-subjects factors are grouped and how many times the conditions are replicated.</p>
+
+<p>For example it is usual to group the trials by interaction technique (T factor) to not disturb participants with successive changes. In that case, the T factor is nested at the block level. Use the combo box corresponding to the factor you want to nest. A block can be defined by several factors by simply nesting these factors at the same block level. For example, one can decide that a block presents trials for one interaction technique (T) at one task difficulty (ID). In this latter case, if there are 3 different interaction techniques and 2 levels of difficulty, the experiment contained 3 x 2 different types of block.</p>
+	
+<p>You can of course define a hierarchy of blocks (e.g. a block made of sub-blocks and so on) by using the different items Block1, Block2, ..., Block<i>n</i> in combo boxes. Note that it is different to nest both the T factor and the ID factor at the same block level (e.g. <i>Block1</i>) than to nest the T factor at one block level (e.g. <i>Block1</i>) and then the ID factor at another block level (e.g. <i>Block2</i>): the counterbalancing strategy is applied to the 3 x 2 = 6 conditions in the first case, while it is applied in sequence to the 3 conditions and then to the 2 conditions in the second case.</p>
+
+<p>The experiment tree on the left part of this tab is synchronized with combo boxes selections to present a generic run of the experiment which helps you to understand the effect of nesting factors at different levels.</p>
+
+<p>The right part of this blocking tab allows you to set the number of participants and the number of replications for each condition. Replication refers to increasing the number of trials of the same type, usually to reduce error variance (mean error). Although not required, replicating trials in HCI experiments is considered good practice. For example, we might decide to measure reaction time four times for each particular target size. Using this tab you can decide to repeat either at the block or at the trial level.</p>
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+javac -d . -cp lib/antlr.jar:lib/commons-lang-2.1.jar:lib/javaosc.jar:lib/jdom.jar:lib/jinput-linux.jar:lib/jinput.jar:lib/js.jar:lib/touchstone.jar:lib/SwingStates.jar @sourcefiles
+java -cp lib/antlr.jar:lib/commons-lang-2.1.jar:lib/javaosc.jar:lib/jdom.jar:lib/jinput-linux.jar:lib/jinput.jar:lib/js.jar:lib/touchstone.jar:lib/SwingStates.jar:. graphic.DesignPlatform
