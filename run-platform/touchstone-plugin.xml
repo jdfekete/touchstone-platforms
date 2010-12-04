@@ -1,0 +1,316 @@
+<project name="touchstone-plugin" default="compile-plugin" basedir=".">
+ <!-- =================================================================== -->
+ <!-- Initialization target                                               -->
+ <!-- =================================================================== -->
+	
+	
+ <target name="init" depends="deps-true,deps-false">
+  <tstamp/>
+  <property name="version" value="${DSTAMP}beta"/>
+  <property name="year" value="2007"/>
+
+  <echo message="----------- ${Name} ${version} [${year}] ------------"/>
+
+  <property name="build.compiler" value="modern"/>
+  <property name="debug" value="off"/>
+  <property name="optimize" value="on"/>
+  <property name="deprecation" value="on"/>
+
+  <!-- Define the source directories -->
+  <dirname property="touchstone.basedir" file="${ant.file.touchstone-plugin}"/>
+  <property name="root.dir" location="."/>
+  <property name="doc.dir" location="${root.dir}/doc"/>
+  <property name="lib.dir" location="${root.dir}/lib"/>
+  <property name="src.dir" location="${root.dir}/src"/>
+  <property name="doc.apidocs" location="${doc.dir}/api"/>
+  <property name="build.dir" location="${root.dir}/build"/> 
+  <property name="build.dest" location="${build.dir}/classes"/>
+  <property name="build.jar" value="${build.dir}/${name}.jar"/>
+  <property name="touchstone.dir" location="${touchstone.basedir}"/>
+  <property name="touchstone.lib" location="${touchstone.dir}/lib"/>
+  <property name="touchstone.tools" location="${touchstone.dir}/tools"/>
+  <property name="touchstone.build" location="${touchstone.dir}/build"/>
+  <property name="touchstone.jar" value="${touchstone.build}/touchstone.jar"/>
+  <property name="touchstone.maxmemory" value="256m"/>
+  <property name="dist.root" value="${root.dir}/dist"/>
+  <property name="sourcedist.dir" value="${dist.root}/${name}-${version}/${name}"/>
+ 	
+  <property name="touchstone.depends" refid="deps"/>
+  <path id="build-classpath">
+  	<fileset dir="${touchstone.lib}">
+  		<include name="*.jar"/>
+  	</fileset>
+  	<fileset dir="${lib.dir}">
+  		<include name="*.jar"/>
+  	</fileset>
+	<path refid="deps-jars"/>
+  	<pathelement location="${touchstone.jar}"/>
+  </path>
+
+ 	<available file="${touchstone.jar}" property="touchstone.present"/>
+ 	<condition property="reqproperties.present">
+ 		<and>
+ 			<isset property="Vendor"/>
+ 			<isset property="URL"/>
+ 			<isset property="name"/>
+ 			<isset property="Name"/>
+ 		</and>
+ 	</condition>
+
+
+ </target>
+	
+	<target name="prepare" depends="init">
+	 	<mkdir dir="${build.dir}"/>
+	 	<mkdir dir="${build.dest}"/>
+	 	<mkdir dir="${src.dir}"/>
+	 	<mkdir dir="${lib.dir}"/>
+	 	<manifestclasspath
+	 		property="build.manifest.classpath"
+	 		jarfile="${build.dir}/${name}.jar">
+	 		<classpath>
+		 	   	<fileset dir="${lib.dir}">
+		 	   		<include name="*.jar"/>
+		 	   	</fileset>
+		    </classpath>
+	 	</manifestclasspath>
+	 	<manifest file="${build.dir}/plugin.mf">
+	 		<attribute name="Built-By" value="${user.name}"/>
+			<attribute name="Main-Class" value="fr.inria.insitu.touchstone.LaunchExperiment"/>
+			<attribute name="Class-Path" value="${build.manifest.classpath}"/>
+			<attribute name="Created-By" value="Caroline Appert and Jean-Daniel Fekete"/>
+			<section name="common">
+				<attribute name="Implementation-Title" value="${Name}"/>
+				<attribute name="Implementation-Version" value="${version} ${TODAY}"/> 
+				<attribute name="Implementation-Vendor" value="INRIA Futurs, France"/>
+				<attribute name="Implementation-URL" value="http://insitu.lri.fr"/>
+			</section>
+		</manifest>
+	</target>
+	
+	<target name="deps-true" if="dependencies">
+	<path id="deps">
+		<dirset dir=".." includes="${dependencies}"/>
+ 	</path>
+		<fail message="Missing path for dependent jar files from 'deps-jars'">
+		     <condition>
+		       <not>
+		         <isreference refid="deps-jars" type="path"/>
+		       </not>
+		     </condition>
+		   </fail>		
+	</target>
+	
+	<target name="deps-false" unless="dependencies">
+		<path id="deps"/>
+		<path id="deps-jars"/>
+		<path id="deps-natives"/>
+	</target>
+	
+	<target name="check" depends="init" unless="reqproperties.present">
+		<fail message="Missing required properties for plugin: 'Vendor', 'URL', 'name' and 'Name' should be defined"/>
+	</target>
+	
+
+	 <!-- =================================================================== -->
+	 <!-- Creates the Factories from documentation                            -->
+	 <!-- =================================================================== -->
+	 <target name="factories" depends="prepare">
+	 	<path id="factories-classpath">
+	 		<path refid="build-classpath"/>
+	  		<fileset dir="${java.home}/lib">
+	  			<include name="tools.jar"/>
+	  		</fileset>
+	  		<fileset dir="${touchstone.lib}">
+	  			<include name="jdom.jar"/>
+	  		</fileset>
+	 	</path>
+	 	
+	 	
+	  <javac srcdir="${touchstone.tools}/src"
+	   source="1.5"
+	   destdir="${build.dir}"
+	   debug="${debug}"
+	   deprecation="${deprecation}"
+	   optimize="${optimize}"
+	  	classpathref="factories-classpath"/>
+
+	  <javadoc 
+	   sourcepath="${src.dir}"
+	   author="true"
+	   public="true"
+	   additionalparam="-source 1.5"
+	   version="true"
+	   noindex="false"
+	  	classpathref="factories-classpath">
+	  	<doclet name="FactoryPropertiesGenerator" path="${build.dir}"/>
+	  </javadoc>
+	 </target>
+	
+	<!-- ================================= 
+          target: build-touchstone              
+         ================================= -->
+    <target name="build-touchstone" depends="prepare,check,factories" 
+    	description="--> build the touchstone.jar if required" 
+    	unless="touchstone.present">
+    	<ant dir="${touchstone.basedir}" antfile="build.xml" target="touchstone" inheritall="false"/>
+    </target>
+
+	<!-- ================================= 
+          target: compile-plugin              
+         ================================= -->
+    <target name="compile-plugin" depends="build-touchstone" description="--> Compiles the touchstone plugin">
+		<copy todir="${build.dest}">
+		<fileset dir="${src.dir}">
+			<exclude name="**.java"/>
+			<exclude name="**.html"/>
+		   </fileset>
+    	</copy>
+    	
+    	<javac srcdir="${src.dir}"
+    	   source="1.5"
+    	   destdir="${build.dest}"
+    	   debug="${debug}"
+    	   deprecation="${deprecation}"
+    	   optimize="${optimize}"
+    	   classpathref="build-classpath"/>
+        
+    </target>
+
+	 <!-- =================================================================== -->
+	 <!-- Creates the plugin.jar in ./build                                  -->
+	 <!-- =================================================================== -->
+	 <target name="jar" depends="compile-plugin">
+	   <jar jarfile="${build.jar}"
+	   basedir="${build.dest}"
+	   includes="**"
+	   manifest="${build.dir}/plugin.mf"/>
+	 </target>
+	
+	<!-- ================================= 
+          target: run
+         ================================= -->
+    <target name="run" depends="jar" description="Runs the plugin">
+        <java
+        	fork="true" 
+        	maxmemory="${touchstone.maxmemory}"
+        	classname="fr.inria.insitu.touchstone.run.LaunchExperiment">
+        	<classpath>
+        		<path refid="build-classpath"/>
+    			<pathelement location="${build.jar}"/>
+    		</classpath>
+        	<env key="PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.PATH}"/>
+        	<env key="LD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.LD_LIBRARY_PATH}"/>
+        	<env key="DYLD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.DYLD_LIBRARY_PATH}"/>
+        	<arg pathref="deps-jars"/>
+        	<!-- list of jar plugins -->
+        </java>
+    </target>
+	
+	<!-- ================================= 
+          target: xml
+         ================================= -->
+    <target name="xml" depends="jar" description="Export the description of the Plugin">
+    	<java
+        	fork="true"
+        	classname="fr.inria.insitu.touchstone.run.utils.PluginUtils">
+        	<classpath>
+        		<path refid="build-classpath"/>
+    			<pathelement location="${build.jar}"/>
+    		</classpath>
+        	<env key="PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.PATH}"/>
+        	<env key="LD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.LD_LIBRARY_PATH}"/>
+        	<env key="DYLD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.DYLD_LIBRARY_PATH}"/>
+        	<arg pathref="deps-jars"/>
+		</java>
+    </target>
+
+	<!-- ================================= 
+      target: keyboard
+     ================================= -->
+<target name="input" depends="jar" description="Export the description of the Keyboard settings as a Plugin">
+	<java
+    	fork="true"
+    	classname="fr.inria.insitu.touchstone.run.input.InputManager">
+    	<classpath>
+    		<path refid="build-classpath"/>
+			<pathelement location="${build.jar}"/>
+		</classpath>
+    	<env key="PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.PATH}"/>
+    	<env key="LD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.LD_LIBRARY_PATH}"/>
+    	<env key="DYLD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.DYLD_LIBRARY_PATH}"/>
+    	<arg value="input.xml"/>
+	</java>
+</target>
+	
+	 <!-- =================================================================== -->
+	 <!-- Creates the API documentation in ./doc/api/                     -->
+	 <!-- =================================================================== -->
+	 <target name="api" depends="prepare">
+	  <mkdir dir="${doc.apidocs}"/>
+	  <javadoc packagenames="*"
+	   sourcepath="${src.dir}"
+	   destdir="${doc.apidocs}"
+	   author="true"
+	   public="true"
+	   additionalparam="-source 1.5"
+	   version="true"
+	   use="true"
+	   splitindex="true"
+	   noindex="false"
+	   windowtitle="TOUCHSTONE"
+	   doctitle="${Name} Touchstone Plugin"
+	   bottom="Copyright &#169; ${year} by ${Vendor}, France All rights reserved."
+	  	classpathref="build-classpath">
+	  	<link href="http://java.sun.com/j2se/1.5/docs/api"/>
+	  	<tag name="touchstone.factory" scope="all" description="Touchstone factory arguments:" />
+	  	<tag name="touchstone.axes" scope="all" description="Touchstone input axes arguments:" />
+	  	<tag name="touchstone.factorRequired" scope="all" description="Touchstone experimental factor required by the objects of this class:" />
+	  	<tag name="touchstone.factor" scope="all" description="Touchstone experimental factor definition:" />
+	  	<tag name="touchstone.measure" scope="all" description="Touchstone experimental measure definition:" />
+	  	<tag name="touchstone.criterion" scope="all" description="Touchstone criterion:" />
+	  	<tag name="touchstone.value" scope="all" description="Touchstone factor value:" />
+	  	<tag name="touchstone.block" scope="all" description="Touchstone experimental block:" />
+	  	<tag name="touchstone.intertitle" scope="all" description="Touchstone experimental intertitle:" />
+	  </javadoc>
+	  </target>
+
+
+	 <!-- =================================================================== -->
+	 <!-- Build source distribution in ./dist                                 -->
+	 <!-- =================================================================== -->
+	 <target name="zip" depends="compile-plugin,xml,api">
+	  <mkdir dir="${dist.root}"/>
+	  <mkdir dir="${sourcedist.dir}"/>
+
+	  <copy todir="${sourcedist.dir}">
+		<fileset dir="${root.dir}">
+		    <exclude name="build/classes/**"/>
+		    <exclude name="build/**.class"/>
+		   	<exclude name="dist/**"/>
+		   	<exclude name="bin/**"/>
+		   	<exclude name="class/**"/>
+		    <exclude name="input.xml"/>
+		</fileset>
+	  </copy>
+
+	  <fixcrlf srcdir="${sourcedist.dir}"
+	   eol="lf" eof="remove"
+	   includes="**/*.sh"
+	   />
+	  <zip zipfile="${dist.root}/${name}-${version}.zip"
+	   basedir="${dist.root}/${name}-${version}"
+	   whenempty="create"/>
+	 </target>
+	
+	 <!-- =================================================================== -->
+	 <!-- Clean restors distribution to original state                        -->
+	 <!-- =================================================================== -->
+	 <target name="clean" depends="init">
+	 	<delete dir="${build.dir}"/>
+  	  	<delete dir="${doc.apidocs}"/>
+  	  	<delete dir="${dist.root}"/>
+	 	<delete name="input.xml"/>
+	 </target>
+
+</project>
