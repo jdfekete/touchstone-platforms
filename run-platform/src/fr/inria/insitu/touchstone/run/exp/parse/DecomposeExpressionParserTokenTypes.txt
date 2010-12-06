@@ -1,0 +1,20 @@
+// $ANTLR : decomposeExpressions.g -> DecomposeExpressionParserTokenTypes.txt$
+DecomposeExpressionParser    // output token vocab name
+IMPLY=4
+STRING=5
+AND=6
+OR=7
+XOR=8
+NOT=9
+LPAREN=10
+RPAREN=11
+WORD=12
+COLON=13
+INT=14
+NUMBER=15
+CHAR_LITERAL=16
+DOT=17
+EXPONENT=18
+ESC=19
+WS=20
+HEX_DIGIT=21
