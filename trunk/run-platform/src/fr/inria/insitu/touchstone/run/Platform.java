@@ -1061,7 +1061,7 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 	 * {@inheritDoc}
 	 */
 	public void acceptMessage(Date when, OSCMessage message) {
-		System.out.println("Received OSC message: " + message.getAddress());		
+//		System.out.println("Received OSC message: " + message.getAddress());		
 		if (message.getAddress().contains(OSC_END_CONDITION_ADDRESS)) {
 			long time = System.currentTimeMillis();
 			if (when != null)
