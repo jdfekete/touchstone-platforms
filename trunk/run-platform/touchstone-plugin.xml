@@ -57,6 +57,27 @@
  		</and>
  	</condition>
 
+ 	<condition property="noarg">
+ 		<and>
+ 			<not><isset property="noe.JVMarg.1"/></not>
+ 	 		<not><isset property="noe.JVMarg.2"/></not>
+ 	 	</and>
+ 	</condition>	
+	
+ 	<condition property="arg1">
+ 		<and>
+ 			<isset property="noe.JVMarg.1"/>
+ 	 		<not><isset property="noe.JVMarg.2"/></not>
+ 	 	</and> 			
+ 	</condition>
+
+ 	<condition property="arg2">
+ 		<and>
+ 			<isset property="noe.JVMarg.1"/>
+ 			<isset property="noe.JVMarg.2"/>
+ 		</and>
+ 	</condition>
+ 	
 
  </target>
 	
@@ -190,7 +211,12 @@
 	<!-- ================================= 
           target: run
          ================================= -->
-    <target name="run" depends="jar" description="Runs the plugin">
+    <target name="run" depends="jar,runnoarg,run1arg,run2args" description="Runs the plugin" >
+    	<!--<echo message="${noe.JVMarg.1}"/>-->
+    </target>
+	
+    <target name="runnoarg" if="noarg">
+    	<echo message="no arg" />
         <java
         	fork="true" 
         	maxmemory="${touchstone.maxmemory}"
@@ -199,6 +225,45 @@
         		<path refid="build-classpath"/>
     			<pathelement location="${build.jar}"/>
     		</classpath>
+        	<env key="PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.PATH}"/>
+        	<env key="LD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.LD_LIBRARY_PATH}"/>
+        	<env key="DYLD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.DYLD_LIBRARY_PATH}"/>
+        	<arg pathref="deps-jars"/>
+        	<!-- list of jar plugins -->
+        </java>
+    </target>
+	
+    <target name="run1arg" if="arg1">
+    	<echo message="1 arg" />
+        <java
+        	fork="true" 
+        	maxmemory="${touchstone.maxmemory}"
+        	classname="fr.inria.insitu.touchstone.run.LaunchExperiment">
+        	<classpath>
+        		<path refid="build-classpath"/>
+    			<pathelement location="${build.jar}"/>
+    		</classpath>
+        	<jvmarg value="${touchstone.JVMarg.1}"/>
+        	<env key="PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.PATH}"/>
+        	<env key="LD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.LD_LIBRARY_PATH}"/>
+        	<env key="DYLD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.DYLD_LIBRARY_PATH}"/>
+        	<arg pathref="deps-jars"/>
+        	<!-- list of jar plugins -->
+        </java>
+    </target>
+	
+    <target name="run2args" if="arg2">
+    	<echo message="2 args" />
+        <java
+        	fork="true" 
+        	maxmemory="${touchstone.maxmemory}"
+        	classname="fr.inria.insitu.touchstone.run.LaunchExperiment">
+        	<classpath>
+        		<path refid="build-classpath"/>
+    			<pathelement location="${build.jar}"/>
+    		</classpath>
+        	<jvmarg value="${touchstone.JVMarg.1}"/>
+        	<jvmarg value="${touchstone.JVMarg.2}"/>
         	<env key="PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.PATH}"/>
         	<env key="LD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.LD_LIBRARY_PATH}"/>
         	<env key="DYLD_LIBRARY_PATH" path="${touchstone.basedir}:${touchstone.depends}:${env.DYLD_LIBRARY_PATH}"/>
