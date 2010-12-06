@@ -336,8 +336,10 @@ public class Experiment extends StateMachine {
 	public void start(String participant, int blockBegin, int trialBegin) {
 		new PartialXMLParse(this, script, participant, 1, 1);
 		boolean in = false;
-		numBlock = blockBegin-1;
-		numTrial = trialBegin-1;
+//		numBlock = blockBegin-1;
+//		numTrial = trialBegin-1;
+		numBlock = -1;
+		numTrial = -1;
 		currentParticipant = participant;
 		Platform.getInstance().setVisible(true);
 		fireActionEvent(EXPERIMENT_STARTED);
@@ -818,6 +820,8 @@ public class Experiment extends StateMachine {
 	private void setEnvironment(Object[] event) {
 		Hashtable<String, String> atts = (Hashtable<String, String>)event[1];
 		int newNumBlock = Integer.parseInt(atts.get("numBlock"));
+		System.out.println("newNumBlock="+newNumBlock);
+		System.out.println("this.numBlock="+this.numBlock);
 		boolean blockChanged = newNumBlock != this.numBlock;
 		this.numBlock = newNumBlock;
 		this.numTrial = Integer.parseInt(atts.get("numTrial"));
