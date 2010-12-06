@@ -4,4 +4,4 @@ TOUCHSTONE INSTALL INSTRUCTIONS
   # Install the design platform: download the archive and and unzip it in your Touchstone workspace.
   # Install the run platform: download the archive and unzip it in your Touchstone workspace. Then go in the run folder and type the command: `./build.sh all` or (`.\build.bat all` for Windows users).
 
-[http://code.google.com/images/install-pic.png]
+http://www.lri.fr/~appert/touchstone/images/install-pic.png
