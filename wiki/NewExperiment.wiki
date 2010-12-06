@@ -4,5 +4,4 @@
   # Design your experiment. In the `design-platform` folder, run the script `./launch-design.sh` (or `.\launch-design.bat` for Windows users)
   # Fill in the code for your experiment components.
   # Run your experiment. In your experiment folder (e.g. `PointingAndDistractors`), use the command `./build.sh run` (or `.\build.bat run` for Windows users)
-  # (optional) Export your experiment as a TouchStone plug-in. In your experiment folder (e.g. `PointingAndDistractors`), use the command `./build.sh xml` (or `.\build.bat xml` for Windows users). The TouchStone plug-in is the combination of a xml description file ('
-`PointingAndDistractors/plugin.xml`) and a library of experiment components (`PointingAndDistractors/build/plugin.xml` in our example).
+  # (optional) Export your experiment as a TouchStone plug-in. In your experiment folder (e.g. `PointingAndDistractors`), use the command `./build.sh xml` (or `.\build.bat xml` for Windows users). The TouchStone plug-in is the combination of a xml description file (`PointingAndDistractors/plugin.xml`) and a library of experiment components (`PointingAndDistractors/build/plugin.xml` in our example).
