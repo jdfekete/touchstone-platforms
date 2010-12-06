@@ -1,13 +1,5 @@
-#summary One-sentence summary of this page.
+TOUCHSTONE INSTALL INSTRUCTIONS
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  # Create a folder that will be your Touchstone workspace (e.g. `touchstone-workspace`)
+  # Install the design platform: download the archive and and unzip it in your Touchstone workspace.
+  # Install the run platform: download the archive and unzip it in your Touchstone workspace. Then go in the run folder and type the command: `./build.sh all` or (`.\build.bat all` for Windows users).
