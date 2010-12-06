@@ -820,8 +820,6 @@ public class Experiment extends StateMachine {
 	private void setEnvironment(Object[] event) {
 		Hashtable<String, String> atts = (Hashtable<String, String>)event[1];
 		int newNumBlock = Integer.parseInt(atts.get("numBlock"));
-		System.out.println("newNumBlock="+newNumBlock);
-		System.out.println("this.numBlock="+this.numBlock);
 		boolean blockChanged = newNumBlock != this.numBlock;
 		this.numBlock = newNumBlock;
 		this.numTrial = Integer.parseInt(atts.get("numTrial"));
