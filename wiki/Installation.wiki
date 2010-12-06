@@ -1,7 +1,7 @@
 TOUCHSTONE INSTALL INSTRUCTIONS
 
   # Create a folder that will be your Touchstone workspace (e.g. `touchstone-workspace`)
-  # Install the design platform: download the archive and and unzip it in your Touchstone workspace.
-  # Install the run platform: download the archive and unzip it in your Touchstone workspace. Then go in the run folder and type the command: `./build.sh all` or (`.\build.bat all` for Windows users).
+  # Install the design platform: download the archive and unzip it in your Touchstone workspace to get the `design-platform` folder.
+  # Install the run platform: download the archive and unzip it in your Touchstone workspace to get the `run-platform` folder. Then go to `run-platform` and use the command: `./build.sh all` or (`.\build.bat all` for Windows users).
 
 http://www.lri.fr/~appert/touchstone/images/install-pic.png
