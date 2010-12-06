@@ -190,7 +190,9 @@ public class Experiment extends StateMachine {
 	protected final void sendOSCMessage(String type) {
 		OSCMessage message = new OSCMessage();
 		message.setAddress(type);
-		Platform.getInstance().sendOSCMessage(message);		
+		if(Platform.getInstance().isOSCEnabled()) {
+			Platform.getInstance().sendOSCMessage(message);
+		}
 	}
 	
 	class SystemEvent extends VirtualEvent {
@@ -336,14 +338,14 @@ public class Experiment extends StateMachine {
 	public void start(String participant, int blockBegin, int trialBegin) {
 		new PartialXMLParse(this, script, participant, 1, 1);
 		boolean in = false;
-//		numBlock = blockBegin-1;
-//		numTrial = trialBegin-1;
 		numBlock = -1;
 		numTrial = -1;
 		currentParticipant = participant;
 		Platform.getInstance().setVisible(true);
 		fireActionEvent(EXPERIMENT_STARTED);
-		sendOSCMessage(Platform.OSC_START_EXPERIMENT_ADDRESS);
+		if(Platform.getInstance().isOSCEnabled()) {
+			sendOSCMessage(Platform.OSC_START_EXPERIMENT_ADDRESS);
+		}
 		processSystemEvent();
 		goTo(blockBegin, trialBegin);
 	}
@@ -545,7 +547,9 @@ public class Experiment extends StateMachine {
 		while(evt == null) {
 			if(eventIndex == systemEvents.size()) {
 				System.out.println("EXPERIMENT FINISHED");
-				sendOSCMessage(Platform.OSC_END_EXPERIMENT_ADDRESS);
+				if(Platform.getInstance().isOSCEnabled()) {
+					sendOSCMessage(Platform.OSC_END_EXPERIMENT_ADDRESS);
+				}
 				fireActionEvent(EXPERIMENT_FINISHED);
 				return;
 			}
