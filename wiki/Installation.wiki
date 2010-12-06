@@ -1,4 +1,4 @@
-# TOUCHSTONE INSTALL INSTRUCTIONS
+#TOUCHSTONE INSTALL INSTRUCTIONS
 
   # Create a folder that will be your Touchstone workspace (e.g. `touchstone-workspace`)
   # Install the design platform: download the archive and unzip it in your Touchstone workspace to get the `design-platform` folder.
