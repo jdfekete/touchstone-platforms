@@ -85,7 +85,8 @@ Then try building.
   <echo message="----------- ${Name} ${version} [${year}] ------------"/>
 
   <property name="build.compiler" value="modern"/>
-  <property name="debug" value="off"/>
+ <!-- <property name="debug" value="off"/>-->
+  <property name="debug" value="on"/>
   <property name="optimize" value="on"/>
   <property name="deprecation" value="on"/>
   <property name="packages" value="fr.inria.insitu.touchstone.run.*"/>
