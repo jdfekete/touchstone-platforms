@@ -63,6 +63,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import com.illposed.osc.OSCMessage;
+
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
 import fr.inria.insitu.touchstone.run.Platform;
@@ -397,6 +399,7 @@ public class CodeGeneration {
 			File directoryOfFilesToCopy = new File("filesToCopyForGeneration");
 			File[] filesToCopy = directoryOfFilesToCopy.listFiles();
 			for (int i = 0; i < filesToCopy.length; i++) {
+				if(!filesToCopy[i].getName().startsWith("build")) continue;
 				File dest = new File(rootDirectory.getAbsolutePath()+File.separator+filesToCopy[i].getName());
 				fileCopy(filesToCopy[i], dest);
 				dest.setExecutable(true);
@@ -492,7 +495,8 @@ public class CodeGeneration {
 
 		File dirPackage = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID);
 		dirPackage.mkdirs();
-		File fileCriterion = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+className+".java");
+		String idCriterionForCode = getValidIDFor(className);
+		File fileCriterion = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+idCriterionForCode+".java");
 		if(fileAlreadyGenerated.contains(fileCriterion.getAbsolutePath()))
 			return;
 		try {
@@ -503,16 +507,17 @@ public class CodeGeneration {
 			pw.write("import java.awt.event.InputEvent;\n");
 			pw.write("import javax.swing.Timer;\n");
 			pw.write("import fr.inria.insitu.touchstone.run.input.AxesEvent;\n");
-
+			pw.write("import com.illposed.osc.OSCMessage;\n");
+			
 			pw.write("/**\n");
 			pw.write(" *\n");
 			pw.write(" * @touchstone.criterion "+className+"\n");
 			pw.write(" */\n");
 
-			pw.write("public class "+className+" extends "+classToExtend.getName()+" {\n");
+			pw.write("public class "+idCriterionForCode+" extends "+classToExtend.getName()+" {\n");
 
 			// constructor
-			pw.write("\tpublic "+className+"(");
+			pw.write("\tpublic "+idCriterionForCode+"(");
 			if(args != null) {
 				for(int i = 0; i < args.length; i++) {
 					if(i!=0) pw.write(", ");
@@ -533,13 +538,18 @@ public class CodeGeneration {
 			pw.write("\t\treturn false;\n");
 			pw.write("\t}\n");
 
+			pw.write("\tpublic boolean isReached(InputEvent e) {\n");
+			pw.write("\t\t// This method is called each time an event occurs on a graphical component that is registered in the Platform\n");
+			pw.write("\t\treturn false;\n");
+			pw.write("\t}\n");
+
 			pw.write("\tpublic boolean isReached(AxesEvent e) {\n");
 			pw.write("\t\t// This method is called each time an axis which is listened by the Platform changes\n");
 			pw.write("\t\treturn false;\n");
 			pw.write("\t}\n");
 
-			pw.write("\tpublic boolean isReached(InputEvent e) {\n");
-			pw.write("\t\t// This method is called each time an event occurs on a graphical component that is registered in the Platform\n");
+			pw.write("\tboolean isReached(OSCMessage message, long when) {\n");
+			pw.write("\t\t// This method is called each time the Platform receives an OSC message\n");
 			pw.write("\t\treturn false;\n");
 			pw.write("\t}\n");
 
@@ -605,7 +615,8 @@ public class CodeGeneration {
 	private void generateBlock(String className, Class<?> classToExtend, Class<?>[] args) {
 		File dirPackage = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID);
 		dirPackage.mkdirs();
-		File fileBlock = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+className+".java");
+		String idBlockForCode = getValidIDFor(className);
+		File fileBlock = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+idBlockForCode+".java");
 		if(fileAlreadyGenerated.contains(fileBlock.getAbsolutePath())) 
 			return;
 		try {
@@ -620,9 +631,9 @@ public class CodeGeneration {
 			pw.write(" * @touchstone.block "+className+"\n");
 			pw.write(" */\n");
 
-			pw.write("public class "+className+" extends "+classToExtend.getName()+" {\n");
+			pw.write("public class "+idBlockForCode+" extends "+classToExtend.getName()+" {\n");
 
-			pw.write("\tpublic "+className+"(");
+			pw.write("\tpublic "+idBlockForCode+"(");
 
 			if(args != null) {
 				for(int i = 0; i < args.length; i++) {
@@ -662,7 +673,8 @@ public class CodeGeneration {
 
 		File dirPackage = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID);
 		dirPackage.mkdirs();
-		File fileIntertitle = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+className+".java");
+		String idIntertitleForCode = getValidIDFor(className);
+		File fileIntertitle = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+idIntertitleForCode+".java");
 		if(fileAlreadyGenerated.contains(fileIntertitle.getAbsolutePath())) 
 			return;
 		try {
@@ -681,10 +693,10 @@ public class CodeGeneration {
 			pw.write(" * @touchstone.intertitle "+className+"\n");
 			pw.write(" */\n");
 
-			pw.write("public class "+className+" extends "+classToExtend.getName()+" {\n");
+			pw.write("public class "+idIntertitleForCode+" extends "+classToExtend.getName()+" {\n");
 
 			// constructor
-			pw.write("\tpublic "+className+"(");
+			pw.write("\tpublic "+idIntertitleForCode+"(");
 			if(args != null) {
 				for(int i = 0; i < args.length; i++) {
 					if(i!=0) pw.write(", ");
@@ -721,7 +733,8 @@ public class CodeGeneration {
 	private void generateCharacterFactor(String factorName) {
 		File dirPackage = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID);
 		dirPackage.mkdirs();
-		File fileFactor = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+"Factor_"+currentCharacterFactor+".java");
+		String idFactorForCode = getValidIDFor(currentCharacterFactor);
+		File fileFactor = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+"Factor_"+idFactorForCode+".java");
 		if(fileAlreadyGenerated.contains(fileFactor.getAbsolutePath())) 
 			return;
 		try {
@@ -734,10 +747,10 @@ public class CodeGeneration {
 			pw.write(" *  name: "+factorName+"\n");
 			pw.write(" */\n");
 
-			pw.write("public class Factor_"+currentCharacterFactor+" extends CharacterFactor {\n");
+			pw.write("public class Factor_"+idFactorForCode+" extends CharacterFactor {\n");
 
 			// constructor
-			pw.write("\tpublic Factor_"+currentCharacterFactor+"() {\n");
+			pw.write("\tpublic Factor_"+idFactorForCode+"() {\n");
 			pw.write("\t\tsuper(\""+currentCharacterFactor+"\");\n");
 			pw.write("\t}\n");
 
@@ -754,7 +767,8 @@ public class CodeGeneration {
 	private void generateCharacterValue(String idValue) {
 		File dirPackage = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID);
 		dirPackage.mkdirs();
-		File fileValue = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+"Value_"+idValue+".java");
+		String idValueForCode = getValidIDFor(idValue);
+		File fileValue = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+"Value_"+idValueForCode+".java");
 		if(fileAlreadyGenerated.contains(fileValue.getAbsolutePath())) {
 			return;
 		}
@@ -767,10 +781,10 @@ public class CodeGeneration {
 			pw.write(" * \tfactor: "+currentCharacterFactor+"\n");
 			pw.write(" */\n");
 
-			pw.write("public class Value_"+idValue+" {\n");
+			pw.write("public class Value_"+idValueForCode+" {\n");
 
 			// constructor
-			pw.write("\tpublic Value_"+idValue+"() { }\n");
+			pw.write("\tpublic Value_"+idValueForCode+"() { }\n");
 
 			pw.write("\tpublic String toString() {\n");
 			pw.write("\t\treturn \""+idValue+"\";\n");
@@ -786,10 +800,26 @@ public class CodeGeneration {
 		}
 	}
 
+	private static String getValidIDFor(String id) {
+		String res = "";
+		for (int i = 0; i < id.length(); i++) {
+			if((id.charAt(i) >= 'a' && id.charAt(i) <= 'z') ||
+			   (id.charAt(i) >= 'A' && id.charAt(i) <= 'Z') ||
+			   (id.charAt(i) >= '0' && id.charAt(i) <= '9') ||
+			   (id.charAt(i) == '_') ) {
+				res += (""+id.charAt(i));				
+			} else {
+				res += "_";
+			}
+		}
+		return res;
+	}
+
 	private void generateNumberFactor(String factorID, String factorName) {
 		File dirPackage = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID);
 		dirPackage.mkdirs();
-		File fileFactor = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+"Factor_"+factorID+".java");
+		String idFactorForCode = getValidIDFor(factorID);
+		File fileFactor = new File(rootDirectory.getAbsolutePath()+File.separator+"src-generated"+File.separator+experimentID+File.separator+"Factor_"+idFactorForCode+".java");
 		if(fileAlreadyGenerated.contains(fileFactor.getAbsolutePath())) 
 			return;
 		try {
@@ -802,10 +832,10 @@ public class CodeGeneration {
 			pw.write(" *  name: "+factorName+"\n");
 			pw.write(" */\n");
 
-			pw.write("public class Factor_"+factorID+" extends NumericalFactor {\n");
+			pw.write("public class Factor_"+idFactorForCode+" extends NumericalFactor {\n");
 
 			// constructor
-			pw.write("\tpublic Factor_"+factorID+"() {\n");
+			pw.write("\tpublic Factor_"+idFactorForCode+"() {\n");
 			pw.write("\t\tsuper(\""+factorID+"\");\n");
 			pw.write("\t}\n");
 
