@@ -60,22 +60,22 @@
 
  	<condition property="noarg">
  		<and>
- 			<not><isset property="noe.JVMarg.1"/></not>
- 	 		<not><isset property="noe.JVMarg.2"/></not>
+ 			<not><isset property="touchstone.JVMarg.1"/></not>
+ 	 		<not><isset property="touchstone.JVMarg.2"/></not>
  	 	</and>
  	</condition>	
 	
  	<condition property="arg1">
  		<and>
- 			<isset property="noe.JVMarg.1"/>
- 	 		<not><isset property="noe.JVMarg.2"/></not>
+ 			<isset property="touchstone.JVMarg.1"/>
+ 	 		<not><isset property="touchstone.JVMarg.2"/></not>
  	 	</and> 			
  	</condition>
 
  	<condition property="arg2">
  		<and>
- 			<isset property="noe.JVMarg.1"/>
- 			<isset property="noe.JVMarg.2"/>
+ 			<isset property="touchstone.JVMarg.1"/>
+ 			<isset property="touchstone.JVMarg.2"/>
  		</and>
  	</condition>
  	
