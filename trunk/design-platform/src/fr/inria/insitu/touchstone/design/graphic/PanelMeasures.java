@@ -39,6 +39,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -553,9 +555,15 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 					if(!listenersEnabled) return;
 					if (editedMeasure !=null){
 						editedMeasure.setId(id.getText());
-						updateSelectedMeasures();
-						updateExperimentPreview();
+//						updateSelectedMeasures();
+//						updateExperimentPreview();
 					}
+				}
+			});
+			id.addFocusListener(new FocusAdapter() {
+				public void focusLost(FocusEvent e) {
+					updateSelectedMeasures();
+					updateExperimentPreview();
 				}
 			});
 			name.addKeyListener(new KeyAdapter(){
@@ -564,9 +572,15 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 					if(!listenersEnabled) return;
 					if (editedMeasure !=null){
 						editedMeasure.setName(name.getText());
-						updateSelectedMeasures();
-						updateExperimentPreview();
+//						updateSelectedMeasures();
+//						updateExperimentPreview();
 					}
+				}
+			});
+			name.addFocusListener(new FocusAdapter() {
+				public void focusLost(FocusEvent e) {
+					updateSelectedMeasures();
+					updateExperimentPreview();
 				}
 			});
 			parent.addKeyListener(new KeyAdapter(){
@@ -581,10 +595,15 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 						removeMeasureFrom(rootSelected, measureNode);
 						editedMeasure.setParent(parent.getText());
 						addMeasureTo(rootSelected, editedMeasure);
-//						((DefaultTreeModel)selectedMeasures.getModel()).reload(rootSelected);
-						updateSelectedMeasures();
-						updateExperimentPreview();
+//						updateSelectedMeasures();
+//						updateExperimentPreview();
 					}
+				}
+			});
+			parent.addFocusListener(new FocusAdapter() {
+				public void focusLost(FocusEvent e) {
+					updateSelectedMeasures();
+					updateExperimentPreview();
 				}
 			});
 			comboType.addActionListener(new ActionListener(){
