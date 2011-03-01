@@ -548,7 +548,7 @@ public class CodeGeneration {
 			pw.write("\t\treturn false;\n");
 			pw.write("\t}\n");
 
-			pw.write("\tboolean isReached(OSCMessage message, long when) {\n");
+			pw.write("\tpublic boolean isReached(OSCMessage message, long when) {\n");
 			pw.write("\t\t// This method is called each time the Platform receives an OSC message\n");
 			pw.write("\t\treturn false;\n");
 			pw.write("\t}\n");
