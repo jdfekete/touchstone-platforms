@@ -237,10 +237,12 @@ public class Experiment extends Step implements Serializable {
 	 */
 	public Vector<Measure> getPredefinedMeasures(){
 		Vector<Measure> result = new Vector<Measure>();
-		for (Plugin plugin : plugins)
-			for (Measure measure : plugin.getPredefinedMeasures())
+		for (Plugin plugin : plugins) {
+			for (Measure measure : plugin.getPredefinedMeasures()) {
 				if (!result.contains(measure))
-					result.add(measure);		
+					result.add(measure);
+			}
+		}
 		return result;
 	}
 
