@@ -39,6 +39,7 @@ import com.illposed.osc.OSCMessage;
 import fr.inria.insitu.touchstone.run.Platform;
 import fr.inria.insitu.touchstone.run.Platform.EndCondition;
 import fr.inria.insitu.touchstone.run.endConditions.ErrorEndCondition;
+import fr.inria.insitu.touchstone.run.endConditions.OrEndCondition;
 
 /**
  * ExperimentPart is a part of an experiment.
@@ -52,14 +53,19 @@ public class ExperimentPart {
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getSource() instanceof ErrorEndCondition)
 				onError(((EndCondition)arg0.getSource()).getEndCondition());
+			else if(arg0.getSource() instanceof OrEndCondition) {
+				EndCondition ec = ((OrEndCondition)arg0.getSource()).getVerifiedCondition();
+				if(ec instanceof ErrorEndCondition)
+					onError(ec.getEndCondition());
+			}
 			done();
 		}
 
 	};
-	
+
 	private Experiment experiment;
 	private EndCondition endCondition = null;
-	
+
 	/**
 	 * Builds a ExperimentPart.
 	 */
@@ -75,7 +81,7 @@ public class ExperimentPart {
 		}
 		return experiment;
 	}
-	
+
 	/**
 	 * Links this part to an experiment.
 	 * @param exp The experiment
@@ -83,7 +89,7 @@ public class ExperimentPart {
 	void setExperiment(Experiment exp) {
 		experiment = exp;
 	}
-	
+
 	/**
 	 * Returns the platform.
 	 * @return The platform.
@@ -91,8 +97,8 @@ public class ExperimentPart {
 	public Platform getPlatform() {
 		return Platform.getInstance();
 	}
-	
-//	this should be called by the state machine of the interaction technique when the current interaction is done:
+
+	//	this should be called by the state machine of the interaction technique when the current interaction is done:
 	/**
 	 * Calls to end this part and process a new event
 	 * parsed from the experiment script file.
@@ -100,9 +106,9 @@ public class ExperimentPart {
 	public final void done () {
 		experiment.processEvent("done");
 	}
-	
 
-	
+
+
 	/**
 	 * Sets the end condition of this experiment part.
 	 * @param ec The end condition
@@ -121,7 +127,7 @@ public class ExperimentPart {
 			setEndCondition(new HitMissEndCondition(HitMissEndCondition.HIT));
 		return endCondition;
 	}
-	
+
 	/**
 	 * Method called when an error is detected.
 	 * By default, this method does nothing, overrides it
@@ -131,7 +137,7 @@ public class ExperimentPart {
 	 */
 	public void onError(String errorType) {
 	}
-	
+
 	/**
 	 * Method called when OSC is enabled, to get the arguments of the message 
 	 * that will be sent to OSC clients during an experiment phase. Returns null by default, 
@@ -143,7 +149,7 @@ public class ExperimentPart {
 	public Object[] getOSCMessageArguments(String messageType) {
 		return null;
 	}
-	
+
 	protected final void sendOSCMessage(String type) {
 		OSCMessage message = new OSCMessage();
 		message.setAddress(type);
