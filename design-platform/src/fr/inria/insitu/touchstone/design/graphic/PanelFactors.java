@@ -388,9 +388,15 @@ public class PanelFactors extends StepPanel<FactorSet> {
 				shortFactorName.setText(factor.getShortName());
 				fullFactorName.setText(factor.getFullName());
 				type.setSelectedItem(factor.getType());
-				tag.setSelectedItem(factor.getTag());				
+				tag.setSelectedItem(factor.getTag());
 				for(Value v : factor.getValues())
 					valuesString.add(v.getShortValue()+" "+v.getFullValue());
+				if(factor.getValues().size() == 0) {
+					valuesString.add("1");
+					thisFactor.addValue("1", "");			
+					valuesString.add("2");
+					thisFactor.addValue("2", "");
+				}
 
 				thisFactor = factor;	
 				
