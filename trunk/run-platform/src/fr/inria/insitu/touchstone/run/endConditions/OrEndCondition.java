@@ -44,7 +44,7 @@ import fr.inria.insitu.touchstone.run.Platform.EndCondition;
  */
 public class OrEndCondition extends BinaryEndCondition {
 	protected volatile EndCondition checked = null;
-	
+
 	/**
 	 * Builds a OrEndCondition.
 	 * @param ec1 The first condition
@@ -53,7 +53,7 @@ public class OrEndCondition extends BinaryEndCondition {
 	public OrEndCondition(EndCondition ec1, EndCondition ec2) {
 		super(ec1, ec2);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -66,7 +66,7 @@ public class OrEndCondition extends BinaryEndCondition {
 		}
 		return v1 || v2;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -74,12 +74,20 @@ public class OrEndCondition extends BinaryEndCondition {
 		if(checked == null) return null;
 		return checked.getEndCondition();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public void start() {
 		super.start();
 		checked = null;
+	}
+
+	public EndCondition getVerifiedCondition() {
+		EndCondition verified = checked;
+		while(verified instanceof OrEndCondition) {
+			verified = ((OrEndCondition)verified).getVerifiedCondition();
+		}
+		return verified;
 	}
 }
