@@ -271,6 +271,9 @@ public class CodeGeneration {
 				experimentID = atts.getValue("id").toLowerCase();
 				experimentAuthor = atts.getValue("author").toLowerCase();
 				experimentDescription = atts.getValue("description").toLowerCase();
+				experimentDescription = experimentDescription.replaceAll("\n", " ");
+				experimentDescription = experimentDescription.replaceAll("\"", "\\\\\"");
+				System.out.println("experimentDescription:\n"+experimentDescription);
 				generatePluginDescription();
 				return;
 			}
