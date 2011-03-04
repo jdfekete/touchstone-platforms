@@ -340,6 +340,8 @@ public class PanelSummary extends StepPanel<Step> {
 		private File experimentFile;
 		private JDialog dialog;
 		private JCheckBox generateClassesForCharacterValues;
+		
+		private JTextField additionalLibrariesTF;
 
 		public CodeGenerationPanel(JDialog framePlugins, Experiment exp, File expFile) {
 			super();
@@ -450,6 +452,46 @@ public class PanelSummary extends StepPanel<Step> {
 				});
 				add(setJarFileList, gbc);
 			}
+			
+			gbc.gridx=0;
+			gbc.gridy++;
+			gbc.gridwidth = 2;
+			gbc.weightx = 1;
+			add(new JLabel("Required additional libraries:"), gbc);
+			gbc.gridy++;
+			gbc.gridwidth = 1;
+			gbc.weightx = 1;
+			additionalLibrariesTF = new JTextField("");
+			additionalLibrariesTF.setMinimumSize(new Dimension(200, additionalLibrariesTF.getMinimumSize().height));
+			add(additionalLibrariesTF, gbc);
+			gbc.gridx++;
+			gbc.fill = GridBagConstraints.NONE;
+			JButton browseLibraries = new JButton("Browse");
+			browseLibraries.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY);
+					fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					fc.setMultiSelectionEnabled(true);
+					fc.setDialogTitle("Select jar files for additional required libraries");
+					int returnVal = fc.showDialog(PanelSummary.this.getDesignPlatform(),"Select jar files for additional required libraries");
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						File[] files = fc.getSelectedFiles();
+						String text = additionalLibrariesTF.getText();
+						for (int i = 0; i < files.length; i++) {
+							if(text.length() != 0)
+								text += ";";
+							text += files[i].getAbsolutePath();
+						}
+						additionalLibrariesTF.setText(text);
+					}
+				}
+			});
+			gbc.weightx = 0;
+			add(browseLibraries, gbc);
+			
+			
+			
+			
 
 			gbc.gridx=0;
 			gbc.gridy++;
@@ -465,7 +507,11 @@ public class PanelSummary extends StepPanel<Step> {
 			go.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File folder = new File(folderSelected.getText());
-					new CodeGeneration(folder, experimentFile, experiment.getPlugins(), javaCode, generateClassesForCharacterValues.isSelected());
+					String[] additionalLibraries = additionalLibrariesTF.getText().split(";");
+					for (int i = 0; i < additionalLibraries.length; i++) {
+						additionalLibraries[i] = additionalLibraries[i].trim();
+					}
+					new CodeGeneration(folder, experimentFile, experiment.getPlugins(), javaCode, generateClassesForCharacterValues.isSelected(), additionalLibraries);
 					DesignPlatform.LAST_DIRECTORY = folder.getParent();
 					DesignPlatform.saveCurrentDirectory();
 					dialog.setVisible(false);

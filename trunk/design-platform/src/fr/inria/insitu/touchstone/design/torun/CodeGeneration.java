@@ -55,7 +55,6 @@ import java.util.Vector;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -63,12 +62,10 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.illposed.osc.OSCMessage;
-
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
-import fr.inria.insitu.touchstone.run.Platform;
 import fr.inria.insitu.touchstone.design.motor.Plugin;
+import fr.inria.insitu.touchstone.run.Platform;
 import fr.inria.insitu.touchstone.run.endConditions.AbstractEndCondition;
 import fr.inria.insitu.touchstone.run.exp.model.Block;
 import fr.inria.insitu.touchstone.run.exp.model.Intertitle;
@@ -97,7 +94,7 @@ public class CodeGeneration {
 	private NameClassMap nameClassMap = new NameClassMap();
 
 
-	public CodeGeneration(File rootDirectory, File script, Vector<Plugin> pluginObjects, Component parent, boolean generateClassesForCharacterValues) {
+	public CodeGeneration(File rootDirectory, File script, Vector<Plugin> pluginObjects, Component parent, boolean generateClassesForCharacterValues, String[] libraries) {
 		this.rootDirectory = rootDirectory;
 		this.pluginObjects = pluginObjects;
 		this.factors = new Vector<String>();
@@ -109,6 +106,8 @@ public class CodeGeneration {
 		this.currentCharacterFactor = null;
 		this.fileAlreadyGenerated = new LinkedList<String>();
 
+		copyJarFiles(libraries);
+		nameClassMap.addLibraries(libraries);
 		copyJarFiles(pluginObjects);
 		nameClassMap.registerJars(pluginObjects);
 
@@ -249,7 +248,7 @@ public class CodeGeneration {
 
 		private CodeGeneration codeGeneration;
 		private boolean generateClassesForCharacterValues;
-		
+
 		public HandlerXML(CodeGeneration codeGeneration, boolean generateClassesForCharacterValues) {
 			this.codeGeneration = codeGeneration;
 			this.generateClassesForCharacterValues = generateClassesForCharacterValues;
@@ -273,7 +272,6 @@ public class CodeGeneration {
 				experimentDescription = atts.getValue("description").toLowerCase();
 				experimentDescription = experimentDescription.replaceAll("\n", " ");
 				experimentDescription = experimentDescription.replaceAll("\"", "\\\\\"");
-				System.out.println("experimentDescription:\n"+experimentDescription);
 				generatePluginDescription();
 				return;
 			}
@@ -429,6 +427,19 @@ public class CodeGeneration {
 		}
 	}
 
+	private void copyJarFiles(String[] jarFiles) {
+		try {
+			File libDirectory = new File(rootDirectory.getAbsolutePath()+File.separator+"lib");
+			libDirectory.mkdirs();
+			for (int j = 0; j < jarFiles.length; j++) {
+				File copiedFile = new File(libDirectory.getAbsolutePath()+File.separator+(new File(jarFiles[j])).getName());
+				fileCopy(new File(jarFiles[j]), copiedFile);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void generateXMLBuild() {
 		try {
 			File xmlBuild = new File(rootDirectory.getAbsolutePath()+File.separator+"build.xml");
@@ -511,7 +522,7 @@ public class CodeGeneration {
 			pw.write("import javax.swing.Timer;\n");
 			pw.write("import fr.inria.insitu.touchstone.run.input.AxesEvent;\n");
 			pw.write("import com.illposed.osc.OSCMessage;\n");
-			
+
 			pw.write("/**\n");
 			pw.write(" *\n");
 			pw.write(" * @touchstone.criterion "+className+"\n");
@@ -807,9 +818,9 @@ public class CodeGeneration {
 		String res = "";
 		for (int i = 0; i < id.length(); i++) {
 			if((id.charAt(i) >= 'a' && id.charAt(i) <= 'z') ||
-			   (id.charAt(i) >= 'A' && id.charAt(i) <= 'Z') ||
-			   (id.charAt(i) >= '0' && id.charAt(i) <= '9') ||
-			   (id.charAt(i) == '_') ) {
+					(id.charAt(i) >= 'A' && id.charAt(i) <= 'Z') ||
+					(id.charAt(i) >= '0' && id.charAt(i) <= '9') ||
+					(id.charAt(i) == '_') ) {
 				res += (""+id.charAt(i));				
 			} else {
 				res += "_";
