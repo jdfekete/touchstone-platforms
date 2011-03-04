@@ -42,6 +42,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.jar.JarEntry;
@@ -68,6 +69,19 @@ public class NameClassMap {
 	public NameClassMap() {
 		URL urls [] = {};
 		jarFileLoader = new JarFileLoader (urls);
+	}
+	
+	public void addLibraries(String[] libraries) {
+		URL urls [] = {};
+		jarFileLoader = new JarFileLoader (urls);
+		try {
+//			jarFileLoader.addFile("/Users/appert/Documents/workspace/exp-stationary-postures/lib/posturesRecognizers.jar");
+			for (int i = 0; i < libraries.length; i++) {
+				jarFileLoader.addFile(libraries[i]);
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void registerJars(Vector<Plugin> pluginObjects) {
