@@ -543,7 +543,7 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 	 * 
 	 * @param e
 	 *            the axis event
-	 * @return true if the technique should terminate
+	 * @return true if the current end condition is reached
 	 */
 	public boolean evalEndCondition(EventObject e) {
 		Object value_escape = getMeasureValue(INPUT_ESC);
@@ -564,6 +564,19 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Evaluates the end condition to a given specified value.
+	 * 
+	 * @param eval
+	 *            true if the end condition must be considered as reached, false otherwise
+	 * @return true if the current end condition is reached
+	 */
+	public boolean evalEndCondition(boolean eval) {
+		if (eval)
+			fireActionListener(endCondition, ACTION_END_CONDITION);
+		return eval;
 	}
 	
 	
