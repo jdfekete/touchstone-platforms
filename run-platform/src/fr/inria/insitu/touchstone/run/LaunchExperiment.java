@@ -406,7 +406,7 @@ public class LaunchExperiment implements AxesListener {
 			Platform.getInstance().enableOSC(portPlatform);
 			for (int i = 0; i < oscHostsClientsTF.size(); i++) {
 				String host = oscHostsClientsTF.get(i).getText();
-				int port = (Integer)oscPortsClientsTF.get(i).getValue();
+				int port = Integer.parseInt(""+oscPortsClientsTF.get(i).getValue());
 				Platform.getInstance().addOSCClient(host, port);
 			}
 		}
