@@ -1612,17 +1612,21 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 	 * @return true if the measure was previously registered, false if this measure is not found. 
 	 */
 	public boolean removeMeasure(String idMeasure) {
-		Iterator<Measure> i = measuresList.iterator();
-		int cpt = 1;
-		while(i.hasNext()) {
-			Measure next = i.next();
-			if(next.getID().compareTo(idMeasure) == 0) {
-				measuresList.remove(cpt);
-				return true;
-			}
-			cpt++;
-		}
-		return false;
+		Measure m = getMeasure(idMeasure);
+		return measuresList.remove(m);
+		
+//		Iterator<Measure> i = measuresList.iterator();
+//		int cpt = 1;
+//		while(i.hasNext()) {
+//			Measure next = i.next();
+//			if(next.getID().compareTo(idMeasure) == 0) {
+//				
+//				System.out.println("removeMeasure..."+measuresList.remove(cpt+1)+" / "+idMeasure);
+//				return true;
+//			}
+//			cpt++;
+//		}
+//		return false;
 	}
 	
 	private void loadInputConfiguration(File file) 
