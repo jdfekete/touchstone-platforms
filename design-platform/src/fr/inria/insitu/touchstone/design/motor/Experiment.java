@@ -761,20 +761,23 @@ public class Experiment extends Step implements Serializable {
 				while(b.getParent() != null && b.getParent().getDepth() <= totalDepth && b.getParent().indexOf(b) == 0)
 					b = b.getParent();
 				index = timing.getIntertitles().size() - b.getDepth();
-				boolean add = false;
-				interblock = xmlDoc.createElementNS(null, "interblock");
-				if(timing.getIntertitles().get(index).toString().length() != 0) {
-					interblock.setAttributeNS(null, "class", ""+timing.getIntertitles().get(index));
-					add = true;
-				}
-				if(timing.getCriteria().get(index).length() != 0) {
-					interblock.setAttributeNS(null, "criterion", timing.getCriteria().get(index));
-					add = true;
-				}
-				if(add)
-					parent.appendChild(interblock);
-				else
-					interblock = null;
+				System.out.println("timing.getIntertitles().size()="+timing.getIntertitles().size()+" - b.getDepth()="+b.getDepth());
+//				if(index >= Timing.INDEX_BEGIN_BLOCKS) {
+					boolean add = false;
+					interblock = xmlDoc.createElementNS(null, "interblock");
+					if(timing.getIntertitles().get(index).toString().length() != 0) {
+						interblock.setAttributeNS(null, "class", ""+timing.getIntertitles().get(index));
+						add = true;
+					}
+					if(timing.getCriteria().get(index).length() != 0) {
+						interblock.setAttributeNS(null, "criterion", timing.getCriteria().get(index));
+						add = true;
+					}
+					if(add)
+						parent.appendChild(interblock);
+					else
+						interblock = null;
+//				}
 			}
 			Element parentBlock = interblock != null ? interblock : parent;
 			Element blockElement = null;
