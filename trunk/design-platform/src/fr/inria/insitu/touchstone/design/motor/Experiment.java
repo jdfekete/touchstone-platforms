@@ -760,9 +760,12 @@ public class Experiment extends Step implements Serializable {
 				Block b = block;
 				while(b.getParent() != null && b.getParent().getDepth() <= totalDepth && b.getParent().indexOf(b) == 0)
 					b = b.getParent();
+				
 				index = timing.getIntertitles().size() - b.getDepth();
-				System.out.println("timing.getIntertitles().size()="+timing.getIntertitles().size()+" - b.getDepth()="+b.getDepth());
-//				if(index >= Timing.INDEX_BEGIN_BLOCKS) {
+				
+				// The test below is necessary in case there is no block but only a series of free trials
+				if(index >= Timing.INDEX_BEGIN_BLOCKS) {
+					
 					boolean add = false;
 					interblock = xmlDoc.createElementNS(null, "interblock");
 					if(timing.getIntertitles().get(index).toString().length() != 0) {
@@ -777,7 +780,10 @@ public class Experiment extends Step implements Serializable {
 						parent.appendChild(interblock);
 					else
 						interblock = null;
-//				}
+				
+				
+				}
+				
 			}
 			Element parentBlock = interblock != null ? interblock : parent;
 			Element blockElement = null;
