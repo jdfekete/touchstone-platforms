@@ -473,7 +473,36 @@ public class PanelSummary extends StepPanel<Step> {
 					fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					fc.setMultiSelectionEnabled(true);
 					fc.setDialogTitle("Select jar files for additional required libraries");
-					int returnVal = fc.showDialog(PanelSummary.this.getDesignPlatform(),"Select jar files for additional required libraries");
+					fc.addChoosableFileFilter(new FileFilter() {
+						
+						public String getExtension(File f) {
+					        String ext = null;
+					        String s = f.getName();
+					        int i = s.lastIndexOf('.');
+					        if (i > 0 &&  i < s.length() - 1) {
+					            ext = s.substring(i+1).toLowerCase();
+					        }
+					        return ext;
+					    }
+
+						public boolean accept(File f) {
+					        if (f.isDirectory()) {
+					            return true;
+					        }
+					        String extension = getExtension(f);
+					        if (extension != null) {
+					            return extension.equals("jar");
+					        }
+					        return false;
+					    }
+
+					    public String getDescription() {
+					        return "Just Jar Files";
+					    }
+
+					});
+		            fc.setAcceptAllFileFilterUsed(false);
+					int returnVal = fc.showDialog(PanelSummary.this.getDesignPlatform(),"Ok");
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						File[] files = fc.getSelectedFiles();
 						String text = additionalLibrariesTF.getText();
@@ -507,9 +536,13 @@ public class PanelSummary extends StepPanel<Step> {
 			go.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File folder = new File(folderSelected.getText());
-					String[] additionalLibraries = additionalLibrariesTF.getText().split(";");
-					for (int i = 0; i < additionalLibraries.length; i++) {
-						additionalLibraries[i] = additionalLibraries[i].trim();
+					String[] additionalLibraries = null;
+					if(additionalLibrariesTF.getText().trim().length() != 0) {
+						additionalLibraries = additionalLibrariesTF.getText().split(";");
+						for (int i = 0; i < additionalLibraries.length; i++) {
+							additionalLibraries[i] = additionalLibraries[i].trim();
+//							System.out.println("Additional library "+i+" = "+additionalLibraries[i]);
+						}
 					}
 					new CodeGeneration(folder, experimentFile, experiment.getPlugins(), javaCode, generateClassesForCharacterValues.isSelected(), additionalLibraries);
 					DesignPlatform.LAST_DIRECTORY = folder.getParent();

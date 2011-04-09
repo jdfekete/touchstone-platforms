@@ -493,6 +493,7 @@ public class PanelExperiment extends StepPanel<Step> {
 		if(experiment.getShortCode() != null && experiment.getShortCode().length() != 0)
 			codeField.setText(experiment.getShortCode());
 		
+		((DefaultListModel)pluginsPanel.pluginsSelectedList.getModel()).removeAllElements();
 		for (Iterator<Plugin> iterator = experiment.getPlugins().iterator(); iterator.hasNext();) {
 			Plugin plugin = iterator.next();
 			boolean in = false;

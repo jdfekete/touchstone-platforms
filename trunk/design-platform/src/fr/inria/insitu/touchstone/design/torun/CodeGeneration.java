@@ -106,8 +106,10 @@ public class CodeGeneration {
 		this.currentCharacterFactor = null;
 		this.fileAlreadyGenerated = new LinkedList<String>();
 
-		copyJarFiles(libraries);
-		nameClassMap.addLibraries(libraries);
+		if(libraries != null) {
+			copyJarFiles(libraries);
+			nameClassMap.addLibraries(libraries);
+		}
 		copyJarFiles(pluginObjects);
 		nameClassMap.registerJars(pluginObjects);
 
