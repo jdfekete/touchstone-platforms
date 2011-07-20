@@ -760,7 +760,7 @@ public class CodeGeneration {
 			pw.write("/**\n");
 			pw.write(" *\n");
 			pw.write(" * @touchstone.factor "+currentCharacterFactor+"\n");
-			pw.write(" *  name: "+factorName+"\n");
+			if(factorName.trim().length() > 0) pw.write(" *  name: "+factorName+"\n");
 			pw.write(" */\n");
 
 			pw.write("public class Factor_"+idFactorForCode+" extends CharacterFactor {\n");
@@ -845,7 +845,7 @@ public class CodeGeneration {
 			pw.write("/**\n");
 			pw.write(" *\n");
 			pw.write(" * @touchstone.factor "+factorID+"\n");
-			pw.write(" *  name: "+factorName+"\n");
+			if(factorName.trim().length() > 0) pw.write(" *  name: "+factorName+"\n");
 			pw.write(" */\n");
 
 			pw.write("public class Factor_"+idFactorForCode+" extends NumericalFactor {\n");
