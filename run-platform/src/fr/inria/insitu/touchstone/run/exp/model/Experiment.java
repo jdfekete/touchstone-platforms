@@ -1074,17 +1074,33 @@ public class Experiment extends StateMachine {
 	public boolean isOSCEnabled() {
 		return generalData.isOSCEnabled();
 	}
+	
+	public void setOSCEnabled(boolean enabled) {
+		generalData.setOSCEnabled(enabled);
+	}
 
 	public int getOSCPortPlatform() {
 		return generalData.getOSCPortPlatform();
+	}
+	
+	public void setOSCPortPlatform(int port) {
+		generalData.setOSCPortPlatform(port);
 	}
 
 	public Vector<String> getOSCHostsClients() {
 		return generalData.getOSCHostsClients();
 	}
 
+	public void setOSCHostsClients(Vector<String> oscHostsClients) {
+		generalData.setOSCHostsClients(oscHostsClients);
+	}
+
 	public Vector<Integer> getOSCPortsClients() {
 		return generalData.getOSCPortsClients();
+	}
+
+	public void setOSCPortsClients(Vector<Integer> oscPortsClients) {
+		generalData.setOSCPortsClients(oscPortsClients);
 	}
 
 }

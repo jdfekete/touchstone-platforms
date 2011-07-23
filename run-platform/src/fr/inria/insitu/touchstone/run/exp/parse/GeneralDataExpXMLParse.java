@@ -144,16 +144,32 @@ public class GeneralDataExpXMLParse extends DefaultHandler {
 		return oscEnabled;
 	}
 
+	public void setOSCEnabled(boolean enabled) {
+		oscEnabled = enabled;
+	}
+
 	public int getOSCPortPlatform() {
 		return oscPortPlatform;
+	}
+
+	public void setOSCPortPlatform(int port) {
+		oscPortPlatform = port;
 	}
 
 	public Vector<String> getOSCHostsClients() {
 		return oscHostsClients;
 	}
 
+	public void setOSCHostsClients(Vector<String> oscHostsClients) {
+		this.oscHostsClients = oscHostsClients;
+	}
+
 	public Vector<Integer> getOSCPortsClients() {
 		return oscPortsClients;
 	}
-	
+
+	public void setOSCPortsClients(Vector<Integer> oscPortsClients) {
+		this.oscPortsClients = oscPortsClients;
+	}
+
 }
