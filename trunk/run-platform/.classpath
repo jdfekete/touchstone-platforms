@@ -11,6 +11,5 @@
 	<classpathentry exported="true" kind="lib" path="lib/jinput.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/js.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/SwingStates.jar" sourcepath="/swingstates"/>
-	<classpathentry exported="true" kind="lib" path="lib/TableLayout.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
