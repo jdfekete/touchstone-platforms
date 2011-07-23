@@ -203,7 +203,7 @@ public class LaunchExperiment implements AxesListener {
 	private String keyboardCmdLine = null;
 
 	/* OSC fields */
-//	private int nbClients = 0;
+	//	private int nbClients = 0;
 	private JCheckBox enableOSC = new JCheckBox("enable OSC");
 	private JFormattedTextField portPlatformTextField = null;
 	private JPanel clientsList = new JPanel();
@@ -214,8 +214,8 @@ public class LaunchExperiment implements AxesListener {
 	/* Favorites */
 	JTextField tfFavorite;
 	JComboBox cbFavorites;
-	JButton addFavorite;
-	
+	JButton addFavorite, removeFavorite;
+
 	private void saveLaunchConfiguration(File file) {
 		Properties configProperties = new Properties();
 		configProperties.setProperty("ExperimentScript", experimentfile.getAbsolutePath());
@@ -250,9 +250,9 @@ public class LaunchExperiment implements AxesListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	private void saveLaunchConfiguration() {
 		saveLaunchConfiguration(new File(".config-last.xml"));
 	}
@@ -263,14 +263,16 @@ public class LaunchExperiment implements AxesListener {
 		try {
 			configProperties.loadFromXML(new FileInputStream(configFile));
 			experimentfile = new File(configProperties.getProperty("ExperimentScript"));
-			loadExperimentFile(experimentfile);
-			comboParticipants.setSelectedItem(configProperties.getProperty("ParticipantID"));
-			nameParticipantSelected.setText(configProperties.getProperty("ParticipantName"));
-			spinnerBlock.setValue(Integer.parseInt(configProperties.getProperty("StartingBlock")));
-			spinnerTrial.setValue(Integer.parseInt(configProperties.getProperty("StartingTrial")));
+			if(experimentfile.exists()) {
+				loadExperimentFile(experimentfile);
+				comboParticipants.setSelectedItem(configProperties.getProperty("ParticipantID"));
+				nameParticipantSelected.setText(configProperties.getProperty("ParticipantName"));
+				spinnerBlock.setValue(Integer.parseInt(configProperties.getProperty("StartingBlock")));
+				spinnerTrial.setValue(Integer.parseInt(configProperties.getProperty("StartingTrial")));
+			}
 			showRemote.setSelected(configProperties.getProperty("ShowRemote").equals("true"));
 			oneLogFile.setSelected(configProperties.getProperty("MasterLogFile").equals("true"));
-			
+
 			enableOSC.setSelected(configProperties.getProperty("OSCEnabled").equals("true"));
 			portPlatformTextField.setText(configProperties.getProperty("PlatformPort"));
 			String hosts = configProperties.getProperty("ClientHosts");
@@ -285,7 +287,7 @@ public class LaunchExperiment implements AxesListener {
 				addClientLine(clientHosts[i], Integer.parseInt(clientPorts[i]));
 			}
 			updateClientsPanel();
-			
+
 		} catch (InvalidPropertiesFormatException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -294,7 +296,7 @@ public class LaunchExperiment implements AxesListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	class BrowseListener implements ActionListener{
 
 		BrowseListener() { }
@@ -330,7 +332,7 @@ public class LaunchExperiment implements AxesListener {
 				treeLogs.setModel(new FileSystemModel(rootDir));
 				experimentInformation();
 				if(comboParticipants.getItemCount() > 0) comboParticipants.setSelectedIndex(0);
-				
+
 				fillPanelOSC(); 
 			}
 			jfc.setVisible(true);
@@ -429,7 +431,7 @@ public class LaunchExperiment implements AxesListener {
 		// back compatibility from the void
 		//this.languageList.setSelectedIndex(language);
 	}
-	
+
 	public int getLanguage() {
 		// back compatibility from the void
 		return 1;
@@ -447,10 +449,10 @@ public class LaunchExperiment implements AxesListener {
 		Platform.getInstance().installGeneralizedInput(confFile, 
 				miceAvailable.getSelectedItem().toString(),
 				(keyboardCmdLine== null)?
-				keyboardsAvailable.getSelectedItem().toString() :
-				keyboardCmdLine);
-//		TODO ?
-//		if(installTouchstoneCursor.isSelected()) Platform.getInstance().installCursor();
+						keyboardsAvailable.getSelectedItem().toString() :
+							keyboardCmdLine);
+		//		TODO ?
+		//		if(installTouchstoneCursor.isSelected()) Platform.getInstance().installCursor();
 		registerNewParticipant(comboParticipants.getSelectedItem().toString(), nameParticipantSelected.getText());
 		Platform platform = Platform.getInstance();
 		platform.addWindowListener(new WindowAdapter() {
@@ -459,7 +461,7 @@ public class LaunchExperiment implements AxesListener {
 			}
 		});
 	}
-	
+
 	public void start() {
 		startInput();
 		Platform.getInstance().validate();
@@ -493,14 +495,14 @@ public class LaunchExperiment implements AxesListener {
 				Platform.getInstance().addOSCClient(host, port);
 			}
 		}
-		
+
 		saveLaunchConfiguration();
-		
+
 		experiment.start((String)comboParticipants.getSelectedItem(), block, trial);
 		if(showRemote.isSelected())
 			new ExperimentRemote(experiment);
-		
-		
+
+
 	}
 
 	void registerNewParticipant(String id, String name) {
@@ -540,7 +542,7 @@ public class LaunchExperiment implements AxesListener {
 		rootDir = new File(experimentName+File.separator+"logs"+File.separator+"cinematic");
 		concat(rootDir, "cinematic");
 	}
-	
+
 	private static void concat(File rootDir, String prefix) {
 		BufferedReader br = null;
 		PrintWriter pw = null;
@@ -634,7 +636,7 @@ public class LaunchExperiment implements AxesListener {
 		if (pluginJars.length != 0) {
 			for (int i = 0; i < pluginJars.length; i++) {
 				String[] jars = pluginJars[i].split(File.pathSeparator);
-//				System.out.println("Found "+jars.length+" items is path");
+				//				System.out.println("Found "+jars.length+" items is path");
 				for (int j = 0; j < jars.length; j++)
 					try {
 						Platform.getInstance().addPluginJar(jars[j]);
@@ -675,7 +677,7 @@ public class LaunchExperiment implements AxesListener {
 		panelOSC.setLayout(new BorderLayout());
 		tabbedPane.addTab("OSC", null, panelOSC,
 		"OSC parameters");
-		
+
 
 		layoutPanelRun(panelRun);
 		layoutPanelSummary(panelSummary);
@@ -688,7 +690,7 @@ public class LaunchExperiment implements AxesListener {
 
 		dialog.pack();
 		dialog.setVisible(true);
-		
+
 		File here = new File(".");
 		File[] files = here.listFiles();
 		for (int i = 0; i < files.length; i++) {
@@ -699,9 +701,9 @@ public class LaunchExperiment implements AxesListener {
 		}
 		cbFavorites.insertItemAt("last run", 0);
 		cbFavorites.setSelectedIndex(0);
-		
+
 		loadLaunchConfiguration(new File(".config-last.xml"));
-		
+
 	}
 
 	/**
@@ -778,11 +780,11 @@ public class LaunchExperiment implements AxesListener {
 		oneLogFile = new JCheckBox("Generate a master log file");
 		oneLogFile.setAlignmentX(Component.CENTER_ALIGNMENT);
 		runPanel.add(oneLogFile);
-		
+
 		showRemote = new JCheckBox("Show remote");
 		showRemote.setAlignmentX(Component.CENTER_ALIGNMENT);
 		runPanel.add(showRemote);
-		
+
 		run = new JButton("RUN!");
 		run.setEnabled(false);
 		run.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -804,10 +806,14 @@ public class LaunchExperiment implements AxesListener {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getItem().toString().equals("last run")) {
 					loadLaunchConfiguration(new File(".config-last.xml"));
+					tfFavorite.setText("");
+					removeFavorite.setEnabled(false);
 					return;
 				}
 				File launchConfigToLoad = new File(".config-"+e.getItem().toString());
 				if(!launchConfigToLoad.exists()) return;
+				tfFavorite.setText(e.getItem().toString());
+				removeFavorite.setEnabled(true);
 				loadLaunchConfiguration(launchConfigToLoad);
 			}
 		});
@@ -828,7 +834,7 @@ public class LaunchExperiment implements AxesListener {
 		favoritesPanel.add(tfFavorite, gbcFavorites);
 		gbcFavorites.gridx++;
 		gbcFavorites.weightx = 0;
-		addFavorite = new JButton(" + ");
+		addFavorite = new JButton("+");
 		addFavorite.setEnabled(false);
 		addFavorite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -837,6 +843,18 @@ public class LaunchExperiment implements AxesListener {
 			}
 		});
 		favoritesPanel.add(addFavorite, gbcFavorites);
+		gbcFavorites.gridx++;
+		removeFavorite = new JButton("-");
+		removeFavorite.setEnabled(false);
+		removeFavorite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				File fileToDelete = new File(".config-"+tfFavorite.getText());
+				if(fileToDelete.delete()) {
+					cbFavorites.removeItem(tfFavorite.getText());
+				}
+			}
+		});
+		favoritesPanel.add(removeFavorite, gbcFavorites);
 		
 		GridBagLayout gblMain = new GridBagLayout();
 		GridBagConstraints gbcMain = new GridBagConstraints();
@@ -909,7 +927,7 @@ public class LaunchExperiment implements AxesListener {
 		for(Iterator<String> i = keyboards.iterator(); i.hasNext(); )
 			keyboardsAvailable.addItem(i.next());
 
-		
+
 		// mouse and keyboard panel
 		JPanel mouseAndKeyboard = new JPanel(new GridLayout(4, 2, 3, 3));
 		mouseAndKeyboard.add(new JLabel("Default mouse: "));
@@ -922,7 +940,7 @@ public class LaunchExperiment implements AxesListener {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) Platform.getInstance().enableJInput();
 				else Platform.getInstance().disableJInput();
-				
+
 				ArrayList<String> mice = InputManager.getInstance().getMice();
 				miceAvailable.removeAllItems();
 				miceAvailable.addItem(LaunchExperiment.DEFAULT_AWT);
@@ -1073,15 +1091,15 @@ public class LaunchExperiment implements AxesListener {
 			addClientLine(oscHostsClients.get(i), oscPortsClients.get(i));
 		}
 	}
-	
+
 	void layoutPanelOSC(JPanel main) {
 		main.add(enableOSC, BorderLayout.NORTH);
-		
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		JPanel hostsAndPorts = new JPanel();
 		hostsAndPorts.setLayout(new GridBagLayout());
 		main.add(hostsAndPorts, BorderLayout.CENTER);
-		
+
 		// platform panel
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
@@ -1101,7 +1119,7 @@ public class LaunchExperiment implements AxesListener {
 		portPlatformTextField.setValue(Platform.DEFAULT_OSC_PORT);
 		platformPanel.add(portLabel);
 		platformPanel.add(portPlatformTextField);
-		
+
 		// client apps panel
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -1112,7 +1130,7 @@ public class LaunchExperiment implements AxesListener {
 		border = BorderFactory.createTitledBorder("Clients");
 		clientsPanel.setBorder(border);
 		hostsAndPorts.add(clientsPanel, gbc);
-		
+
 		GridBagConstraints gbcClients = new GridBagConstraints();
 		clientsPanel.setLayout(new GridBagLayout());
 		gbcClients.gridx = 0;
@@ -1134,11 +1152,11 @@ public class LaunchExperiment implements AxesListener {
 			}
 		});
 		clientsPanel.add(addClient, gbcClients);
-		
+
 		clientsList.setLayout(new GridBagLayout());
 		addClientLine("", -1);
 	}
-	
+
 	private void addClientLine(String hostValue, int portValue) {
 		oscHostsClientsTF.add(new JTextField(hostValue));
 		oscPortsClientsTF.add(new JFormattedTextField(""+portValue));
@@ -1150,62 +1168,62 @@ public class LaunchExperiment implements AxesListener {
 		clientsList = new JPanel();
 		clientsList.setBackground(Color.WHITE);
 		clientsList.setLayout(new GridBagLayout());
-		
+
 		GridBagConstraints c = new GridBagConstraints();
-	    
+
 		for (int i = 0; i < oscHostsClientsTF.size(); i++) {
 			final JTextField tfHost = oscHostsClientsTF.get(i);
 			final JFormattedTextField tfPort = oscPortsClientsTF.get(i);
-			
+
 			final JPanel res = new JPanel();
 			TitledBorder border = BorderFactory.createTitledBorder("Client");
 			res.setBorder(border);
 			res.setLayout(new GridLayout(2, 2));
-			
+
 			JLabel hostLabel = new JLabel("Host");
 			res.add(hostLabel);
 			res.add(tfHost);
-			
+
 			JLabel portLabel = new JLabel("Port");
 			NumberFormat nf = NumberFormat.getIntegerInstance();
 			nf.setGroupingUsed(false);
 			res.add(portLabel);
 			res.add(tfPort);
-			
+
 			c.weighty = 0.0;
-		    c.weightx = 1.0;
-		    c.gridx = 1;
+			c.weightx = 1.0;
+			c.gridx = 1;
 			c.gridy = i;
 			c.fill = GridBagConstraints.HORIZONTAL;
-		    c.anchor = GridBagConstraints.NORTH;
-		    clientsList.add(res, c);
-		    
-		    JButton removeClient = new JButton(" - ");
-		    removeClient.setBorder(BorderFactory.createRaisedBevelBorder());
-		    removeClient.setBackground(new Color(230, 230, 230));
-		    removeClient.setOpaque(true);
-		    removeClient.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    		oscHostsClientsTF.remove(tfHost);
-		    		oscPortsClientsTF.remove(tfPort);
-		    		updateClientsPanel();
-		    	}
-		    });
-		    
-		    c.weightx = 0.0;
-		    c.gridx = 0;
-		    c.anchor = GridBagConstraints.CENTER;
-		    c.fill = GridBagConstraints.NONE;
-		    c.insets = new Insets(20, 0, 0, 0);
-		    clientsList.add(removeClient, c);
+			c.anchor = GridBagConstraints.NORTH;
+			clientsList.add(res, c);
+
+			JButton removeClient = new JButton(" - ");
+			removeClient.setBorder(BorderFactory.createRaisedBevelBorder());
+			removeClient.setBackground(new Color(230, 230, 230));
+			removeClient.setOpaque(true);
+			removeClient.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					oscHostsClientsTF.remove(tfHost);
+					oscPortsClientsTF.remove(tfPort);
+					updateClientsPanel();
+				}
+			});
+
+			c.weightx = 0.0;
+			c.gridx = 0;
+			c.anchor = GridBagConstraints.CENTER;
+			c.fill = GridBagConstraints.NONE;
+			c.insets = new Insets(20, 0, 0, 0);
+			clientsList.add(removeClient, c);
 		}
-		
+
 		jspClientsList.setViewportView(clientsList);
-	    clientsList.revalidate();
-	    jspClientsList.isValidateRoot();
+		clientsList.revalidate();
+		jspClientsList.isValidateRoot();
 	}
 
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
