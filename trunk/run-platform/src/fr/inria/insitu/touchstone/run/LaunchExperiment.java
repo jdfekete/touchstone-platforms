@@ -689,17 +689,18 @@ public class LaunchExperiment implements AxesListener {
 		dialog.pack();
 		dialog.setVisible(true);
 		
-		loadLaunchConfiguration(new File(".config-last.xml"));
-		
 		File here = new File(".");
 		File[] files = here.listFiles();
 		for (int i = 0; i < files.length; i++) {
 			if(files[i].getName().startsWith(".config-")) {
-				cbFavorites.addItem(files[i].getName().substring(8));
+				if(!files[i].getName().equals(".config-last.xml"))
+					cbFavorites.addItem(files[i].getName().substring(8));
 			}
 		}
 		cbFavorites.insertItemAt("last run", 0);
 		cbFavorites.setSelectedIndex(0);
+		
+		loadLaunchConfiguration(new File(".config-last.xml"));
 		
 	}
 
@@ -801,6 +802,10 @@ public class LaunchExperiment implements AxesListener {
 		cbFavorites = new JComboBox();
 		cbFavorites.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
+				if(e.getItem().toString().equals("last run")) {
+					loadLaunchConfiguration(new File(".config-last.xml"));
+					return;
+				}
 				File launchConfigToLoad = new File(".config-"+e.getItem().toString());
 				if(!launchConfigToLoad.exists()) return;
 				loadLaunchConfiguration(launchConfigToLoad);
