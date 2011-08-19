@@ -173,6 +173,8 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 
     private EndCondition        endCondition;
 
+    private boolean 			exitOnEscape = true;
+    
     private EventListenerList   eventListenerList;
 
     private int                 pollDelay;
@@ -535,7 +537,13 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 		}
 	}
 	
+	public void setExitOnEscape(boolean exitOnEscape) {
+		this.exitOnEscape = exitOnEscape;
+	}
 	
+	public boolean isExitOnEscape() {
+		return this.exitOnEscape;
+	}
 	
 	/**
 	 * Evaluates the end condition, returning true if it considers the technique
@@ -547,7 +555,7 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 	 */
 	public boolean evalEndCondition(EventObject e) {
 		Object value_escape = getMeasureValue(INPUT_ESC);
-		if(value_escape != null) {
+		if(this.exitOnEscape && value_escape != null) {
 			if (Double.parseDouble(value_escape.toString()) == 1)
 				System.exit(0);
 		}
