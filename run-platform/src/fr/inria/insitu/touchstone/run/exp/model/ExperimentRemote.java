@@ -32,12 +32,14 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.run.exp.model;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import fr.inria.insitu.touchstone.run.Platform;
 
@@ -50,6 +52,7 @@ public class ExperimentRemote extends JFrame {
 	private JButton nextTrial;
 	private JButton previousBlock;
 	private JButton nextBlock;
+	private JButton resendOSCMessage;
 	private RemoteListener remoteListener;
 	
 	private class RemoteListener implements ActionListener {
@@ -71,6 +74,10 @@ public class ExperimentRemote extends JFrame {
 				nextBlock();
 				return;
 			}
+			if(e.getSource() == resendOSCMessage) {
+				resendLastOSCMessage();
+				return;
+			}
 		}
 	}
 	
@@ -78,20 +85,25 @@ public class ExperimentRemote extends JFrame {
 		super("Experiment remote");
 		this.experiment = experiment;
 		setAlwaysOnTop(true);
-		getContentPane().setLayout(new GridLayout(2, 2));
+		getContentPane().setLayout(new BorderLayout());
+		JPanel previousAndNextButtons = new JPanel(new GridLayout(2, 2));
 		remoteListener = new RemoteListener();
 		previousTrial = new JButton("previous trial");
 		previousTrial.addActionListener(remoteListener);
-		getContentPane().add(previousTrial);
+		previousAndNextButtons.add(previousTrial);
 		nextTrial = new JButton("next trial");
 		nextTrial.addActionListener(remoteListener);
-		getContentPane().add(nextTrial);
+		previousAndNextButtons.add(nextTrial);
 		previousBlock = new JButton("previous block");
 		previousBlock.addActionListener(remoteListener);
-		getContentPane().add(previousBlock);
+		previousAndNextButtons.add(previousBlock);
 		nextBlock = new JButton("next block");
 		nextBlock.addActionListener(remoteListener);
-		getContentPane().add(nextBlock);
+		previousAndNextButtons.add(nextBlock);
+		resendOSCMessage = new JButton("resend last OSC message"); // resend the last OSC message that has been sent to all clients
+		resendOSCMessage.addActionListener(remoteListener);
+		getContentPane().add(previousAndNextButtons, BorderLayout.CENTER);
+		getContentPane().add(resendOSCMessage, BorderLayout.SOUTH);
 		pack();
 		setVisible(true);
 	}
@@ -139,6 +151,10 @@ public class ExperimentRemote extends JFrame {
 		Integer numBlock = (Integer)Platform.getInstance().getMeasureValue(Experiment.MEASURE_EXPERIMENT_BLOCK);
     	experiment.goTo(numBlock-1, 1);
     	endCurrentExperimentPart();
+	}
+	
+	public void resendLastOSCMessage() {
+		Platform.getInstance().reSendLastOSCMessage();
 	}
 
 }
