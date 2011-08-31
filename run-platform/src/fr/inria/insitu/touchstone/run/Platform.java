@@ -331,6 +331,25 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 		}
 	}
 	
+	private String lastOSCHost = null;
+	private int lastOSCPort = 0;
+	private OSCMessage lastOSCMessage = null;
+	
+	/**
+	 * Re-send the last OSC message.
+	 */
+	public void reSendLastOSCMessage() {
+		if (lastOSCMessage == null) {
+			System.err.println("Can not send last OSC message (last message is null)...");
+			return;			
+		}
+		if (lastOSCHost != null) {//last sent message was for a specific host...
+			sendOSCMessage(lastOSCHost, lastOSCPort, lastOSCMessage);
+		} else {//last message was sent to all known clients
+			sendOSCMessage(lastOSCMessage);
+		}
+	}
+	
 	/**
 	 * Send an OSC message to all the clients in the list.
 	 * 
@@ -341,6 +360,9 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 			System.err.println("Can not send OSC message. OSC is disabled...");
 			return;
 		}
+		lastOSCHost = null;
+		lastOSCPort = 0;
+		lastOSCMessage = message;
 		for (OSCPortOut outPort : oscClients.values()) {
 			try {
 				//System.out.println("Sending message " + message.getAddress() + " to " + host + "(" + port +")");
@@ -371,6 +393,9 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 			outPort = addOSCClient(host, port);
 		}
 		if (outPort != null) {
+			lastOSCHost = host;
+			lastOSCPort = port;
+			lastOSCMessage = message;
 			try {
 //System.out.println("Sending message " + message.getAddress() + " to " + host + "(" + port +")");
 				outPort.send(message);
