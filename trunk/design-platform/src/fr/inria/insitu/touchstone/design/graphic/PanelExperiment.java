@@ -32,22 +32,12 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.graphic;
 
-import fr.inria.insitu.touchstone.design.XMLParser.PluginHandler;
-import fr.inria.insitu.touchstone.design.graphic.widgets.AddYourOwn;
-import fr.inria.insitu.touchstone.design.graphic.widgets.ArrowButton;
-import fr.inria.insitu.touchstone.design.graphic.widgets.EditableItem;
-import fr.inria.insitu.touchstone.design.graphic.widgets.EditableMenu;
-import fr.inria.insitu.touchstone.design.graphic.widgets.Function;
-import fr.inria.insitu.touchstone.design.graphic.widgets.PlusButton;
-import fr.inria.insitu.touchstone.design.motor.Experiment;
-import fr.inria.insitu.touchstone.design.motor.Intertitle;
-import fr.inria.insitu.touchstone.design.motor.Plugin;
-import fr.inria.insitu.touchstone.design.motor.Step;
-
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,6 +53,7 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -74,15 +65,26 @@ import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
- 
+import fr.inria.insitu.touchstone.design.XMLParser.PluginHandler;
+import fr.inria.insitu.touchstone.design.graphic.widgets.AddYourOwn;
+import fr.inria.insitu.touchstone.design.graphic.widgets.ArrowButton;
+import fr.inria.insitu.touchstone.design.graphic.widgets.EditableItem;
+import fr.inria.insitu.touchstone.design.graphic.widgets.EditableMenu;
+import fr.inria.insitu.touchstone.design.graphic.widgets.Function;
+import fr.inria.insitu.touchstone.design.graphic.widgets.PlusButton;
+import fr.inria.insitu.touchstone.design.motor.Experiment;
+import fr.inria.insitu.touchstone.design.motor.Intertitle;
+import fr.inria.insitu.touchstone.design.motor.Plugin;
+import fr.inria.insitu.touchstone.design.motor.Step;
+
+
 public class PanelExperiment extends StepPanel<Step> {
 
 	private static final long serialVersionUID = 42L;
-	
+
 	private JLabel titleLabel = new JLabel("Title of experiment:");
 	private JTextField titleField  = new JTextField();
 	private JLabel codeLabel = new JLabel("Short code:");
@@ -98,7 +100,7 @@ public class PanelExperiment extends StepPanel<Step> {
 	private ArrowButton mb = new ArrowButton();
 
 	private ExperimentListener experimentListener;
-	
+
 	public PanelExperiment(DesignPlatform designPlatform, Experiment experiment, int depth){
 		super(designPlatform, experiment, depth);	
 		setLayout(new GridBagLayout());
@@ -164,7 +166,7 @@ public class PanelExperiment extends StepPanel<Step> {
 		blockClasses.add(new AddYourOwn());
 		add(selectBlockClassBox,gbc);
 		selectBlockClassBox.setSelectedIndex(0);
-		
+
 		experimentListener = new ExperimentListener(this);
 		codeField.getDocument().addDocumentListener(experimentListener);
 		titleField.getDocument().addDocumentListener(experimentListener);
@@ -173,7 +175,7 @@ public class PanelExperiment extends StepPanel<Step> {
 		selectBlockClassBox.addActionListener(experimentListener);
 	}
 
-	
+
 	public Step getStep() {
 		experiment.setDescription(descriptionField.getText());
 		experiment.setPlugins(pluginsPanel.getPlugins());
@@ -196,7 +198,7 @@ public class PanelExperiment extends StepPanel<Step> {
 	private class PluginPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		JLabel pluginsSelectedLabel = new JLabel("Selected plugins:");
 		JList pluginsSelectedList = new JList(new DefaultListModel());		
 		JPanel panelSelectedPlugin;
@@ -227,11 +229,18 @@ public class PanelExperiment extends StepPanel<Step> {
 			panelSelectedPlugin.add(jspDesc, gbc2);
 
 			refreshBlockClass();
-			
+
 			browse.addActionListener(new ActionListener(){
 
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser fc = new JFileChooser();
+					JFileChooser fc = new JFileChooser() {
+						protected JDialog createDialog(Component parent)
+						throws HeadlessException {
+							JDialog dlg = super.createDialog(parent);
+							dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+							return dlg;
+						}
+					};
 					int returnVal = fc.showDialog(browse,"Choose Plugin");
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						String file = fc.getSelectedFile().getAbsolutePath();
@@ -317,7 +326,7 @@ public class PanelExperiment extends StepPanel<Step> {
 			selectBlockClassBox.revalidate();
 			selectBlockClassBox.addActionListener(experimentListener);
 		}
-		
+
 		/**
 		 * remove all elements from the panel
 		 */
@@ -352,8 +361,8 @@ public class PanelExperiment extends StepPanel<Step> {
 			gbc.gridheight = 5;
 			panelSelectedPlugin.setMinimumSize(new Dimension(402, 80));
 			add(panelSelectedPlugin,gbc);
-			
-			
+
+
 			gbc.gridy += gbc.gridheight;
 			gbc.weighty = 0;
 			gbc.gridheight = 1;
@@ -393,7 +402,7 @@ public class PanelExperiment extends StepPanel<Step> {
 		private class PluginDescriptionPanel extends JPanel {
 
 			private static final long serialVersionUID = 1L;
-			
+
 			JLabel pluginName;
 			JCheckBox loadFactors;
 			JCheckBox loadMeasures;
@@ -401,9 +410,9 @@ public class PanelExperiment extends StepPanel<Step> {
 			JCheckBox loadIntertitles;
 			JCheckBox loadBlockClass;
 			Plugin plugin;
-			
+
 			public PluginDescriptionPanel (Plugin p){
-				
+
 				loadFactors = new JCheckBox("Load Factors");
 				loadMeasures = new JCheckBox("Load Measures");
 				loadCriteria = new JCheckBox("Load Criteria");
@@ -453,7 +462,7 @@ public class PanelExperiment extends StepPanel<Step> {
 				add(loadCriteria);
 				add(loadIntertitles);
 				add(loadBlockClass);
-				
+
 				setPlugin(p);
 			}
 
@@ -483,7 +492,7 @@ public class PanelExperiment extends StepPanel<Step> {
 
 	public void display() {
 		experimentListener.setEnabled(false);
-		
+
 		if(experiment.getDescription() != null && experiment.getDescription().length() != 0)
 			descriptionField.setText(experiment.getDescription());
 		if(experiment.getAuthor() != null && experiment.getAuthor().length() != 0)
@@ -492,7 +501,7 @@ public class PanelExperiment extends StepPanel<Step> {
 			titleField.setText(experiment.getTitle());
 		if(experiment.getShortCode() != null && experiment.getShortCode().length() != 0)
 			codeField.setText(experiment.getShortCode());
-		
+
 		((DefaultListModel)pluginsPanel.pluginsSelectedList.getModel()).removeAllElements();
 		for (Iterator<Plugin> iterator = experiment.getPlugins().iterator(); iterator.hasNext();) {
 			Plugin plugin = iterator.next();
@@ -502,9 +511,9 @@ public class PanelExperiment extends StepPanel<Step> {
 			if(!in)
 				((DefaultListModel)pluginsPanel.pluginsSelectedList.getModel()).addElement(plugin);
 		}
-		
+
 		pluginsPanel.refreshBlockClass();
-		
+
 		hiliteExperimentPreview();
 		experimentListener.setEnabled(true);
 	}
@@ -513,14 +522,14 @@ public class PanelExperiment extends StepPanel<Step> {
 	public void save() {
 		getStep();
 	}
-	
+
 	public void updateExperimentPreview() {
 		getStep();
 		getDesignPlatform().getExperimentPreview().updateExperimentData();
 	}
-	
+
 	public void hiliteExperimentPreview() {
 		getDesignPlatform().getExperimentPreview().hiliteExperimentData();
 	}
-	
+
 }
