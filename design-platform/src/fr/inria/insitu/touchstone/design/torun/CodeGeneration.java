@@ -33,6 +33,7 @@
 package fr.inria.insitu.touchstone.design.torun;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

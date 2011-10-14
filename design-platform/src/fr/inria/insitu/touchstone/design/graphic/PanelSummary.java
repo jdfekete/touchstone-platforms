@@ -45,6 +45,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -111,7 +113,14 @@ public class PanelSummary extends StepPanel<Step> {
 
 		loadXML.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY);
+				JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY) {
+					protected JDialog createDialog(Component parent)
+					throws HeadlessException {
+						JDialog dlg = super.createDialog(parent);
+						dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+						return dlg;
+					}
+				};
 				int returnVal = fc.showDialog(loadXML,"Open");
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					String file = fc.getSelectedFile().getAbsolutePath();
@@ -136,7 +145,14 @@ public class PanelSummary extends StepPanel<Step> {
 		save.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY);
+				JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY) {
+					protected JDialog createDialog(Component parent)
+					throws HeadlessException {
+						JDialog dlg = super.createDialog(parent);
+						dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+						return dlg;
+					}
+				};
 				int returnVal = fc.showDialog(save,"Save");
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					String file = fc.getSelectedFile().getAbsolutePath();
@@ -158,6 +174,7 @@ public class PanelSummary extends StepPanel<Step> {
 				}
 				if (experimentfile.exists()) {
 					JDialog framePlugins = new JDialog(getDesignPlatform());
+					framePlugins.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
 					CodeGenerationPanel panelPlugins = new CodeGenerationPanel(framePlugins, getExperiment(), experimentfile);
 					framePlugins.getContentPane().add(panelPlugins);
 					framePlugins.pack();
@@ -168,7 +185,14 @@ public class PanelSummary extends StepPanel<Step> {
 
 		csvFile.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser(LAST_DIRECTORY);
+				JFileChooser fc = new JFileChooser(LAST_DIRECTORY) {
+					protected JDialog createDialog(Component parent)
+					throws HeadlessException {
+						JDialog dlg = super.createDialog(parent);
+						dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+						return dlg;
+					}
+				};
 				int returnVal = fc.showDialog(getDesignPlatform(),"Save as csv");
 				File file = new File("experiment.csv");
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -367,6 +391,7 @@ public class PanelSummary extends StepPanel<Step> {
 			gbc.weightx = 1;
 			folderSelected = new JTextField("");
 			folderSelected.setMinimumSize(new Dimension(200, folderSelected.getMinimumSize().height));
+			folderSelected.setPreferredSize(new Dimension(200, folderSelected.getMinimumSize().height));
 			folderSelected.getDocument().addDocumentListener(new DocumentListener() {
 				public void changedUpdate(DocumentEvent e) {
 					go.setEnabled(e.getDocument().getLength() != 0);
@@ -384,7 +409,14 @@ public class PanelSummary extends StepPanel<Step> {
 			browseFolder = new JButton("Browse");
 			browseFolder.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY);
+					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY) {
+						protected JDialog createDialog(Component parent)
+						throws HeadlessException {
+							JDialog dlg = super.createDialog(parent);
+							dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+							return dlg;
+						}
+					};
 					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					fc.setDialogTitle("Set folder for code generation");
 					int returnVal = fc.showDialog(PanelSummary.this.getDesignPlatform(),"Folder for code generation");
@@ -436,7 +468,14 @@ public class PanelSummary extends StepPanel<Step> {
 				setJarFileList.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						int index = setJarFileList.getSelectedIndex();
-						JFileChooser fcPlugins = new JFileChooser(DesignPlatform.LAST_DIRECTORY);
+						JFileChooser fcPlugins = new JFileChooser(DesignPlatform.LAST_DIRECTORY) {
+							protected JDialog createDialog(Component parent)
+							throws HeadlessException {
+								JDialog dlg = super.createDialog(parent);
+								dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+								return dlg;
+							}
+						};
 						Plugin plugin = plugins.get(index);
 						fcPlugins.setDialogTitle("Set jar file for plugin "+plugin.getId());
 						fcPlugins.setFileFilter(new JarFilter());
@@ -457,19 +496,29 @@ public class PanelSummary extends StepPanel<Step> {
 			gbc.gridy++;
 			gbc.gridwidth = 2;
 			gbc.weightx = 1;
+			gbc.anchor = GridBagConstraints.WEST;
+			gbc.fill = GridBagConstraints.BOTH;
 			add(new JLabel("Required additional libraries:"), gbc);
 			gbc.gridy++;
 			gbc.gridwidth = 1;
 			gbc.weightx = 1;
 			additionalLibrariesTF = new JTextField("");
 			additionalLibrariesTF.setMinimumSize(new Dimension(200, additionalLibrariesTF.getMinimumSize().height));
+			additionalLibrariesTF.setPreferredSize(folderSelected.getPreferredSize());
 			add(additionalLibrariesTF, gbc);
 			gbc.gridx++;
 			gbc.fill = GridBagConstraints.NONE;
 			JButton browseLibraries = new JButton("Browse");
 			browseLibraries.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY);
+					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY) {
+						protected JDialog createDialog(Component parent)
+						throws HeadlessException {
+							JDialog dlg = super.createDialog(parent);
+							dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+							return dlg;
+						}
+					};
 					fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					fc.setMultiSelectionEnabled(true);
 					fc.setDialogTitle("Select jar files for additional required libraries");

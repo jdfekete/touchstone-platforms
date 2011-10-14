@@ -34,9 +34,13 @@ package fr.inria.insitu.touchstone.design.graphic;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -262,6 +266,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 			sampleLogCreationPanel = new JPanel();
 			sampleLogCreationWindow.getContentPane().add(sampleLogCreationPanel);
 		}
+		sampleLogCreationWindow.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
 		sampleLogCreationPanel.removeAll();
 		Vector<Measure> measures = getExperiment().getMeasureSet().getMeasures();
 		// possible types: Integer, Float, String
@@ -301,7 +306,11 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 			if(measure.getPossibleValue() != null)
 				expressions.add(new JTextField(measure.getPossibleValue().toString()));
 			else {
-				expressions.add(new JTextField("            "));
+				JTextField tf = new JTextField();
+				tf.setMinimumSize(new Dimension(100,tf.getPreferredSize().height));
+				tf.setPreferredSize(new Dimension(100,tf.getPreferredSize().height));
+				expressions.add(tf);
+//				expressions.add(new JTextField("            "));
 			}
 			measureNames.add(measure);
 			expressions.get(expressions.size()-1).getDocument().addDocumentListener(new ExpressionListener(cpt));
@@ -337,7 +346,14 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 							}
 						}
 					}
-					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY);
+					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY) {
+						protected JDialog createDialog(Component parent)
+						throws HeadlessException {
+							JDialog dlg = super.createDialog(parent);
+							dlg.setLocation(getDesignPlatform().getLocationOnScreen().x + 50, getDesignPlatform().getLocationOnScreen().y + 50);
+							return dlg;
+						}
+					};
 					int returnVal = fc.showDialog(getDesignPlatform(),"Save");
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						writeLogSample(fc.getSelectedFile());
@@ -381,6 +397,8 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 					 * [value_min, value_max]
 					 */
 					final JDialog errorMessage = new JDialog(getDesignPlatform());
+					errorMessage.setLocationRelativeTo(getDesignPlatform());
+					errorMessage.setLocation(new Point(50, 50));
 					errorMessage.getContentPane().setLayout(new BorderLayout());
 					errorMessage.getContentPane().add(textPane, BorderLayout.NORTH);
 					JButton ok = new JButton("ok");
