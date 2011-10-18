@@ -349,7 +349,9 @@ public class PanelBlocking extends StepPanel<Blocking> {
 		}	
 	}
 
-	public void save() { }		
+	public void save() {
+		experiment.updateOrdering();
+	}		
 	
 	public void updateExperimentPreview() {
 	}
