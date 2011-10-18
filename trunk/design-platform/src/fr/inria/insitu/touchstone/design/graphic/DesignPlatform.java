@@ -410,7 +410,7 @@ public class DesignPlatform extends JFrame {
 	private void save(File fileName) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
-			addSnapshot.doClick();
+//			addSnapshot.doClick();
 			oos.writeInt(snapshots.getSize());
 			for(int i = 0; i < snapshots.getSize(); i++) {
 				oos.writeObject(snapshots.getElementAt(i));
