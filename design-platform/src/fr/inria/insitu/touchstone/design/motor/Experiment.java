@@ -279,7 +279,7 @@ public class Experiment extends Step implements Serializable {
 	}
 
 	public void setFactorSet(FactorSet factorSet) {
-
+		
 		Block oldBlock = null;
 		BlockType oldBlockType = null;
 
@@ -348,8 +348,9 @@ public class Experiment extends Step implements Serializable {
 					// selectedBlockType.getNumberOfBlockLevel() + 2 trials
 					selectedBlock.setBlockReplication(0,oldBlock.getBlockReplications(0));
 					for (int i = 1; i<= (selectedBlockType.getNumberOfBlockLevel()+1);i++) {
-						if(i <= (oldBlockType.getNumberOfBlockLevel()+1))
+						if(i <= (oldBlockType.getNumberOfBlockLevel()+1)) {
 							selectedBlock.setBlockReplication(i,oldBlock.getBlockReplications(i));
+						} 
 					}
 					selectedBlock.setBlockReplication(selectedBlockType.getNumberOfBlockLevel() + 2,
 							oldBlock.getBlockReplications(selectedBlockType.getNumberOfBlockLevel() + 2));
