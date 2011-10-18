@@ -277,12 +277,11 @@ public class PanelPractice extends StepPanel<Practice> {
 					PlusButton add = new PlusButton();
 					add.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
+							save();
 							PanelPractice.this.experiment.getPractice().getPractices().get(PracticeLine.this.blockingLevel).add(new PracticeBlock());
-							
 							// save opened paths
 							Enumeration<TreePath> expandedPaths = treeRenderer.getTree().getExpandedDescendants(new TreePath(treeRenderer.getRoot()));
 							PanelPractice.this.display();
-							
 							// restore opened paths
 							while(expandedPaths != null && expandedPaths.hasMoreElements()) {
 								TreePath path = expandedPaths.nextElement();
