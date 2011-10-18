@@ -59,7 +59,7 @@ public class Block extends Vector<Block> implements Serializable {
 		cpt++;
 		this.values = values;
 		if (factors.size()>0){
-			//pour chaque combi de valeur de facteur, creer un block
+			//pour chaque combinaison de valeurs de facteur, creer un block
 			Vector<Vector<Value>> combinations = new Vector<Vector<Value>>();
 			Vector<Vector<Factor>> reste = new Vector<Vector<Factor>>();
 			if (factors.size()>1)
