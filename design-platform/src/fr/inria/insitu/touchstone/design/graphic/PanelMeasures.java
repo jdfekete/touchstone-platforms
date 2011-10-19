@@ -96,7 +96,7 @@ import fr.inria.insitu.touchstone.design.motor.MeasureValue;
 public class PanelMeasures extends StepPanel<MeasureSet> {
 
 	private static final long serialVersionUID = 42L;
-	
+
 	private DefaultMutableTreeNode rootAvailable = new DefaultMutableTreeNode();
 	private DefaultMutableTreeNode rootSelected = new DefaultMutableTreeNode();
 	private JTree availableMeasures = new JTree(rootAvailable);
@@ -104,7 +104,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 	private PanelMeasure measureEdition = new PanelMeasure();
 
 	private boolean listenersEnabled = true;
-	
+
 	public PanelMeasures(DesignPlatform designPlatform, Experiment experiment, int depth) {
 		super(designPlatform, experiment, depth);
 
@@ -120,6 +120,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 						DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)selPath.getLastPathComponent();
 						Object selectedItem = selectedNode.getUserObject();	
 						if ((selectedItem!=null)&&(selectedItem.getClass() == Measure.class)){
+							measureEdition.setEditedMeasure(null);
 							addMeasureTo(rootSelected, (Measure)((Measure)selectedItem).clone());
 							updateSelectedMeasures();
 						}							
@@ -134,19 +135,11 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 				int selRow = selectedMeasures.getRowForLocation(e.getX(), e.getY());
 				TreePath selPath = selectedMeasures.getPathForLocation(e.getX(), e.getY());
 				if(selRow != -1) {
-//					if(e.getClickCount() == 1) {
-//						Object selectedItem = ((DefaultMutableTreeNode)selPath.getLastPathComponent()).getUserObject();
-//						if ((selectedItem!=null)&&(selectedItem.getClass() == Measure.class)){
-//							Measure selectedMeasure = (Measure)selectedItem;
-//							measureEdition.setEditedMeasure(selectedMeasure);
-//							measureEdition.displayMeasure(selectedMeasure);
-//						}
-//					}
-//					else 
-						if(e.getClickCount() == 2) {
+					if(e.getClickCount() == 2) {
 						DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)selPath.getLastPathComponent();
 						Object selectedItem = selectedNode.getUserObject();						
 						if ((selectedItem!=null)&&(selectedItem.getClass() == Measure.class)){
+							measureEdition.setEditedMeasure(null);
 							removeMeasureFrom(rootSelected, selectedNode);
 							measureEdition.clearAll();
 							updateSelectedMeasures();
@@ -212,15 +205,15 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 	private Vector<JTextField> expressions = null;
 	private Vector<Measure> measureNames = null;
 	private boolean syntaxCorrect = false; 
-	
+
 	private class ExpressionListener implements DocumentListener {
 
 		private int cpt;
-		
+
 		public ExpressionListener(int cpt) {
 			this.cpt = cpt;
 		}
-		
+
 		private void checkSyntax() {
 			try {
 				new ContinuousMeasureValue(
@@ -235,8 +228,8 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 			}
 			try {
 				new DiscreteMeasureValue(
-					expressions.get(cpt).getText(),
-					measureNames.get(cpt).getType());
+						expressions.get(cpt).getText(),
+						measureNames.get(cpt).getType());
 				expressions.get(cpt).setBackground(Color.WHITE);
 				syntaxCorrect = true; 
 				return;
@@ -245,7 +238,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 				syntaxCorrect = false; 
 			}
 		}
-		
+
 		public void changedUpdate(DocumentEvent e) {
 			checkSyntax();
 		}
@@ -257,9 +250,9 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 		public void removeUpdate(DocumentEvent e) {
 			checkSyntax();
 		}
-		
+
 	}
-	
+
 	private void showSampleLogCreationWindow() {
 		if(sampleLogCreationWindow == null) {
 			sampleLogCreationWindow = new JFrame("");
@@ -282,7 +275,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 		int cpt = 0;
 		for (Iterator<Measure> iterator = measures.iterator(); iterator.hasNext();) {
 			Measure measure = iterator.next();
-			
+
 			boolean isFactor = false;
 			Vector<Factor> factors = getExperiment().getFactorSet().getFactors();
 			for (Iterator<Factor> iterator2 = factors.iterator(); iterator2.hasNext();) {
@@ -296,30 +289,30 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 					|| measure.getId().compareTo("inPractice") == 0
 					|| measure.getId().compareTo("nbBlocks") == 0
 					|| measure.getId().compareTo("nbTrials") == 0
-					) 
+			) 
 				continue;
-			
+
 			String mName = measure.getParent().length() != 0 ? 
 					measure.getParent()+"."+measure.getId() 
 					: measure.getId();
-			JLabel measureName = new JLabel(mName+" ("+measure.getType()+")");
-			if(measure.getPossibleValue() != null)
-				expressions.add(new JTextField(measure.getPossibleValue().toString()));
-			else {
-				JTextField tf = new JTextField();
-				tf.setMinimumSize(new Dimension(100,tf.getPreferredSize().height));
-				tf.setPreferredSize(new Dimension(100,tf.getPreferredSize().height));
-				expressions.add(tf);
-//				expressions.add(new JTextField("            "));
-			}
-			measureNames.add(measure);
-			expressions.get(expressions.size()-1).getDocument().addDocumentListener(new ExpressionListener(cpt));
-			panelListMeasures.add(measureName, gbc);
-			gbc.gridx = 1;
-			panelListMeasures.add(expressions.get(expressions.size()-1), gbc);
-			gbc.gridy ++;
-			gbc.gridx = 0;
-			cpt++;
+					JLabel measureName = new JLabel(mName+" ("+measure.getType()+")");
+					if(measure.getPossibleValue() != null)
+						expressions.add(new JTextField(measure.getPossibleValue().toString()));
+					else {
+						JTextField tf = new JTextField();
+						tf.setMinimumSize(new Dimension(100,tf.getPreferredSize().height));
+						tf.setPreferredSize(new Dimension(100,tf.getPreferredSize().height));
+						expressions.add(tf);
+						//				expressions.add(new JTextField("            "));
+					}
+					measureNames.add(measure);
+					expressions.get(expressions.size()-1).getDocument().addDocumentListener(new ExpressionListener(cpt));
+					panelListMeasures.add(measureName, gbc);
+					gbc.gridx = 1;
+					panelListMeasures.add(expressions.get(expressions.size()-1), gbc);
+					gbc.gridy ++;
+					gbc.gridx = 0;
+					cpt++;
 		}
 		JButton getLogSample = new JButton("get log sample");
 		getLogSample.addActionListener(new ActionListener() {
@@ -363,30 +356,30 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 					}
 				} else {
 					String[] initString =
-	                { 
+					{ 
 							"The sample log will be created by picking one possible value for each measure.\n" +
-	                		"To specify the possible values for a given measure, you can either\n" +
-	                		"define a set of discrete values and the possible value will be randomly picked in this set:\n",
-	                		"{value_1, value_2, ..., value_n}\n",
-	                		"or\n" +
-	                		"define a continuous range and the value will be randomly picked in this range:\n",
-	                		"[value_min, value_max]"
-	                };
+							"To specify the possible values for a given measure, you can either\n" +
+							"define a set of discrete values and the possible value will be randomly picked in this set:\n",
+							"{value_1, value_2, ..., value_n}\n",
+							"or\n" +
+							"define a continuous range and the value will be randomly picked in this range:\n",
+							"[value_min, value_max]"
+					};
 					String[] initStyles =
 					{ "regular", "italic", "regular", "italic" };
 					JTextPane textPane = new JTextPane();
-			        StyledDocument doc = textPane.getStyledDocument();
-			        addStylesToDocument(doc);
-	        
-			        try {
-			            for (int i=0; i < initString.length; i++) {
-			                doc.insertString(doc.getLength(), initString[i],
-			                                 doc.getStyle(initStyles[i]));
-			            }
-			        } catch (BadLocationException ble) {
-			            System.err.println("Couldn't insert initial text into text pane.");
-			        }
-			        
+					StyledDocument doc = textPane.getStyledDocument();
+					addStylesToDocument(doc);
+
+					try {
+						for (int i=0; i < initString.length; i++) {
+							doc.insertString(doc.getLength(), initString[i],
+									doc.getStyle(initStyles[i]));
+						}
+					} catch (BadLocationException ble) {
+						System.err.println("Couldn't insert initial text into text pane.");
+					}
+
 					/* 
 					 * The sample log will be created by picking one possible value for each measure.
 					 * To specify the possible values for a given measure, you can either
@@ -419,23 +412,23 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 		sampleLogCreationWindow.pack();
 		sampleLogCreationWindow.setVisible(true);
 	}
-	
+
 	protected void addStylesToDocument(StyledDocument doc) {
-        //Initialize some styles.
-        Style def = StyleContext.getDefaultStyleContext().
-                        getStyle(StyleContext.DEFAULT_STYLE);
+		//Initialize some styles.
+		Style def = StyleContext.getDefaultStyleContext().
+		getStyle(StyleContext.DEFAULT_STYLE);
 
-        Style regular = doc.addStyle("regular", def);
-        StyleConstants.setFontFamily(def, "SansSerif");
+		Style regular = doc.addStyle("regular", def);
+		StyleConstants.setFontFamily(def, "SansSerif");
 
-        Style s = doc.addStyle("italic", regular);
-        StyleConstants.setItalic(s, true);
+		Style s = doc.addStyle("italic", regular);
+		StyleConstants.setItalic(s, true);
 
-        s = doc.addStyle("bold", regular);
-        StyleConstants.setBold(s, true);
-    }
+		s = doc.addStyle("bold", regular);
+		StyleConstants.setBold(s, true);
+	}
 
-	
+
 	private void writeLogSample(File file) {
 		try {
 			PrintWriter pw = new PrintWriter(file);
@@ -445,7 +438,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * takes two node and tests if the second one is a child of the first one.
 	 * @param parent the supposed parent node
@@ -459,7 +452,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 		}
 		return -1;
 	}	
-	
+
 	/**
 	 * 
 	 * @param node a Node
@@ -479,16 +472,16 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 		MeasureType.Float,
 		MeasureType.String
 	};
-	
+
 	/**
 	 * 
 	 * Panel used to edit a specified Measure or to create a new one.
 	 *
 	 */
 	private class PanelMeasure extends JPanel{
-		
+
 		private static final long serialVersionUID = 1L;
-		
+
 		JCheckBox log = new JCheckBox();
 		JCheckBox cinematic = new JCheckBox();
 		JTextField id= new JTextField();
@@ -546,7 +539,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 			add(addButton,gbcEdition);
 
 			log.addActionListener(new ActionListener(){
-				
+
 				public void actionPerformed(ActionEvent e) {
 					if(!listenersEnabled) return;
 					if (editedMeasure !=null){
@@ -557,7 +550,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 				}
 			});
 			cinematic.addActionListener(new ActionListener(){
-				
+
 				public void actionPerformed(ActionEvent e) {
 					if(!listenersEnabled) return;
 					if (editedMeasure !=null){
@@ -568,13 +561,13 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 				}
 			});
 			id.addKeyListener(new KeyAdapter(){
-				
+
 				public void keyReleased(KeyEvent e) {
 					if(!listenersEnabled) return;
 					if (editedMeasure !=null){
 						editedMeasure.setId(id.getText());
-//						updateSelectedMeasures();
-//						updateExperimentPreview();
+						//						updateSelectedMeasures();
+						//						updateExperimentPreview();
 					}
 				}
 			});
@@ -585,13 +578,13 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 				}
 			});
 			name.addKeyListener(new KeyAdapter(){
-				
+
 				public void keyReleased(KeyEvent e) {
 					if(!listenersEnabled) return;
 					if (editedMeasure !=null){
 						editedMeasure.setName(name.getText());
-//						updateSelectedMeasures();
-//						updateExperimentPreview();
+						//						updateSelectedMeasures();
+						//						updateExperimentPreview();
 					}
 				}
 			});
@@ -602,7 +595,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 				}
 			});
 			parent.addKeyListener(new KeyAdapter(){
-				
+
 				public void keyReleased(KeyEvent e) {
 					if(!listenersEnabled) return;
 					if (editedMeasure !=null){
@@ -613,8 +606,8 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 						removeMeasureFrom(rootSelected, measureNode);
 						editedMeasure.setParent(parent.getText());
 						addMeasureTo(rootSelected, editedMeasure);
-//						updateSelectedMeasures();
-//						updateExperimentPreview();
+						//						updateSelectedMeasures();
+						//						updateExperimentPreview();
 					}
 				}
 			});
@@ -650,27 +643,27 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 			});
 
 			clearAll.addActionListener(new ActionListener(){
-				
+
 				public void actionPerformed(ActionEvent e) {
 					if(!listenersEnabled) return;
 					clearAll();
 				}
 			});
-			
-			
+
+
 		}
 
 		/**
 		 * removes all the text from the JTextComponents
 		 */
 		public void clearAll(){
+			setEditedMeasure(null);
 			log.setSelected(false);
 			cinematic.setSelected(false);
 			id.setText("");
 			name.setText("");
 			parent.setText("");
 			comboType.setSelectedIndex(0);
-			setEditedMeasure(null);
 		}
 
 		/**
@@ -766,7 +759,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 		return;
 	}
 
-	
+
 	@SuppressWarnings("unchecked")
 	public MeasureSet getStep() {
 		MeasureSet measureSet = new MeasureSet();
@@ -781,8 +774,9 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 		return measureSet;
 	}
 
-	
+
 	public void display() {
+		
 		listenersEnabled = false;
 		rootAvailable.removeAllChildren();
 		rootSelected.removeAllChildren();
@@ -797,45 +791,52 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 			Measure measure = new Measure(true, false, factor.getShortName(), "", factor.getType(), factor.getFullName());
 			addMeasureTo(rootAvailable,measure);
 		}
-		
-		
+
+
 		for (int i = 0; i<rootAvailable.getChildCount();i++)
 			availableMeasures.expandRow(i);
 		MeasureSet measureSet = experiment.getMeasureSet();
 		if(measureSet != null) {
-			for (Measure measure : measureSet.getMeasures())
+			for (Measure measure : measureSet.getMeasures()) {
 				addMeasureTo(rootSelected,measure);
+			}
 		}
 		selectedMeasures.expandRow(0);
 		hiliteExperimentPreview();
 		listenersEnabled = true;
 		updateSelectedMeasures();
+		
+		measureEdition.clearAll();
 	}
-	
+
 	public void save() {
 		experiment.setMeasureSet(getStep());
 	}
-	
+
 	public void updateExperimentPreview() {
 		save();
 		getDesignPlatform().getExperimentPreview().updateMeasuresData();
 	}
-	
+
 	public void hiliteExperimentPreview() {
 		getDesignPlatform().getExperimentPreview().hiliteMeasuresData();
 	}
-	
+
 	private void updateSelectedMeasures() {
+		TreePath[] selectedPaths = selectedMeasures.getSelectionPaths();
+		
 		// save opened paths
 		Enumeration<TreePath> expandedPaths = selectedMeasures.getExpandedDescendants(new TreePath(rootSelected));
 		((DefaultTreeModel)selectedMeasures.getModel()).reload();
-		
+
 		// restore opened paths
 		while(expandedPaths != null && expandedPaths.hasMoreElements()) {
 			TreePath path = expandedPaths.nextElement();
 			TreePath nPath = Utils.getTreePath(path, selectedMeasures, true);
 			if(nPath != null) selectedMeasures.expandPath(nPath);
 		}
+		
+		selectedMeasures.setSelectionPaths(selectedPaths);
 	}
-	
+
 }

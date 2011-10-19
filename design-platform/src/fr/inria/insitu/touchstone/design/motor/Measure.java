@@ -122,6 +122,10 @@ public class Measure implements Serializable {
 	public String toString() {
 		return (log ? "[trial] " : "")+(cinematic ? "[event] " : "")+id;
 	}
+	
+	public String oldToString() {
+		return super.toString();
+	}
 
 	public String toXML(){
 		String idMeasure = parent == null || parent.length() == 0 ? id :
