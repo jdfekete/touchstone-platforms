@@ -102,6 +102,7 @@ public class Experiment extends StateMachine {
 	private Intertitle currentIntertrial;
 	private Intertitle currentInterblock;
 	private Intertitle experimentSetUp;
+	private Intertitle experimentUnSetUp;
 	private Block currentBlock;
 	private String currentParticipant;
 
@@ -296,6 +297,8 @@ public class Experiment extends StateMachine {
 	private static final int END_SETUP = 12;
 	private static final int GOTO_START_STATE = 13;
 	private static final int GOTO_BLOCK_STATE = 14;
+	private static final int BEGIN_UNSETUP = 15;
+	private static final int END_UNSETUP = 16;
 
 
 	private static final boolean DEBUG = false;
@@ -319,6 +322,9 @@ public class Experiment extends StateMachine {
 		}
 		if(nameEvent.compareTo("setup") == 0) {
 			return event.length != 2 ? BEGIN_SETUP : END_SETUP;
+		}
+		if(nameEvent.compareTo("unsetup") == 0) {
+			return event.length != 2 ? BEGIN_UNSETUP : END_UNSETUP;
 		}
 		if(nameEvent.compareTo("goto start") == 0) {
 			return GOTO_START_STATE;
@@ -415,6 +421,30 @@ public class Experiment extends StateMachine {
 					});
 				else
 					setCriterion(experimentSetUp, criterion, (Locator)event[2]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void setUnSetupExperiment(Object[] event) {
+		if(event.length == 2) {
+			// means it is a closing tag: </setup>
+			return;
+		} else {
+			try {
+				experimentUnSetUp = (Intertitle) newExperimentPart(event);
+				String criterion = (String) ((Hashtable)event[1]).get("criterion");
+				// By default a setup is finished immediately (except if an end condition is explicitly specified)
+				if(criterion == null)
+					experimentUnSetUp.setEndCondition(new AbstractEndCondition() {
+						public boolean isReached(AxesEvent e) { return true; }
+						public boolean isReached(InputEvent e) { return true; }
+						public boolean isReached(OSCMessage message, long when) { return true; }
+						public boolean isReached(Timer timer, long when) { return true; }
+					});
+				else
+					setCriterion(experimentUnSetUp, criterion, (Locator)event[2]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -574,6 +604,12 @@ public class Experiment extends StateMachine {
 //				if(Platform.getInstance().getEndCondition() != null)
 					evt = new VirtualEvent("setup");
 			case END_SETUP :
+				break;
+			case BEGIN_UNSETUP :
+				setUnSetupExperiment(nextEvent);
+//				if(Platform.getInstance().getEndCondition() != null)
+					evt = new VirtualEvent("unsetup");
+			case END_UNSETUP :
 				break;
 			case BEGIN_INTERTRIAL :
 				for (int i = eventIndex; i < systemEvents.size(); i++) {
@@ -924,6 +960,12 @@ public class Experiment extends StateMachine {
 				experimentSetUp.doBeginIntertitle();
 			}
 		};
+		
+		Transition unsetup = new Event ("unsetup", ">> unsetup") {
+			public void action() {
+				experimentUnSetUp.doBeginIntertitle();
+			}
+		};
 
 		Transition practice = new Event ("practice", ">> block") {
 			public void action() {
@@ -956,13 +998,25 @@ public class Experiment extends StateMachine {
 
 
 	/**
-	 * The interblock state.
+	 * The setup state.
 	 */
 	public State setup = new UserState () {
 
 		Transition done = new Event ("done", ">> start") {
 			public void action() {
 				experimentSetUp.doEndIntertitle();
+			}
+		};
+	};
+	
+	/**
+	 * The unsetup state.
+	 */
+	public State unsetup = new UserState () {
+
+		Transition done = new Event ("done", ">> start") {
+			public void action() {
+				experimentUnSetUp.doEndIntertitle();
 			}
 		};
 	};
@@ -1055,6 +1109,13 @@ public class Experiment extends StateMachine {
 	 */
 	public Intertitle getSetUp() {
 		return experimentSetUp;
+	}
+	
+	/**
+	 * @return The unsetup of this experiment.
+	 */
+	public Intertitle getUnSetUp() {
+		return experimentUnSetUp;
 	}
 
 	/**
