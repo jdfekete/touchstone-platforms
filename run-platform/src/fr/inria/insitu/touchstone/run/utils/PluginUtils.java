@@ -258,6 +258,7 @@ public class PluginUtils {
 				for (int i = 0; i < Platform.measuresMouse.length; i++) {
 					Element measureElement = new Element("measure");
 					measureElement.setAttribute("id", Platform.measuresMouse[i]);
+					measureElement.setAttribute("type", "integer");
 					measures.addContent(measureElement);
 				}
 				Collection<String> keyboardMappings = KeyMapJInputAWT.mappings.values();
@@ -265,6 +266,7 @@ public class PluginUtils {
 						.hasNext();) {
 					Element measureElement = new Element("measure");
 					measureElement.setAttribute("id", "Keyboard."+iterator.next());
+					measureElement.setAttribute("type", "integer");
 					measures.addContent(measureElement);
 				}
 			}

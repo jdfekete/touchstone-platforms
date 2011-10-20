@@ -88,6 +88,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -711,6 +712,17 @@ public class LaunchExperiment implements AxesListener {
 	 * @param args program arguments
 	 */
 	public static void main(String[] args) {
+		// TO REMOVE
+//		System.setProperty("apple.laf.useScreenMenuBar", "true");
+//		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Undo Experiment");
+//		try {
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		System.setProperty("apple.awt.fakefullscreen", "true");
+		// TO REMOVE
+		
 		new LaunchExperiment(args);
 	}
 
