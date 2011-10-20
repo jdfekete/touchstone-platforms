@@ -223,6 +223,24 @@ public class DesignPlatform extends JFrame {
 		}
 	}
 
+	protected JComboBox comboSnapshots;
+	protected ActionListener comboSnapShotsListener = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getActionCommand().compareTo("comboBoxChanged") == 0
+					&& snapshots.getSelectedItem() != null) {
+				if(snapshots.getSelectedItem() instanceof Experiment) {
+					try {
+						setExperiment(((Experiment)snapshots.getSelectedItem()).snapshot());
+					} catch (CloneNotSupportedException e1) {
+						e1.printStackTrace();
+					}
+					((Tab)tabs.getSelectedComponent()).display();
+				}
+				comboEdited(snapshots.getSelectedItem().toString());
+			}
+		}
+	};
+	
 	private JPanel getSnapshotsPanel() {
 		JPanel snapshotsPanel = new JPanel();
 		snapshotsPanel.setLayout(new GridBagLayout());
@@ -233,28 +251,8 @@ public class DesignPlatform extends JFrame {
 		gbc.weightx = 98;
 		snapshots = new DefaultComboBoxModel();
 		snapshots.addElement(experiment);
-		JComboBox comboSnapshots = new JComboBox(snapshots);
-		comboSnapshots.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(e.getActionCommand().compareTo("comboBoxChanged") == 0
-						&& snapshots.getSelectedItem() != null) {
-					try {
-						((Tab)tabs.getSelectedComponent()).save();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					if(snapshots.getSelectedItem() instanceof Experiment) {
-						try {
-							setExperiment(((Experiment)snapshots.getSelectedItem()).snapshot());
-						} catch (CloneNotSupportedException e1) {
-							e1.printStackTrace();
-						}
-						((Tab)tabs.getSelectedComponent()).display();
-					}
-					comboEdited(snapshots.getSelectedItem().toString());
-				}
-			}
-		});
+		comboSnapshots = new JComboBox(snapshots);
+		comboSnapshots.addActionListener(comboSnapShotsListener);
 		comboSnapshots.setEditable(true);
 		Component c = comboSnapshots.getEditor().getEditorComponent();
 		((JTextField)c).getDocument().addDocumentListener(
@@ -281,11 +279,13 @@ public class DesignPlatform extends JFrame {
 					String newSnapshot = snapshots.getSelectedItem().toString();
 					// remove potential existing snapshot having the same id
 					int indexToRemove = getIndexOfExperiment(newSnapshot);
-					if(indexToRemove >= 0) snapshots.removeElementAt(indexToRemove);
 					Experiment snapShot = experiment.snapshot();
 					snapShot.setID(newSnapshot);
-					snapshots.addElement(snapShot);
-					comboEdited(snapshots.getSelectedItem().toString());
+					comboSnapshots.removeActionListener(comboSnapShotsListener);
+					if(indexToRemove >= 0) snapshots.removeElementAt(indexToRemove);
+					snapshots.insertElementAt(snapShot,0);
+					snapshots.setSelectedItem(snapShot);
+					comboSnapshots.addActionListener(comboSnapShotsListener);
 				} catch (CloneNotSupportedException e2) {
 					e2.printStackTrace();
 				} catch (Exception e3) {
@@ -310,10 +310,6 @@ public class DesignPlatform extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(snapshots.getSelectedItem() != null)
 					snapshots.removeElement(snapshots.getSelectedItem());
-				if(snapshots.getSize() == 0) {
-					experiment = new Experiment(DesignPlatform.this);
-					experiment.init();
-				}
 			}
 		});
 		gbc.gridx = 2;
@@ -415,6 +411,9 @@ public class DesignPlatform extends JFrame {
 			for(int i = 0; i < snapshots.getSize(); i++) {
 				oos.writeObject(snapshots.getElementAt(i));
 			}
+			
+			oos.writeObject(getExperiment());
+			
 			oos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -433,6 +432,13 @@ public class DesignPlatform extends JFrame {
 				exp = (Experiment)ois.readObject();
 				exp.setDesignPlatform(DesignPlatform.this);
 				snapshots.addElement(exp);
+			}
+			try {
+				exp = (Experiment)ois.readObject();
+				exp.setDesignPlatform(DesignPlatform.this);
+				setExperiment(exp);
+			} catch(Exception e) {
+				setExperiment((Experiment)snapshots.getElementAt(0));
 			}
 			ois.close();
 			((Tab)tabs.getComponentAt(0)).display();
