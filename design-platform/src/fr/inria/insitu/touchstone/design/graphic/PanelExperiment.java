@@ -189,11 +189,7 @@ public class PanelExperiment extends StepPanel<Step> {
 	}
 
 	/**
-	 *
-	 * The panel allowing to load a plugin.
-	 * 
-	 *
-	 *
+	 * The panel to load a plugin.
 	 */
 	private class PluginPanel extends JPanel {
 
@@ -493,14 +489,10 @@ public class PanelExperiment extends StepPanel<Step> {
 	public void display() {
 		experimentListener.setEnabled(false);
 
-		if(experiment.getDescription() != null && experiment.getDescription().length() != 0)
-			descriptionField.setText(experiment.getDescription());
-		if(experiment.getAuthor() != null && experiment.getAuthor().length() != 0)
-			authorField.setText(experiment.getAuthor());
-		if(experiment.getTitle() != null && experiment.getTitle().length() != 0)
-			titleField.setText(experiment.getTitle());
-		if(experiment.getShortCode() != null && experiment.getShortCode().length() != 0)
-			codeField.setText(experiment.getShortCode());
+		descriptionField.setText(experiment.getDescription() != null ? experiment.getDescription() : "");
+		authorField.setText(experiment.getAuthor() != null ? experiment.getAuthor() : "");
+		titleField.setText(experiment.getTitle() != null ? experiment.getTitle() : "");
+		codeField.setText(experiment.getShortCode() != null ? experiment.getShortCode() : "");
 
 		((DefaultListModel)pluginsPanel.pluginsSelectedList.getModel()).removeAllElements();
 		for (Iterator<Plugin> iterator = experiment.getPlugins().iterator(); iterator.hasNext();) {

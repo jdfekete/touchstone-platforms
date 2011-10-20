@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <touchstone version="1.0">
-  <platform date="Dec 3, 2010 9:12:23 AM">
+  <platform date="Oct 19, 2011 12:23:51 PM">
     <plugin id="Core">
       <factors />
       <measures>
@@ -17,114 +17,114 @@
         <measure id="nbBlocks" name="Number of blocks for current participant" help="The number of blocks for current participant" type="integer" />
         <measure id="nbTrials" name="Number of trials for current block" help="The number of trials for current block" type="integer" />
         <measure id="inPractice" name="practice block" help="True if in practice, false otherwise" type="string" />
-        <measure id="Mouse.x" />
-        <measure id="Mouse.y" />
-        <measure id="Mouse.Left" />
-        <measure id="Mouse.Middle" />
-        <measure id="Mouse.Right" />
-        <measure id="Mouse.Wheel" />
-        <measure id="Keyboard.Back" />
-        <measure id="Keyboard.Tab" />
-        <measure id="Keyboard.Return" />
-        <measure id="Keyboard.Control" />
-        <measure id="Keyboard.Shift" />
-        <measure id="Keyboard.Pause" />
-        <measure id="Keyboard.Alt" />
-        <measure id="Keyboard.Capital" />
-        <measure id="Keyboard.Escape" />
-        <measure id="Keyboard.Noconvert" />
-        <measure id="Keyboard.Convert" />
-        <measure id="Keyboard.PageDown" />
-        <measure id="Keyboard.End" />
-        <measure id="Keyboard.Space" />
-        <measure id="Keyboard.PageUp" />
-        <measure id="Keyboard.Up" />
-        <measure id="Keyboard.At" />
-        <measure id="Keyboard.Colon" />
-        <measure id="Keyboard.Right" />
-        <measure id="Keyboard.Circumflex" />
-        <measure id="Keyboard.Home" />
-        <measure id="Keyboard.Left" />
-        <measure id="Keyboard.Down" />
-        <measure id="Keyboard.Period" />
-        <measure id="Keyboard.Slash" />
-        <measure id="Keyboard.NumpadComma" />
-        <measure id="Keyboard.Underscore" />
-        <measure id="Keyboard.Minus" />
-        <measure id="Keyboard.3" />
-        <measure id="Keyboard.2" />
-        <measure id="Keyboard.1" />
-        <measure id="Keyboard.0" />
-        <measure id="Keyboard.7" />
-        <measure id="Keyboard.6" />
-        <measure id="Keyboard.5" />
-        <measure id="Keyboard.4" />
-        <measure id="Keyboard.Semicolon" />
-        <measure id="Keyboard.9" />
-        <measure id="Keyboard.8" />
-        <measure id="Keyboard.NumpadEqual" />
-        <measure id="Keyboard.D" />
-        <measure id="Keyboard.E" />
-        <measure id="Keyboard.F" />
-        <measure id="Keyboard.G" />
-        <measure id="Keyboard.A" />
-        <measure id="Keyboard.B" />
-        <measure id="Keyboard.C" />
-        <measure id="Keyboard.L" />
-        <measure id="Keyboard.M" />
-        <measure id="Keyboard.N" />
-        <measure id="Keyboard.O" />
-        <measure id="Keyboard.H" />
-        <measure id="Keyboard.I" />
-        <measure id="Keyboard.J" />
-        <measure id="Keyboard.K" />
-        <measure id="Keyboard.U" />
-        <measure id="Keyboard.T" />
-        <measure id="Keyboard.W" />
-        <measure id="Keyboard.V" />
-        <measure id="Keyboard.Q" />
-        <measure id="Keyboard.P" />
-        <measure id="Keyboard.S" />
-        <measure id="Keyboard.R" />
-        <measure id="Keyboard.Rbracket" />
-        <measure id="Keyboard.Backslash" />
-        <measure id="Keyboard.Y" />
-        <measure id="Keyboard.X" />
-        <measure id="Keyboard.Lbracket" />
-        <measure id="Keyboard.Z" />
-        <measure id="Keyboard.Numpad6" />
-        <measure id="Keyboard.Numpad7" />
-        <measure id="Keyboard.Numpad4" />
-        <measure id="Keyboard.Numpad5" />
-        <measure id="Keyboard.Numpad2" />
-        <measure id="Keyboard.Numpad3" />
-        <measure id="Keyboard.Numpad0" />
-        <measure id="Keyboard.Numpad1" />
-        <measure id="Keyboard.Decimal" />
-        <measure id="Keyboard.Divide" />
-        <measure id="Keyboard.Subtract" />
-        <measure id="Keyboard.Mutliply" />
-        <measure id="Keyboard.Add" />
-        <measure id="Keyboard.Numpad8" />
-        <measure id="Keyboard.Numpad9" />
-        <measure id="Keyboard.F8" />
-        <measure id="Keyboard.F7" />
-        <measure id="Keyboard.F6" />
-        <measure id="Keyboard.F5" />
-        <measure id="Keyboard.F4" />
-        <measure id="Keyboard.F3" />
-        <measure id="Keyboard.F2" />
-        <measure id="Keyboard.F1" />
-        <measure id="Keyboard.Delete" />
-        <measure id="Keyboard.F12" />
-        <measure id="Keyboard.F11" />
-        <measure id="Keyboard.F10" />
-        <measure id="Keyboard.F9" />
-        <measure id="Keyboard.Grave" />
-        <measure id="Keyboard.Insert" />
-        <measure id="Keyboard.Numlock" />
-        <measure id="Keyboard.Scroll" />
-        <measure id="Keyboard.Stop" />
+        <measure id="Mouse.x" type="integer" />
+        <measure id="Mouse.y" type="integer" />
+        <measure id="Mouse.Left" type="integer" />
+        <measure id="Mouse.Middle" type="integer" />
+        <measure id="Mouse.Right" type="integer" />
+        <measure id="Mouse.Wheel" type="integer" />
+        <measure id="Keyboard.Back" type="integer" />
+        <measure id="Keyboard.Tab" type="integer" />
+        <measure id="Keyboard.Return" type="integer" />
+        <measure id="Keyboard.Control" type="integer" />
+        <measure id="Keyboard.Shift" type="integer" />
+        <measure id="Keyboard.Pause" type="integer" />
+        <measure id="Keyboard.Alt" type="integer" />
+        <measure id="Keyboard.Capital" type="integer" />
+        <measure id="Keyboard.Escape" type="integer" />
+        <measure id="Keyboard.Noconvert" type="integer" />
+        <measure id="Keyboard.Convert" type="integer" />
+        <measure id="Keyboard.PageDown" type="integer" />
+        <measure id="Keyboard.End" type="integer" />
+        <measure id="Keyboard.Space" type="integer" />
+        <measure id="Keyboard.PageUp" type="integer" />
+        <measure id="Keyboard.Up" type="integer" />
+        <measure id="Keyboard.At" type="integer" />
+        <measure id="Keyboard.Colon" type="integer" />
+        <measure id="Keyboard.Right" type="integer" />
+        <measure id="Keyboard.Circumflex" type="integer" />
+        <measure id="Keyboard.Home" type="integer" />
+        <measure id="Keyboard.Left" type="integer" />
+        <measure id="Keyboard.Down" type="integer" />
+        <measure id="Keyboard.Period" type="integer" />
+        <measure id="Keyboard.Slash" type="integer" />
+        <measure id="Keyboard.NumpadComma" type="integer" />
+        <measure id="Keyboard.Underscore" type="integer" />
+        <measure id="Keyboard.Minus" type="integer" />
+        <measure id="Keyboard.3" type="integer" />
+        <measure id="Keyboard.2" type="integer" />
+        <measure id="Keyboard.1" type="integer" />
+        <measure id="Keyboard.0" type="integer" />
+        <measure id="Keyboard.7" type="integer" />
+        <measure id="Keyboard.6" type="integer" />
+        <measure id="Keyboard.5" type="integer" />
+        <measure id="Keyboard.4" type="integer" />
+        <measure id="Keyboard.Semicolon" type="integer" />
+        <measure id="Keyboard.9" type="integer" />
+        <measure id="Keyboard.8" type="integer" />
+        <measure id="Keyboard.NumpadEqual" type="integer" />
+        <measure id="Keyboard.D" type="integer" />
+        <measure id="Keyboard.E" type="integer" />
+        <measure id="Keyboard.F" type="integer" />
+        <measure id="Keyboard.G" type="integer" />
+        <measure id="Keyboard.A" type="integer" />
+        <measure id="Keyboard.B" type="integer" />
+        <measure id="Keyboard.C" type="integer" />
+        <measure id="Keyboard.L" type="integer" />
+        <measure id="Keyboard.M" type="integer" />
+        <measure id="Keyboard.N" type="integer" />
+        <measure id="Keyboard.O" type="integer" />
+        <measure id="Keyboard.H" type="integer" />
+        <measure id="Keyboard.I" type="integer" />
+        <measure id="Keyboard.J" type="integer" />
+        <measure id="Keyboard.K" type="integer" />
+        <measure id="Keyboard.U" type="integer" />
+        <measure id="Keyboard.T" type="integer" />
+        <measure id="Keyboard.W" type="integer" />
+        <measure id="Keyboard.V" type="integer" />
+        <measure id="Keyboard.Q" type="integer" />
+        <measure id="Keyboard.P" type="integer" />
+        <measure id="Keyboard.S" type="integer" />
+        <measure id="Keyboard.R" type="integer" />
+        <measure id="Keyboard.Rbracket" type="integer" />
+        <measure id="Keyboard.Backslash" type="integer" />
+        <measure id="Keyboard.Y" type="integer" />
+        <measure id="Keyboard.X" type="integer" />
+        <measure id="Keyboard.Lbracket" type="integer" />
+        <measure id="Keyboard.Z" type="integer" />
+        <measure id="Keyboard.Numpad6" type="integer" />
+        <measure id="Keyboard.Numpad7" type="integer" />
+        <measure id="Keyboard.Numpad4" type="integer" />
+        <measure id="Keyboard.Numpad5" type="integer" />
+        <measure id="Keyboard.Numpad2" type="integer" />
+        <measure id="Keyboard.Numpad3" type="integer" />
+        <measure id="Keyboard.Numpad0" type="integer" />
+        <measure id="Keyboard.Numpad1" type="integer" />
+        <measure id="Keyboard.Decimal" type="integer" />
+        <measure id="Keyboard.Divide" type="integer" />
+        <measure id="Keyboard.Subtract" type="integer" />
+        <measure id="Keyboard.Mutliply" type="integer" />
+        <measure id="Keyboard.Add" type="integer" />
+        <measure id="Keyboard.Numpad8" type="integer" />
+        <measure id="Keyboard.Numpad9" type="integer" />
+        <measure id="Keyboard.F8" type="integer" />
+        <measure id="Keyboard.F7" type="integer" />
+        <measure id="Keyboard.F6" type="integer" />
+        <measure id="Keyboard.F5" type="integer" />
+        <measure id="Keyboard.F4" type="integer" />
+        <measure id="Keyboard.F3" type="integer" />
+        <measure id="Keyboard.F2" type="integer" />
+        <measure id="Keyboard.F1" type="integer" />
+        <measure id="Keyboard.Delete" type="integer" />
+        <measure id="Keyboard.F12" type="integer" />
+        <measure id="Keyboard.F11" type="integer" />
+        <measure id="Keyboard.F10" type="integer" />
+        <measure id="Keyboard.F9" type="integer" />
+        <measure id="Keyboard.Grave" type="integer" />
+        <measure id="Keyboard.Insert" type="integer" />
+        <measure id="Keyboard.Numlock" type="integer" />
+        <measure id="Keyboard.Scroll" type="integer" />
+        <measure id="Keyboard.Stop" type="integer" />
       </measures>
       <intertitles>
         <intertitle id="Message" class="fr.inria.insitu.touchstone.run.exp.defaults.Message">
