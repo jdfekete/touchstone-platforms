@@ -32,7 +32,9 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.motor;
 
-public class Couple<T,U> {
+import java.io.Serializable;
+
+public class Couple<T,U> implements Serializable {
 	
 	private static final long serialVersionUID = 42L;
 	

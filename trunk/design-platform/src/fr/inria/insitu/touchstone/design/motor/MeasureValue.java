@@ -32,7 +32,9 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.motor;
 
-public abstract class MeasureValue {
+import java.io.Serializable;
+
+public abstract class MeasureValue implements Serializable {
 
 	abstract String getRandomValue();
 	

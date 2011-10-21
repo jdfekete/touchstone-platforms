@@ -32,9 +32,10 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.motor;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class DiscreteMeasureValue extends MeasureValue {
+public class DiscreteMeasureValue extends MeasureValue implements Serializable {
 
 	private Vector<String> values = new Vector<String>();
 

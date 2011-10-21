@@ -32,6 +32,8 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.motor;
 
-public enum FactorRole {
+import java.io.Serializable;
+
+public enum FactorRole implements Serializable {
 	key, secondary, nuisance, SubjectCharacteristic;
 }
