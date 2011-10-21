@@ -32,9 +32,10 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.motor;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class LatinSquare extends OrderingMode {
+public class LatinSquare extends OrderingMode implements Serializable {
 
 	private static final long serialVersionUID = 42L;
 	

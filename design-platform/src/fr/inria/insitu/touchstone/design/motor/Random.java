@@ -32,10 +32,11 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.motor;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class Random extends OrderingMode {
+public class Random extends OrderingMode implements Serializable {
 	
 	private static final long serialVersionUID = 42L;
 	

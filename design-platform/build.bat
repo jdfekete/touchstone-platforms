@@ -7,6 +7,7 @@ if "%JAVA_HOME%" == "" goto error
 
 set LOCALCLASSPATH=%JAVA_HOME%\lib\tools.jar;.\tools\lib\ant.jar;.\tools\lib\ant-launcher.jar;%CLASSPATH%
 set ANT_HOME=./tools
+set ANT_OPTS=-Xms1024m -Xms1024m
 
 echo Building with classpath %LOCALCLASSPATH%
 

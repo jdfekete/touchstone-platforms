@@ -94,7 +94,6 @@ public class NameClassMap {
 	}
 
 	public void registerJar(File file) {
-
 		try {
 			jarFileLoader.addFile(file.getAbsolutePath());
 			JarFile jar = new JarFile(file, false, ZipFile.OPEN_READ);

@@ -623,9 +623,10 @@ public class CodeGeneration {
 				}
 			}
 		}
-		pw.write("\t\t// TODO If you make use of default mouse measures (e.g., Mouse.x, Mouse.y...),\n" +
-				"\t\t// do not forget to register the component that must be tracked \n" +
-		"\t\t// using method registerComponent in Platform\n");
+		pw.write("\t\t// TODO do not forget to register the graphical component that must be tracked \n" +
+		"\t\t// with Platform.getInstance().registerComponent(componentToTrack).\n" +
+		"\t\t// This makes the platform able to update the values of Mouse.* and Keyboard.* measures\n" +
+		"\t\t// and evaluates the current criterion each time an input event occurs on this component.\n");
 	}
 
 

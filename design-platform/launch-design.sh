@@ -1,1 +1,1 @@
-java -Xmx1024m -jar TouchStone-design.jar
+./build.sh DesignPlatform

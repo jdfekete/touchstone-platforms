@@ -32,9 +32,10 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.design.motor;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
-public class ContinuousMeasureValue extends MeasureValue {
+public class ContinuousMeasureValue extends MeasureValue implements Serializable {
 	
 	private double minValue;
 	private double maxValue;

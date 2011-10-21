@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="lib/jinput.jar"/>
 	<classpathentry kind="lib" path="lib/js.jar"/>
 	<classpathentry kind="lib" path="lib/SwingStates.jar"/>
-	<classpathentry kind="lib" path="lib/touchstone.jar"/>
+	<classpathentry kind="lib" path="lib/touchstone.jar" sourcepath="/run-platform"/>
 	<classpathentry kind="lib" path="lib/javaosc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
