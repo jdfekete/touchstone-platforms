@@ -32,20 +32,11 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.run;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.logging.Level;
+import java.util.Iterator;
+import java.util.Vector;
 import java.util.logging.Logger;
-import java.util.zip.ZipFile;
 
+import fr.inria.insitu.touchstone.run.Platform.EndCondition;
 import fr.inria.insitu.touchstone.run.utils.BasicFactory;
 
 /**
@@ -59,152 +50,39 @@ import fr.inria.insitu.touchstone.run.utils.BasicFactory;
  * @author Caroline Appert
  *
  */
-public abstract class Factor extends BasicFactory {
-	
+public abstract class Factor {
+
 	private static final Logger LOG = Logger.getLogger(Factor.class.getName());
 	protected Object value;
-	protected String keyValue = "";
-	
-	/**
-	 * The mapping between a factor id and the factory 
-	 * that can build the values of this factor.
-	 */
-	private static HashMap<String, Factor> factoriesForFactors = null;
-	
-	static {
-		factoriesForFactors = new HashMap<String, Factor>();
-		loadFactoryClasses();
-	}
-	
+	protected String id;
+
+	protected static Vector<Factor> allFactors = new Vector<Factor>();
+
 	/**
 	 * Builds a factor given its id.
 	 * @param id the factor id (that must be used in the experiment script).
 	 */
 	protected Factor(String id) {
-		super(id, true);
+		this.id = id;
+		allFactors.add(this);
+//		System.out.println("add factor "+id);
 	}
-	
-	/**
-	 * Returns a factor given its id.
-	 * @param idFactor the factor id.
-	 * @return the factor whose id is <code>idFactor</code>
-	 */
-	public static Factor getFactor(String idFactor) {
-		return factoriesForFactors.get(idFactor);
-	}
-	
-	private static void loadFactoryClasses() {
-		String resourceName = "resources/factoriesForFactors.properties";
-		InputStream in = 
-			Factor.class.getClassLoader().getResourceAsStream(resourceName);
-		BufferedReader br = null;
-		if(in != null) {
-			br = new BufferedReader(new InputStreamReader(in));
-			registerFactorsFromStream(br);
-		}
-		
-        String classpath = System.getProperty("java.class.path");
-        String sep = System.getProperty("path.separator");
-        String[] cp = classpath.split(sep);
-        for (int i = 0; i < cp.length; i++) {
-            String path = cp[i];
-            if (path.endsWith(".jar")) try { 
-                JarFile jar = new JarFile(new File(path), false, ZipFile.OPEN_READ);
-                JarEntry entry = jar.getJarEntry(resourceName);
-                if (entry != null) {
-                    in = jar.getInputStream(entry);
-                    if (in != null) {
-                    	br = new BufferedReader(new InputStreamReader(in));
-                    	registerFactorsFromStream(br);
-                    }
-                }
-            }
-            catch(IOException e) {
-                LOG.log(Level.SEVERE, "While trying to open jar file at "+path, e);
-            }
-        }
-	}
-	
-	@SuppressWarnings("unchecked")
-	private static void registerFactorsFromStream(BufferedReader br) {
-		String line = null;
-		try {
-			line = br.readLine();
-			line = br.readLine();
-			while(line != null) {
-				String[] parts = line.split(":");
-				String factorID = parts[1];
-				if(factoriesForFactors.get(factorID) == null) {
-					try {
-						Class factoryClass = Class.forName(parts[0]);
-						Class[] classesArgs = { String.class };
-						Object[] args = { factorID };
-						Factor factorFactory;
-						try {
-							Constructor<Factor> constructor = factoryClass.getConstructor(classesArgs);
-							factorFactory = constructor.newInstance(args);
-						} catch (NoSuchMethodException e) {
-							factorFactory = (Factor)(factoryClass.newInstance());
-						}
-						factoriesForFactors.put(factorID, factorFactory);
-					} catch (ClassNotFoundException e) {
-						LOG.log(Level.SEVERE, "Cannot find factory for factor "+factorID+" in classpath", e);
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (SecurityException e) {
-						e.printStackTrace();
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						e.printStackTrace();
-					}
-				}
-				line = br.readLine();
-			}
-			br.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}
-	
-	/**
-     * Return the value of a factor given the factor id.
-     * @param idFactor the factor id
-     * @param keyValue the key of the value
-     * @return a the value object or null
-     */
-    public static Object getValue(String idFactor, String keyValue) {
-    	Factor bf = getFactor(idFactor);
-		if(bf == null) return null;
-		return bf.getValue(keyValue);
-    }
-    
-	/**
-	 * Returns the value of this <code>Factor</code> given the id value.
-	 * @param idValue The id value
-	 * @return the value having key <code>idValue</code> of this factor.
-	 */
-	protected Object getValue(String idValue) {
-		return idValue;
-	}
-	
+
 	/**
 	 * @return the current value of this <code>Factor</code>.
 	 */
 	public Object getValue() {
 		return value;
 	}
-	
-    /**
-     * Called when the value of this factor is set from an experiment script.
-     * Overrides it to specify specific treatments when setting the value a factor.
-     * @param value the value to set.
-     */
-    public void setValue(Object value) {
-    	this.value = value;
-    }
+
+	/**
+	 * Called when the value of this factor is set from an experiment script.
+	 * Overrides it to specify specific treatments when setting the value a factor.
+	 * @param value the value to set.
+	 */
+	public void setValue(Object value) {
+		this.value = value;
+	}
 
 	public Double getDoubleValue() {
 		if(getValue() instanceof Number)
@@ -221,26 +99,41 @@ public abstract class Factor extends BasicFactory {
 			return (long)Double.parseDouble(getValue().toString());
 		}
 	}
-	
+
 	public Integer getIntValue() {
 		return getLongValue().intValue();
 	}
-	
+
 	public String getStringValue() {
 		if(getValue() == null) return "null";
 		return getValue().toString();
 	}
-    
-    /**
-     * Called when the value of this factor is set from an experiment script.
-     * @param value the key of the value to set.
-     */
-	public final void setKeyValue(String value) {
-		keyValue = value;
-		setValue(getValue(value));
+
+	/**
+	 * Called when the value of this factor is set from an experiment script.
+	 * @param value the key of the value to set.
+	 */
+	public void setKeyValue(String keyValue) {
+		BasicFactory factoryForFactor = FactoriesForValues.getFactor(id);
+		if(factoryForFactor != null)
+			try {
+				Object value = factoryForFactor.createFor(keyValue, null); 
+				setValue(value);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		else
+			setValue(keyValue);
 	}
-	
-	public String getKeyValue() {
-		return keyValue;
+
+	public static Factor getFactor(String idFactor) {
+		for (Iterator<Factor> iterator = allFactors.iterator(); iterator.hasNext();) {
+			Factor factor = iterator.next();
+			if(factor.id.equals(idFactor)) {
+				return factor;
+			}
+		}
+		return null;
 	}
+
 }

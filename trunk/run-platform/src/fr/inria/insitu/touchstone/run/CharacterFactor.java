@@ -137,57 +137,6 @@ public abstract class CharacterFactor extends Factor {
 	 */
 	public CharacterFactor(String id) {
 		super(id);
-		addDefaultCreators("values", id);
-	}
-	
-	protected void addDefaultCreators(String factoryName, String factorID) {
-		Properties props1 = loadProperties(factoryName);
-    	addDefaultCreators(props1, factorID);
-        loadAllProperties(factoryName);
-    }
-	
-    protected void addDefaultCreators(Properties p, String factorID) {
-    	Class<?> c;
-        for (int i = 0; i < 1000; i++) {
-            String suffix = "." + i;
-            String nameProperty = p.getProperty("name" + suffix);
-            String classProperty = p.getProperty("class" + suffix);
-            String factorProperty = p.getProperty("factor" + suffix);
-            if(factorProperty == null || nameProperty == null || classProperty == null) {
-            	break;
-            }
-            if(factorProperty.compareTo(factorID) == 0) {
-            	try {
-            		c = Class.forName(classProperty);
-            		addClass(nameProperty, c);
-            	} catch (ClassNotFoundException e) {
-            		LOG.log(Level.SEVERE, "Cannot create class for name "+classProperty, e.getMessage());
-            	}
-            }
-        }
-    }
-    
-    
-    
-    /**
-     * {@inheritDoc}
-     */
-    protected final Object getValue(String idValue) {
-    	Object objectValue = values.get(idValue);
-		if(objectValue != null) return objectValue;
-		Class<?> objectClass = getClassFor(idValue);
-		if(objectClass != null) {
-			try {
-				objectValue = objectClass.newInstance();
-				values.put(idValue, objectValue);
-				return objectValue;
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-    	return idValue;
 	}
     
 }

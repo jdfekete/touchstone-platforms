@@ -13,6 +13,11 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import fr.inria.insitu.touchstone.run.CharacterFactor;
+import fr.inria.insitu.touchstone.run.FactorInitializer;
+import fr.inria.insitu.touchstone.run.FactoriesForValues;
+import fr.inria.insitu.touchstone.run.NominalFactor;
+import fr.inria.insitu.touchstone.run.NumericalFactor;
 import fr.inria.insitu.touchstone.run.exp.model.Experiment;
 
 public class PartialXMLParse extends DefaultHandler {
@@ -112,6 +117,23 @@ public class PartialXMLParse extends DefaultHandler {
 					} else {
 						if(name.compareTo("setup") == 0) {
 							if(!inParticipant) return;
+						} else {
+							if(name.compareTo("factor") == 0) {
+								FactorInitializer.getInstance();
+								FactoriesForValues.getInstance();
+								// TODO
+//								String type = atts.getValue("type");
+//								String id = atts.getValue("id");
+//								if(type.equalsIgnoreCase("string")) {
+//									new NominalFactor(id);
+//								} else if(type.equalsIgnoreCase("integer")) {
+//									new NumericalFactor(id);
+//								} else if(type.equalsIgnoreCase("float")) {
+//									new NumericalFactor(id);
+//								} else {
+//									System.err.println("unexpected type: "+type);
+//								}
+							}
 						}
 					}
 				}

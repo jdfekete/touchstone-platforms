@@ -32,6 +32,8 @@
  *********************************************************************************/
 package fr.inria.insitu.touchstone.run;
 
+import fr.inria.insitu.touchstone.run.utils.BasicFactory;
+
 /**
  * <code>NumericalFactor</code> is the base class to extend in order
  * to define new numerical factors whose value is a number.
@@ -89,20 +91,19 @@ public class NumericalFactor extends Factor {
 	}
 	
 	/**
-	 * Returns the value of this <code>Factor</code> given the id value.
-	 * @param idValue The id value
-	 * @return the value having key <code>idValue</code> of this factor.
+	 * Called when the value of this factor is set from an experiment script.
+	 * @param value the key of the value to set.
 	 */
-	protected final Object getValue(String idValue) {
+	public void setKeyValue(String keyValue) {
 		try {
-			return Integer.parseInt(idValue);
+			value = Integer.parseInt(keyValue);
 		} catch(NumberFormatException exc1) {
 			try {
-				return Long.parseLong(idValue);
+				value = Long.parseLong(keyValue);
 			} catch(NumberFormatException exc2) {
-				return Double.parseDouble(idValue);
+				value = Double.parseDouble(keyValue);
 			}
 		}
 	}
-
+	
 }
