@@ -331,10 +331,34 @@ public class PanelFactors extends StepPanel<FactorSet> {
 			Factor thisFactor = new Factor();
 
 			public PanelFactor() {
-				valuesString.add("1");
-				thisFactor.addValue("1", "");			
-				valuesString.add("2");
-				thisFactor.addValue("2", "");
+				this(new Factor());
+			}
+
+			public PanelFactor(Factor factor){
+				thisFactor = factor;
+				
+				shortFactorName.getDocument().removeDocumentListener(experimentListener);
+				fullFactorName.getDocument().removeDocumentListener(experimentListener);
+				shortValueName.getDocument().removeDocumentListener(experimentListener);
+				fullValueName.getDocument().removeDocumentListener(experimentListener);
+				type.removeActionListener(experimentListener);
+				
+				valuesString.removeAllElements();
+				
+				role.setSelectedItem(factor.getRole());
+				shortFactorName.setText(factor.getShortName());
+				fullFactorName.setText(factor.getFullName());
+				type.setSelectedItem(factor.getType());
+				tag.setSelectedItem(factor.getTag());
+				
+				for(Value v : factor.getValues())
+					valuesString.add(v.getShortValue()+" "+v.getFullValue());
+				if(factor.getValues().size() == 0) {
+					valuesString.add("1");
+					thisFactor.addValue("1", "");			
+					valuesString.add("2");
+					thisFactor.addValue("2", "");
+				}
 
 				add.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e) {
@@ -363,42 +387,6 @@ public class PanelFactors extends StepPanel<FactorSet> {
 				};
 				shortValueName.addKeyListener(kl);
 				fullValueName.addKeyListener(kl);
-				
-				
-//				remove.addActionListener(experimentListener);
-				shortFactorName.getDocument().addDocumentListener(experimentListener);
-				fullFactorName.getDocument().addDocumentListener(experimentListener);
-				shortValueName.getDocument().addDocumentListener(experimentListener);
-				fullValueName.getDocument().addDocumentListener(experimentListener);
-				type.addActionListener(experimentListener);
-			}
-
-			public PanelFactor(Factor factor){
-				this();
-				
-				shortFactorName.getDocument().removeDocumentListener(experimentListener);
-				fullFactorName.getDocument().removeDocumentListener(experimentListener);
-				shortValueName.getDocument().removeDocumentListener(experimentListener);
-				fullValueName.getDocument().removeDocumentListener(experimentListener);
-				type.removeActionListener(experimentListener);
-				
-				valuesString.removeAllElements();
-				
-				role.setSelectedItem(factor.getRole());
-				shortFactorName.setText(factor.getShortName());
-				fullFactorName.setText(factor.getFullName());
-				type.setSelectedItem(factor.getType());
-				tag.setSelectedItem(factor.getTag());
-				for(Value v : factor.getValues())
-					valuesString.add(v.getShortValue()+" "+v.getFullValue());
-				if(factor.getValues().size() == 0) {
-					valuesString.add("1");
-					thisFactor.addValue("1", "");			
-					valuesString.add("2");
-					thisFactor.addValue("2", "");
-				}
-
-				thisFactor = factor;	
 				
 				shortFactorName.getDocument().addDocumentListener(experimentListener);
 				fullFactorName.getDocument().addDocumentListener(experimentListener);
