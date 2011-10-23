@@ -1706,7 +1706,9 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 	 */
 	public Object getFactorValue(String idFactor) {
 		Factor f = Factor.getFactor(idFactor);
-		if(f != null) return f.getValue();
+		if(f != null) {
+			return f.getValue();
+		}
 		Measure m = getMeasure(idFactor);
 		if(m != null) return m.getValue();
 		return null;
@@ -1770,17 +1772,17 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
                 String className = buffer.toString();
                 System.out.println("Found class "+className);
                 try {
-                	System.out.println("--> try to build class object... ");
+                	System.out.println("--> Try to build class object... ");
                     Class<?> c = Class.forName(className);
                     System.out.println("--> class object "+(c==null?"null":(""+c.getName())));
                     if (Plugin.class.isAssignableFrom(c)) {
-                        Plugin p = (Plugin)c .newInstance();
+                        Plugin p = (Plugin)c.newInstance();
                         System.out.println("Plugin: "+className);
                         return addPlugin(p);
                     }
                 }
                 catch(Exception ignored) {
-                    ;
+//                    System.out.println("exception "+ignored);
                 }
             }
         }

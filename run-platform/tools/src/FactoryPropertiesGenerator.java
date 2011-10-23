@@ -61,7 +61,7 @@ public class FactoryPropertiesGenerator {
 	 * @return true if the processing went well
 	 */
 	public static boolean start(RootDoc root) {
-//		manageAxesContents(root.classes());
+		//		manageAxesContents(root.classes());
 		(new File("src/resources/")).mkdirs();
 		manageMeasures(root.classes());
 		manageFactoryContents(root.classes());
@@ -109,7 +109,7 @@ public class FactoryPropertiesGenerator {
 			}
 		}
 	}
-	
+
 	private static Properties getProperties(String docLine, String[] propertyNames) {
 		String[] parts = parseLine(docLine);
 		for (int i = 0; i < parts.length; i++) {
@@ -150,7 +150,7 @@ public class FactoryPropertiesGenerator {
 				return getFactorType(cd.superclassType());
 			}
 	}
-	
+
 	private static void descriptionFiles(ClassDoc[] classes) {
 		try {
 			for(int i = 0; i < classes.length; i++) {
@@ -178,10 +178,10 @@ public class FactoryPropertiesGenerator {
 						valuesDescription.println("name:"+props.getProperty("name"));
 						valuesDescription.println("help:"+props.getProperty("help"));
 						valuesDescription.println();
-//						System.out.println("id: "+props.getProperty("id"));
-//						System.out.println("factor: "+props.getProperty("factor"));
-//						System.out.println("name: "+props.getProperty("name"));
-//						System.out.println("help: "+props.getProperty("help"));
+						//						System.out.println("id: "+props.getProperty("id"));
+						//						System.out.println("factor: "+props.getProperty("factor"));
+						//						System.out.println("name: "+props.getProperty("name"));
+						//						System.out.println("help: "+props.getProperty("help"));
 					}
 				}
 			}
@@ -232,11 +232,13 @@ public class FactoryPropertiesGenerator {
 						pfout.println("class."+cpt+":"+classes[i].qualifiedName());
 						pfout.println();
 						cpt++;
-						pfout.println("factor."+cpt+":"+props.getProperty("factor"));
-						pfout.println("name."+cpt+":"+props.getProperty("name"));
-						pfout.println("class."+cpt+":"+classes[i].qualifiedName());
-						pfout.println();
-						cpt++;
+						if(props.getProperty("name") != null) {
+							pfout.println("factor."+cpt+":"+props.getProperty("factor"));
+							pfout.println("name."+cpt+":"+props.getProperty("name"));
+							pfout.println("class."+cpt+":"+classes[i].qualifiedName());
+							pfout.println();
+							cpt++;
+						}
 					}
 				}
 			}
@@ -279,7 +281,7 @@ public class FactoryPropertiesGenerator {
 			}
 		}
 	}
-	
+
 	private static String[] parseLine(String text) {
 		StringReader sin = new StringReader(text);
 		BufferedReader br = new BufferedReader(sin);

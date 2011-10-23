@@ -147,7 +147,7 @@ public class BasicFactory {
         return name;
     }
     
-    protected void addClass(String name, Class theClass) {
+    public void addClass(String name, Class theClass) {
         putEntry(name, theClass);
     }
     
