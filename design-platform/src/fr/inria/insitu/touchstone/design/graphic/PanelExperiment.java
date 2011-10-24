@@ -229,7 +229,7 @@ public class PanelExperiment extends StepPanel<Step> {
 			browse.addActionListener(new ActionListener(){
 
 				public void actionPerformed(ActionEvent e) {
-					JFileChooser fc = new JFileChooser() {
+					JFileChooser fc = new JFileChooser(DesignPlatform.LAST_DIRECTORY) {
 						protected JDialog createDialog(Component parent)
 						throws HeadlessException {
 							JDialog dlg = super.createDialog(parent);
@@ -241,6 +241,8 @@ public class PanelExperiment extends StepPanel<Step> {
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						String file = fc.getSelectedFile().getAbsolutePath();
 						locationField.setText(file);
+						DesignPlatform.LAST_DIRECTORY = fc.getSelectedFile().getParent();
+						DesignPlatform.saveCurrentDirectory();
 					}
 				}			
 			});
