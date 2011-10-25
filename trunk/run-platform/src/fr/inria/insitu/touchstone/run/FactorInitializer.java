@@ -40,7 +40,7 @@ public class FactorInitializer {
 	 * @return the properties
 	 */
 	protected void load() {
-		String resourceName = "resources"+File.separator+"factoriesForFactors.properties";
+		String resourceName = "resources/"+"factoriesForFactors.properties";
 		InputStream in = 
 			Platform.classloader.getResourceAsStream(resourceName);
 		loadFromInputStream(in);
@@ -88,7 +88,7 @@ public class FactorInitializer {
 	 * @param factoryName the factory name
 	 */
 	public void loadAll() {
-		String resourceName = "resources"+File.separator+"factoriesForFactors.properties";
+		String resourceName = "resources/"+"factoriesForFactors.properties";
 		String classpath = System.getProperty("java.class.path");
 		String sep = System.getProperty("path.separator");
 		String[] cp = classpath.split(sep);

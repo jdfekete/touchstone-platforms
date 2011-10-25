@@ -76,7 +76,7 @@ public class FactoriesForValues {
 	}
 
 	public Properties loadValues() {
-		String resourceName = "resources"+File.separator+"values.properties";
+		String resourceName = "resources/"+"values.properties";
 		InputStream in = 
 			Platform.classloader.getResourceAsStream(resourceName);
 		Properties props = new Properties();
@@ -92,7 +92,7 @@ public class FactoriesForValues {
 	}
 
 	public void loadAllProperties() {
-		String resourceName = "resources"+File.separator+"values.properties";
+		String resourceName = "resources/"+"values.properties";
 		String classpath = System.getProperty("java.class.path");
 		String sep = System.getProperty("path.separator");
 		String[] cp = classpath.split(sep);
