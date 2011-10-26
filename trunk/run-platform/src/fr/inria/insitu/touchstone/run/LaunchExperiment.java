@@ -217,6 +217,9 @@ public class LaunchExperiment implements AxesListener {
 	JComboBox cbFavorites;
 	JButton addFavorite, removeFavorite;
 
+//	private String fileSeparator = fileSeparator;
+	private static String fileSeparator = "/";
+	
 	private void saveLaunchConfiguration(File file) {
 		Properties configProperties = new Properties();
 		configProperties.setProperty("ExperimentScript", experimentfile.getAbsolutePath());
@@ -512,8 +515,8 @@ public class LaunchExperiment implements AxesListener {
 		String line;
 		File rootDir = new File(experimentName);
 		if(!rootDir.exists()) rootDir.mkdirs();
-		File inFile = new File(rootDir+File.separator+"participants.txt");
-		File outFile = new File(rootDir+File.separator+"participants.tmp");
+		File inFile = new File(rootDir+fileSeparator+"participants.txt");
+		File outFile = new File(rootDir+fileSeparator+"participants.tmp");
 		try {
 			pw = new PrintWriter(outFile);
 			pw.write(id+":"+name+"\n");
@@ -538,9 +541,9 @@ public class LaunchExperiment implements AxesListener {
 	}
 
 	private void generateOneLogFile() {
-		File rootDir = new File(experimentName+File.separator+"logs"+File.separator+"trial");
+		File rootDir = new File(experimentName+fileSeparator+"logs"+fileSeparator+"trial");
 		concat(rootDir, "log");
-		rootDir = new File(experimentName+File.separator+"logs"+File.separator+"cinematic");
+		rootDir = new File(experimentName+fileSeparator+"logs"+fileSeparator+"cinematic");
 		concat(rootDir, "cinematic");
 	}
 
@@ -549,7 +552,7 @@ public class LaunchExperiment implements AxesListener {
 		PrintWriter pw = null;
 		String line;
 		if(!rootDir.exists()) return;
-		File outFile = new File(rootDir.getAbsolutePath()+File.separator+"allLogs.log");
+		File outFile = new File(rootDir.getAbsolutePath()+fileSeparator+"allLogs.log");
 		boolean first = true;
 		try {
 			pw = new PrintWriter(outFile);
@@ -585,7 +588,7 @@ public class LaunchExperiment implements AxesListener {
 		Properties props = new Properties();
 		InputStream in;
 		try {
-			in = new FileInputStream(experimentName+File.separator+"participants.txt");
+			in = new FileInputStream(experimentName+fileSeparator+"participants.txt");
 			if (in != null) {
 				props.load(in);
 			}
@@ -599,7 +602,7 @@ public class LaunchExperiment implements AxesListener {
 		Object[] columnNames = {"ID","name"};
 		tableParticipants.setAutoCreateColumnsFromModel(true);
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(experimentName+File.separator+"participants.txt"));
+			BufferedReader br = new BufferedReader(new FileReader(experimentName+fileSeparator+"participants.txt"));
 			int nbLines = 0;
 			String line = br.readLine();
 			while(line != null) {
@@ -609,7 +612,7 @@ public class LaunchExperiment implements AxesListener {
 			br.close();
 			tableParticipants.setShowGrid(true);
 			tableParticipants.setModel(new DefaultTableModel(columnNames, nbLines));
-			br = new BufferedReader(new FileReader(experimentName+File.separator+"participants.txt"));
+			br = new BufferedReader(new FileReader(experimentName+fileSeparator+"participants.txt"));
 			line = br.readLine();
 			while(line != null) {
 				splitLine = line.split(":");

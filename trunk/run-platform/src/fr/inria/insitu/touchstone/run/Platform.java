@@ -203,6 +203,10 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 	private Hashtable<OSCClient, OSCPortOut> oscClients;
 
     public static String[] measuresMouse = {"Mouse.x", "Mouse.y", "Mouse.Left", "Mouse.Middle", "Mouse.Right", "Mouse.Wheel"};
+    
+//	private String fileSeparator = fileSeparator;
+	private static String fileSeparator = "/";
+	
 	/**
 	 * <b>EndCondition</b> is used by Platform to test for the end condition.
 	 * 
@@ -1001,10 +1005,10 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 	 */
 	public void writeLogHeader(String headerComment, List<String> measureNames, List<String> measureTypes) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        File rootDir = new File(getMeasureValue(Experiment.MEASURE_EXPERIMENT_NAME)+File.separator+"logs"+File.separator+"trial");
+        File rootDir = new File(getMeasureValue(Experiment.MEASURE_EXPERIMENT_NAME)+fileSeparator+"logs"+fileSeparator+"trial");
 		if(!rootDir.exists()) rootDir.mkdirs();
 		
-		String filename = rootDir+File.separator+"log-" + Platform.getInstance().getMeasureValue(Experiment.MEASURE_EXPERIMENT_PARTICIPANT) + "-" + format.format(new Date()) + ".log";
+		String filename = rootDir+fileSeparator+"log-" + Platform.getInstance().getMeasureValue(Experiment.MEASURE_EXPERIMENT_PARTICIPANT) + "-" + format.format(new Date()) + ".log";
 		writeLogHeader(filename, headerComment, measureNames, measureTypes);
 	}
 	
