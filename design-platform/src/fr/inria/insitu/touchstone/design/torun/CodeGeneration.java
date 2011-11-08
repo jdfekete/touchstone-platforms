@@ -180,7 +180,8 @@ public class CodeGeneration {
 		int[] parentheses = getParenthesesIndices(expression);
 		if(parentheses == null) return null;
 		String arguments = expression.substring(parentheses[0]+1, parentheses[1]);
-
+		System.out.println(expression+" --> arguments="+arguments);
+		if(arguments.length() == 0) return null;
 		for(int i = 0; i < arguments.length(); i++) {
 			c = arguments.charAt(i);
 			if(c == '{') {
