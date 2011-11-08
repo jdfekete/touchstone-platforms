@@ -253,11 +253,13 @@ public class Intertitle implements Serializable {
 				return new AddYourOwn();
 		}
 		Vector<String> argsTypeVec = new Vector<String>();
-		for (String argType : argsTypes)
+		for (String argType : argsTypes) {
 			argsTypeVec.add(argType);
+		}
 		Vector<String> argsValueVec = new Vector<String>();
-		for (String argValue : argsValues)
+		for (String argValue : argsValues) {
 			argsValueVec.add(argValue);
+		}
 		return new Function(functionName,argsTypeVec,argsValueVec,classe);
 	}
 
