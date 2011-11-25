@@ -81,13 +81,13 @@ public class Function extends EditableItem implements Serializable {
 	 * @param classe the class of the function (as in the XML file describing a plugin)
 	 */
 	public Function(String name, Vector<String> argsType, Vector<String> argsValues, String classe ){
-		System.out.println("new function...");
+//		System.out.println("new function...");
 		this.name = name;
 		this.argsType = argsType;
-		for (Iterator<String> iterator = argsType.iterator(); iterator.hasNext();) {
-			String string = iterator.next();
-			System.out.println("\ttype="+string);
-		}
+//		for (Iterator<String> iterator = argsType.iterator(); iterator.hasNext();) {
+//			String string = iterator.next();
+//			System.out.println("\ttype="+string);
+//		}
 		this.classe = classe;
 		itemRepresentation = toEditableMenuItem();
 		setArgsValues(argsValues);
