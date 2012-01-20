@@ -76,6 +76,8 @@ import java.util.logging.Logger;
 import java.util.zip.ZipFile;
 
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.EventListenerList;
 
 import com.illposed.osc.OSCListener;
@@ -97,7 +99,7 @@ import fr.inria.insitu.touchstone.run.utils.KeyMapJInputAWT;
  */
 
 public class Platform extends Frame 
-implements ActionListener, AxesListener, OSCListener, Plugin {
+implements ActionListener, AxesListener, OSCListener, Plugin, DocumentListener {
 
 	private static final long serialVersionUID = -6647687767110640249L;
 
@@ -283,6 +285,10 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 		 * @return true when the end condition is reached
 		 */
 		boolean isReached(InputEvent e);
+
+		boolean isReached(DocumentEvent e);
+		
+		boolean isReached(EventObject e);
 	}
 	
 	
@@ -596,6 +602,18 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 			finished = finished || endCondition.isReached((AxesEvent)e);
 		}
 		else if(e instanceof InputEvent) finished = finished || endCondition.isReached((InputEvent)e);
+		else finished = finished || endCondition.isReached(e);
+		if (finished) {
+			fireActionListener(endCondition, ACTION_END_CONDITION);
+			return true;
+		}
+		return false;
+	}
+	
+	
+	public boolean evalEndCondition(DocumentEvent e) {
+		boolean finished = false;
+		finished = finished || endCondition.isReached(e);
 		if (finished) {
 			fireActionListener(endCondition, ACTION_END_CONDITION);
 			return true;
@@ -1832,6 +1850,21 @@ implements ActionListener, AxesListener, OSCListener, Plugin {
 
 	public long getStartTime() {
 		return startTime;
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		evalEndCondition(e);
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		evalEndCondition(e);
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		evalEndCondition(e);
 	}
 	
 }

@@ -33,8 +33,10 @@
 package fr.inria.insitu.touchstone.run.endConditions;
 
 import java.awt.event.InputEvent;
+import java.util.EventObject;
 
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
 
 import com.illposed.osc.OSCMessage;
 
@@ -87,6 +89,14 @@ public abstract class AbstractEndCondition implements EndCondition {
 	 * {@inheritDoc}
 	 */
 	public boolean isReached(OSCMessage message, long when) {
+		return false;
+	}
+	
+	public boolean isReached(EventObject e) {
+		return false;
+	}
+	
+	public boolean isReached(DocumentEvent e) {
 		return false;
 	}
 

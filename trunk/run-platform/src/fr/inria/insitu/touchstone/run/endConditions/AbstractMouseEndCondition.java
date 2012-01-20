@@ -34,8 +34,10 @@ package fr.inria.insitu.touchstone.run.endConditions;
 
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
 
 import com.illposed.osc.OSCMessage;
 
@@ -87,6 +89,14 @@ public abstract class AbstractMouseEndCondition implements EndCondition {
 		if(evt.getID() == id && evt.getButton() == getButtonID(button)) {
 			return true;
 		}
+		return false;
+	}
+	
+	public boolean isReached(EventObject e) {
+		return false;
+	}
+	
+	public boolean isReached(DocumentEvent e) {
 		return false;
 	}
 	

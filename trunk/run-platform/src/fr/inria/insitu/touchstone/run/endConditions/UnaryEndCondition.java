@@ -33,8 +33,10 @@
 package fr.inria.insitu.touchstone.run.endConditions;
 
 import java.awt.event.InputEvent;
+import java.util.EventObject;
 
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
 
 import com.illposed.osc.OSCMessage;
 
@@ -69,6 +71,20 @@ public abstract class UnaryEndCondition implements EndCondition {
     public boolean eval(boolean v) {
         return false;
     }
+    
+    public boolean isReached(EventObject e) {
+    	if (eval(endCondition.isReached(e))) {
+            return true;
+        }
+        return false;
+	}
+    
+    public boolean isReached(DocumentEvent e) {
+    	if (eval(endCondition.isReached(e))) {
+            return true;
+        }
+        return false;
+	}
 
     /**
      * {@inheritDoc}
