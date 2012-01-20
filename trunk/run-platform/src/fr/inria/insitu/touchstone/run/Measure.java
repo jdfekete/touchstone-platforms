@@ -127,7 +127,6 @@ public class Measure {
 	
 	/**
 	 * Sets the value of this measure.
-	 * WARNING (2012-01-20): this method no longer writes a new line in the event log. Use the <code>setValueAndLog</code> to write a new line in the event log.  
 	 * A measure has such a method because factors are also
 	 * registered as measures to be logged and their value
 	 * are set from the experiment script.
