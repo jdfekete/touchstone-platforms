@@ -135,8 +135,8 @@ public class Measure {
 	 */
 	public void setValue(Object value) {
 		this.value = value;
-//		if(Platform.getInstance().getCinematicLogger().contains(id))
-//			Platform.getInstance().getCinematicLogger().log();
+		if(Platform.getInstance().getCinematicLogger().contains(id))
+			Platform.getInstance().getCinematicLogger().log();
 	}
 	
 	/**
