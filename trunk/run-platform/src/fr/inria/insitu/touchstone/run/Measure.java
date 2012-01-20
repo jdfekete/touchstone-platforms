@@ -140,19 +140,6 @@ public class Measure {
 	}
 	
 	/**
-	 * Sets the value of this measure and record a line in the event log.
-	 * A measure has such a method because factors are also
-	 * registered as measures to be logged and their value
-	 * are set from the experiment script.
-	 * @param value The value to set
-	 */
-	public void setValueAndLog(Object value) {
-		this.value = value;
-		if(Platform.getInstance().getCinematicLogger().contains(id))
-			Platform.getInstance().getCinematicLogger().log();
-	}
-	
-	/**
 	 * {@inheritDoc}
 	 */
 	public boolean equals(Object obj) {
