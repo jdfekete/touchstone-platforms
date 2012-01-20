@@ -34,8 +34,10 @@ package fr.inria.insitu.touchstone.run.endConditions;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
 
 import com.illposed.osc.OSCMessage;
 
@@ -96,6 +98,14 @@ public abstract class AbstractKeyEndCondition implements EndCondition {
 	 */
 	public void start() {
 		Platform.getInstance().addAxesListener(getRequiredAxes(), Platform.getInstance());
+	}
+	
+	public boolean isReached(EventObject e) {
+		return false;
+	}
+	
+	public boolean isReached(DocumentEvent e) {
+		return false;
 	}
 	
 	/**

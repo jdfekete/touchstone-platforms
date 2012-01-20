@@ -33,8 +33,10 @@
 package fr.inria.insitu.touchstone.run.endConditions;
 
 import java.awt.event.InputEvent;
+import java.util.EventObject;
 
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
 
 import com.illposed.osc.OSCMessage;
 
@@ -97,6 +99,14 @@ public abstract class BinaryEndCondition implements EndCondition {
         public boolean isReached(OSCMessage message, long when) {
             return eval(endCondition1.isReached(message, when), endCondition2.isReached(message, when));
         }
+        
+        public boolean isReached(EventObject e) {
+        	return eval(endCondition1.isReached(e), endCondition2.isReached(e));
+    	}
+        
+        public boolean isReached(DocumentEvent e) {
+        	return eval(endCondition1.isReached(e), endCondition2.isReached(e));
+    	}
 
         /**
          * {@inheritDoc}
