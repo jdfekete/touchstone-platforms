@@ -124,7 +124,7 @@ public class Measure {
 	 * This method is called each time a trial begins.
 	 */
 	public void resetValue() { }
-	
+
 	/**
 	 * Sets the value of this measure.
 	 * A measure has such a method because factors are also
@@ -133,8 +133,20 @@ public class Measure {
 	 * @param value The value to set
 	 */
 	public void setValue(Object value) {
+		setValue(value, true);
+	}	
+	
+	/**
+	 * Sets the value of this measure.
+	 * A measure has such a method because factors are also
+	 * registered as measures to be logged and their value
+	 * are set from the experiment script.
+	 * @param value The value to set
+	 * @param cineLog Log in the cinematic logger or not
+	 */
+	public void setValue(Object value, boolean cineLog) {
 		this.value = value;
-		if(Platform.getInstance().getCinematicLogger().contains(id))
+		if(cineLog && Platform.getInstance().getCinematicLogger().contains(id))
 			Platform.getInstance().getCinematicLogger().log();
 	}
 	

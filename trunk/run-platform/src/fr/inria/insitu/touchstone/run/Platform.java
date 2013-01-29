@@ -1526,9 +1526,9 @@ implements ActionListener, AxesListener, OSCListener, Plugin, DocumentListener {
      * @param values the values
      */
     private void setMeasureValue(String[] measureIDs, Object[] values, boolean logLine) {
-    	int maxI = Math.max(measureIDs.length, values.length);
+    	int minI = Math.min(measureIDs.length, values.length);   	
     	boolean cinelog = false;
-    	for (int index = 0; index < maxI; index++) {
+    	for (int index = 0; index < minI; index++) {
     		String measureID = measureIDs[index];
     		Object value = values[index];
 	    	boolean found = false;
@@ -1536,14 +1536,14 @@ implements ActionListener, AxesListener, OSCListener, Plugin, DocumentListener {
 	    	for(Iterator<Measure> i = measuresList.iterator(); i.hasNext(); ) {
 	    		measure = i.next();
 				if(measure.getID().compareTo(measureID) == 0) {
-					measure.setValue(value);
+					measure.setValue(value, false);
 					found = true;
 					break;
 				}
 			}
 	    	if(!found) {
 	    		measure = new Measure(measureID);
-	    		measure.setValue(value);
+	    		measure.setValue(value, false);
 	    		addMeasure(measure);
 	    	}
 	    	if(logLine && cinematicLogger != null && measureID.compareTo("currentTime") != 0) {
