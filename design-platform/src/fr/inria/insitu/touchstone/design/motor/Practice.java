@@ -33,6 +33,7 @@
 package fr.inria.insitu.touchstone.design.motor;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -113,6 +114,9 @@ public class Practice extends Step implements Serializable {
 			newBlock.setValues(newValues);
 			Vector<Vector<Value>> combinations = new Vector<Vector<Value>>();
 			getCombinations(combinations, new Vector<Value>(), sampledFactor, 0);
+			
+			Collections.shuffle(combinations);
+			
 			int nbTrials = practiceBlock.size();
 			for(int j = 0; j < nbTrials; j++) {
 				Block trial = new Block();

@@ -201,6 +201,7 @@ public class DesignPlatform extends JFrame {
 		add(snapshotsPanel, BorderLayout.NORTH);
 		add(tabs, BorderLayout.CENTER);
 		setSize(new Dimension(1200,800));
+		
 		pack();
 		setVisible(true);
 	}
