@@ -827,7 +827,46 @@ public class Experiment extends Step implements Serializable {
 			line+=(","+factorNames[i]);
 		}
 		pw.write(line+"\n");
-		for (int subjectID = 0; subjectID < ordering.getOrderedBlock().size() ; subjectID++){
+		
+		
+		
+		
+		
+		for (int subjectID = 0; subjectID < ordering.getOrderedBlock().size() ; subjectID++) {
+			
+			// begin experiment practice
+			if(practice != null && practice.getPracticesEnabled().get(0)) {
+				Vector<PracticeBlock> practiceBlocks = practice.getPracticeBlocksFor(ordering.getOrderedBlock().get(subjectID), factorSet.getFactors());
+				for(int i = 0; i < practiceBlocks.size(); i++) {
+					for(int j = 0; j < practiceBlocks.get(i).size(); j++) {
+						int trialNumber = j;
+						int blockNumber = i;
+						String valuesAtt = "";
+						String[] factorValues = new String[factorNames.length];
+						Block b = practiceBlocks.get(i).get(j);
+						while(b != null) {
+							for (Value value : b.getValues())
+								if(value.getFactor().getShortName().length() > 0) {
+									for (int k = 0; k < factorNames.length; k++) {
+										if(factorNames[k].compareTo(value.getFactor().getShortName()) == 0) {
+											factorValues[k] = value.getShortValue();
+										}
+									}
+								}
+							b = b.getParent();
+						}
+						for (int k = 0; k < factorValues.length; k++) {
+							valuesAtt+=","+factorValues[k];				
+						}
+						line = subjectID+",true,"+blockNumber+","+trialNumber+valuesAtt;
+						pw.write(line+"\n");
+					}
+				}
+			}
+			// end experiment practice
+			
+			
+			
 			Block block = ordering.getOrderedBlock().get(subjectID);
 			blockToCSV(block, subjectID, factorNames, pw);
 		}
@@ -866,7 +905,7 @@ public class Experiment extends Step implements Serializable {
 		} else {
 			// begin practice at block level
 			index = practice.getPractices().size() - block.getDepth();
-			if(practice != null && practice.getPracticesEnabled().get(index)
+			if(index != 0 && practice != null && practice.getPracticesEnabled().get(index)
 					&& !(block.isReplication() && !practice.getReplicationsEnabled().get(index))) {
 				Vector<PracticeBlock> practiceBlocks = practice.getPracticeBlocksFor(block, factorSet.getFactors());
 				for(int i = 0; i < practiceBlocks.size(); i++) {
@@ -896,8 +935,9 @@ public class Experiment extends Step implements Serializable {
 				}
 			}
 			// end practice at block level
-			for(int i = 0; i < block.size(); i++) 
+			for(int i = 0; i < block.size(); i++)  {
 				blockToCSV(block.get(i), subjectID, factorNames, pw);
+			}
 		}
 	}
 
