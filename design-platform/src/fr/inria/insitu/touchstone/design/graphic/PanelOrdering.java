@@ -64,6 +64,7 @@ import fr.inria.insitu.touchstone.design.motor.Experiment;
 import fr.inria.insitu.touchstone.design.motor.Factor;
 import fr.inria.insitu.touchstone.design.motor.FixedOrder;
 import fr.inria.insitu.touchstone.design.motor.LatinSquare;
+import fr.inria.insitu.touchstone.design.motor.BalancedLatinSquare;
 import fr.inria.insitu.touchstone.design.motor.Ordering;
 import fr.inria.insitu.touchstone.design.motor.OrderingMode;
 import fr.inria.insitu.touchstone.design.motor.Random;
@@ -88,6 +89,7 @@ public class PanelOrdering extends StepPanel<Ordering> {
 	
 	private static OrderingMode ORDER_RANDOM = new Random();
 	private static OrderingMode ORDER_LATIN_SQUARE = new LatinSquare();
+	private static OrderingMode ORDER_BALANCED_LATIN_SQUARE = new BalancedLatinSquare();
 	private static OrderingMode ORDER_ALL_PAIRS = new AllPairs();
 	private static OrderingMode ORDER_FIXED = new FixedOrder();
 
@@ -96,6 +98,7 @@ public class PanelOrdering extends StepPanel<Ordering> {
 		needJSP = false;
 		orderingModes.add(ORDER_RANDOM);
 		orderingModes.add(ORDER_LATIN_SQUARE);
+		orderingModes.add(ORDER_BALANCED_LATIN_SQUARE);
 		orderingModes.add(ORDER_ALL_PAIRS);
 		orderingModes.add(ORDER_FIXED);
 		setLayout(new GridBagLayout());
@@ -173,7 +176,10 @@ public class PanelOrdering extends StepPanel<Ordering> {
 					if(orderMode instanceof Random)
 						cb.setSelectedItem(ORDER_RANDOM);
 					else
-						cb.setSelectedItem(ORDER_FIXED);
+						if (orderMode instanceof BalancedLatinSquare)
+							cb.setSelectedItem(ORDER_BALANCED_LATIN_SQUARE);
+						else
+							cb.setSelectedItem(ORDER_FIXED);
 
 			cb.addItemListener(new ItemListener(){
 				
