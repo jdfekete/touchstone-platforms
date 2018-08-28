@@ -714,7 +714,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 	 */
 	@SuppressWarnings("unchecked")
 	public void addMeasureTo(DefaultMutableTreeNode root,Measure measure){
-		Enumeration<DefaultMutableTreeNode> children = root.children();
+		Enumeration<DefaultMutableTreeNode> children = (Enumeration<DefaultMutableTreeNode>)(Object)root.children();
 		boolean done = false;
 		DefaultMutableTreeNode measureNode = new DefaultMutableTreeNode(measure);
 		while ((children.hasMoreElements())&&(!done)){
@@ -744,7 +744,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 	 */
 	@SuppressWarnings("unchecked")
 	public void removeMeasureFrom(DefaultMutableTreeNode root,DefaultMutableTreeNode measure){
-		Enumeration<DefaultMutableTreeNode> children = root.children();
+		Enumeration<DefaultMutableTreeNode> children = (Enumeration<DefaultMutableTreeNode>)(Object)root.children();
 		DefaultMutableTreeNode emptyParent = null;
 		while (children.hasMoreElements()){
 			DefaultMutableTreeNode child = children.nextElement();
@@ -763,7 +763,7 @@ public class PanelMeasures extends StepPanel<MeasureSet> {
 	@SuppressWarnings("unchecked")
 	public MeasureSet getStep() {
 		MeasureSet measureSet = new MeasureSet();
-		Enumeration<DefaultMutableTreeNode> nodes = rootSelected.depthFirstEnumeration();
+		Enumeration<DefaultMutableTreeNode> nodes = (Enumeration<DefaultMutableTreeNode>)(Object)rootSelected.depthFirstEnumeration();
 		while(nodes.hasMoreElements()){
 			DefaultMutableTreeNode node = nodes.nextElement();
 			if (node.getUserObject() instanceof Measure){
